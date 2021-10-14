@@ -1,0 +1,179 @@
+{block title}Rezervace{/block}
+{block description}Svůj nezapomenutelný zážitek ve virtuální realitě si můžete rezervovat hned teď. Nejmodernější VR herna v Plzni s brýlemi HTC VIVE Pro.{/block}
+
+{block head}
+{include parent}
+	<link rel="stylesheet" href="/css/rezervace.css{ifset $csVer}{$csVer}{/ifset}">{/block}
+
+{block content}
+	<main>
+		<section class="game-single-area area-bg-four pt-50 pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="game-single-content">
+							{* NADPIS + UVOD *}
+							<div class="game-single-title mb-10">
+								<h4 class="d-none d-md-block">Zarezervujte si <span>zážitek</span></h4>{* DESKTOP *}
+								<h4 class="d-block d-md-none text-center">Zarezervujte si <span>zážitek</span></h4>{* MOBILE *}
+							</div>
+							<div class="row mb-0">
+								<div class="col">
+									<p class="mb-0">
+										<span class="font-weight-bold">Svůj nezapomenutelný zážitek</span>
+										<span class="font-weight-normal">ve virtuální realitě si můžete rezervovat hned teď.
+										Nejmodernější VR herna v Plzni je vybavena třemi herními boxy</span>
+										<span class="font-weight-bold">s brýlemi HTC VIVE Pro,</span>
+										<span class="font-weight-normal">které vám budou k dispozici po celý rezervovaný čas.
+										Provedeme Vás krátkou instruktáží. Pro rezervaci stačí vybrat volné datum a čas, zvolit počet herních boxů
+										a vyplnit své kontaktní údaje.</span> <span class="font-weight-bold">Nakonec nezbývá nic jiného než se těšit na skvělý zážitek!</span></p>
+									<p class="text-left"><span class="font-weight-bold font-italic" style="color: #e13175; font-size: 0.9em;">Disponujeme nejnovější technologii HTC WIRELESS,
+										neomezujte se kabelem a využijte volnost svého pohybu v herním boxu.</span></p>
+								</div>
+							</div>
+							{* RESERVATION MENU: DESKTOP *}
+							<ol class="breadcrumb breadcrumb-arrow d-none d-md-block" style="margin: 10px 0 0 0;">
+								<li><a class="nolink bg-light" href="javascript:void(0)">REZERVACE</a></li>
+								<li><a id="bc-desktop-0" class="bc-link nolink bg-light"	data-bc="0" href="javascript:void(0)">1. krok<br><small>Vyběr dne</small></a></li>
+								<li><a id="bc-desktop-1" class="bc-link nolink nobg"		data-bc="1" href="javascript:void(0)">2. krok<br><small>Výběr hodiny</small></a></li>
+								<li><a id="bc-desktop-2" class="bc-link nolink nobg"		data-bc="2" href="javascript:void(0)">3. krok<br><small>Kontaktní údaje</small></a></li>
+								{*<li><a id="bc-desktop-3" class="bc-link nolink nobg"		data-bc="3" href="javascript:void(0)">4. krok<br><small>Shrnutí a potvrzení</small></a></li>*}
+								<li><a class="nolink nobg" href="javascript:void(0)">&nbsp;<br><small>&nbsp;</small></a></li>
+							</ol>
+							{* RESERVATION MENU: MOBILE *}
+							<ol class="breadcrumb breadcrumb-arrow d-block d-md-none" style="margin: 10px 0 0 0;">
+								<li><a class="nolink bg-light" href="javascript:void(0)">&nbsp; <i class="far fa-calendar-alt"></i> &nbsp;</a></li>
+								<li><a id="bc-mobile-0" class="bc-link center nolink bg-light"	data-bc="0" href="javascript:void(0)"><strong>&nbsp; 1 </strong></a></li>
+								<li><a id="bc-mobile-1" class="bc-link center nolink nobg"		data-bc="1" href="javascript:void(0)"><strong>&nbsp; 2 </strong></a></li>
+								<li><a id="bc-mobile-2" class="bc-link center nolink nobg"		data-bc="2" href="javascript:void(0)"><strong>&nbsp; 3 </strong></a></li>
+								{*<li><a id="bc-mobile-3" class="bc-link center nolink nobg"	data-bc="3" href="javascript:void(0)"><strong>&nbsp;4</strong></a></li>*}
+								<li><a class="nolink nobg" href="javascript:void(0)"></a></li>
+							</ol>
+							{* ALERTY *}
+							<div class="mt-0">
+							{include '../layout/alerts.latte'}
+							</div>
+							{* WIZARD *}
+							<div id="wizard" style="min-height: 600px;">
+								{* SELECT DAY *}
+								<h5 class="d-none">Výběr dne</h5>
+								<div class="row pb-0 mb-0">
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+									<div class="col-xl-6 col-lg-12" id="selectday" style="padding: 0 5px;">
+										<div style="display: none;" id="ajax-data"
+											data-yprv="{$pagination['yearPrev']}"  data-ynxt="{$pagination['yearNext']}"
+											data-mprv="{$pagination['monthPrev']}" data-mnxt="{$pagination['monthNext']}"
+											data-ynow="{$now['year']}" data-mnow="{$now['month']}" data-dnow="{$now['day']}"
+											data-year="{$pagination['year']}" data-month="{$pagination['month']}"></div>
+									</div>
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+								</div>
+								{* SELECT HOUR / UNIT *}
+								<h5 class="d-none">Výber hodiny</h5>
+								<div class="row pb-0 mb-0">
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+									<div class="col-xl-6 col-lg-12" id="selecthour" style="padding: 0 5px;">
+										<div class="kontakt-item" style="min-height: 388px;">
+											<h2 style="width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;">
+												Vyberte den
+											</h2>
+										</div>
+									</div>
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+								</div>
+								{* RESERVATION FORM *}
+								<h5 class="d-none">Kontaktní údaje</h5>
+								<div class="row pb-0 mb-0">
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+									<div class="col-xl-6 col-lg-12 d-block" style="padding: 0 5px;">
+										<a class="anchor" id="reservationForm"></a>
+										<div class="reservation-item">
+											{control reservationForm}
+										</div>
+									</div>
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+								</div>
+							</div>{* /WIZARD *}
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}
+
+{block scripts}
+{include parent}
+	<script src="/js/jquery.steps.js"></script>
+
+	<script>
+	// Initialize Wizard
+	var wizard = $("#wizard").steps({
+		headerTag: "h5",
+		bodyTag: "div",
+		//stepsContainerTag: "ol",
+		//transitionEffect: "fade",
+		//transitionEffectSpeed: 200,
+		autoFocus: true,
+		enablePagination: false,
+		enableFinishButton: false,
+		stepsOrientation: "horizontal",
+		titleTemplate: '<span class="number d-none">#index#. #title#</span>',
+		labels: { cancel:"Zrušit",current:"",pagination:"Stránkování",finish:"Dokončit",next:"Další",previous:"Zpět",loading:"Nahrávání ..." },
+		onStepChanging: function (event, currentIndex, newIndex) {
+			$('#bc-desktop-' + currentIndex).removeClass('nolink').removeClass('bg-light').addClass('nobg');
+			$('#bc-desktop-' + newIndex).addClass('nolink').addClass('bg-light').removeClass('nobg');
+			$('#bc-mobile-' + currentIndex).removeClass('nolink').removeClass('bg-light').addClass('nobg');
+			$('#bc-mobile-' + newIndex).addClass('nolink').addClass('bg-light').removeClass('nobg');
+			return true;
+		}
+	});
+
+	// BreadCrumb Link Click Action
+	$(".bc-link").click(function() {
+		var hrefIndex = $(this).data('bc');
+		var currentIndex = $("#wizard").steps("getCurrentIndex");
+		if(currentIndex === hrefIndex || $(this).hasClass('nolink')) { return false; }
+		//if($(this).hasClass('nolink')) { return false; }
+		if(currentIndex > hrefIndex) { for(var i = hrefIndex; i < currentIndex; i++) { $("#wizard").steps("previous"); } return true; }
+		if(currentIndex < hrefIndex) { for(var i = hrefIndex; i > currentIndex; i--) { $("#wizard").steps("next"); } return true; }
+	});
+
+	// jQuery Main Trigger
+	jQuery(document).ready(function($) {
+		var a = $("#ajax-data");
+		/*var yprv = a.data("yprv");
+		var ynxt = a.data("ynxt");
+		var mprv = a.data("mprv");
+		var mnxt = a.data("mnxt");*/
+		var ynow = a.data("ynow");
+		var mnow = a.data("mnow");
+		var dnow = a.data("dnow");
+		var year = a.data("year");
+		var month = a.data("month");
+
+		$("#selecthour").html("\
+						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
+							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
+								<img src=\"/img/icon/loading-data.svg\" alt=\"Loading...\">\
+							</h2>\
+						</div>"); // INIT LOADING
+
+		$.get("/partials/selectday", { year: year, month: month }, function(data, status) {
+			if(status == "success") {
+				$("#selectday").html(data);
+				$("#reservation_date").html(year + '-' + month + '-' + dnow); // RESERVATION_DATE form set
+			}
+		});
+
+		/*if(year == ynow && month == mnow) {
+			$.get("/partials/selecthour", { year: ynow, month: mnow, day: dnow }, function(data, status) {
+				if(status == "success") {
+					$("#selecthour").html(data);
+				}
+			});
+		}*/
+	});
+	</script>
+
+{/block}

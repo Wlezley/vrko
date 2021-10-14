@@ -1,0 +1,20 @@
+<body>
+	<table>
+		<tr>
+			<td style="width:  30px; height: 320px;">&nbsp;</td>
+			<td style="width: 600px; height: 320px;">&nbsp;</td>
+		  {*<td style="font-size: 56px; color: #e13175; text-align: center; vertical-align: bottom;">{$voucherId}</td>*}
+			<td style="font-size: 48px; color: #000000; text-align: center; vertical-align: bottom;">{$voucherId}</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td style="font-size: 14px; color: #ffffff; text-align: left; vertical-align: bottom;">
+				Datum nákupu: {$voucherDate|date:'%d.%m.%Y'}<br>
+				Platnost poukazu je 180 dní od nákupu.
+			</td>
+			<td style="text-align: center;" class="barcodecell">
+				<barcode code="{$voucherEAN}" type="EAN13" text="0" size="1.5" height="0.5" class="barcode" />
+			</td>
+		</tr>
+	</table>
+</body>

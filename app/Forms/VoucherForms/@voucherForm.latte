@@ -1,0 +1,75 @@
+<div class="container">
+	<div class="row mb-10" style="color: #E13175; text-align: left; vertical-align: middle; font-family: 'Oxanium', cursive; font-size: 1.50em;">
+		<div class="col-12" style="text-align: center;">Objednávka herního poukazu</div>
+	</div>
+	{form form, class => 'row'}
+		<div class="col-12">
+			<div class="form-group row">
+				{label jmeno, class => 'col-sm-3 d-none d-sm-block p-0', style => 'margin: 8px 0;' /}
+				{input jmeno, class => 'col-sm-9', style => 'font-size: 1.5em; border: 1px solid #808080;'}
+			</div>
+			<div class="form-group row">
+				{label prijmeni, class => 'col-sm-3 d-none d-sm-block p-0', style => 'margin: 8px 0;' /}
+				{input prijmeni, class => 'col-sm-9', style => 'font-size: 1.5em; border: 1px solid #808080;'}
+			</div>
+			<div class="form-group row">
+				{label email, class => 'col-sm-3 d-none d-sm-block p-0', style => 'margin: 8px 0;' /}
+				{input email, class => 'col-sm-9', style => 'font-size: 1.5em; border: 1px solid #808080;'}
+			</div>
+			<div class="form-group row">
+				{label telefon, class => 'col-sm-3 d-none d-sm-block p-0', style => 'margin: 8px 0;' /}
+				{input predvolba, class => 'col-xs-6 col-sm-2 pl-0', style => 'border: 1px solid #808080; width: 25%;'}
+				{input telefon, class => 'col-xs-6 col-sm-7', style => 'font-size: 1.5em; border: 1px solid #808080; width: 75%;'}
+			</div>
+			<div class="form-group row">
+				{label vouchery, class => 'col-sm-3 d-none d-sm-block p-0', style => 'margin: 8px 0;' /}
+				{input vouchery, class => 'col-sm-9 pl-10', style => 'font-size: 1.0em; border: 1px solid #808080; height: 39px;'}
+				{*, onChange => "return alert('TEST');"*}
+			</div>
+			{*<div class="row pb-10">
+				<span class="col text-center" id="price-total" style="color: #808080; font-size: 20px; border-top: 1px solid #eceff8; border-bottom: 1px solid #eceff8;">Cena: 250,- Kč</span>
+			</div>*}
+			<div class="row pb-20">
+				<span style="color: #808080; font-style: italic;">* Výše uvedené položky jsou povinné</span>
+			</div>
+			<div class="row">
+				<label class="my-checkbox">Chci dostávat novinky a slevové kupóny na můj Email.
+					<input type="checkbox" name="subscribe">
+					<span class="checkmark"></span>
+				</label>
+			</div>
+			<div class="row">
+				<label class="my-checkbox">Souhlasím s <a href="/docs/vseobecne-obchodni-podminky.pdf" target="_blank" title="Všeobecné obchodní podmínky">obchodními podmínkami</a> a <a href="/docs/podminky-ochrany-osobnich-udaju.pdf" target="_blank" title="Ochrana osobnéch údajů a GDPR">GDPR</a>.
+					<input type="checkbox" name="agree" required data-nette-rules='[{"op":":filled","msg":"Je vyžadován souhlas s obchodními podmínkami a GDPR."}]'>
+					<span class="checkmark"></span>
+				</label>
+			</div>
+			<div class="row">
+				<label class="my-checkbox">Souhlasím s <a href="/docs/dodaci-podminky.pdf" target="_blank" title="Dodací podmínky">dodacími</a> a <a href="https://www.comgate.cz/cz/reklamacni-rad" target="_blank" title="Reklamační řád">reklamačními</a> podmínkami.
+					<input type="checkbox" name="agree2" required data-nette-rules='[{"op":":filled","msg":"Je vyžadován souhlas s dodacími a reklamačními podmínkami."}]'>
+					<span class="checkmark"></span>
+				</label>
+			</div>
+
+			<div class="row pt-10 pb-0" style="border-top: 1px solid #eceff8; border--bottom: 1px solid #eceff8;">
+				{*<span class="col text-center" style="color: #808080; font-size: 16px;">Původní cena: <span class="strikethrough" id="price-orig">Cena: 300,- Kč</span></span>*}
+			</div>
+			<div class="row pt-0 pb-10" style="border--top: 1px solid #eceff8; border-bottom: 1px solid #eceff8;">
+				<span class="col text-center wow pulse animated" style="font-size: 20px; color: #e13175;" data-wow-iteration="infinite" data-wow-duration="4s">Vaše cena: <span id="price-total">250,- Kč</span></span>
+			</div>
+
+			{*<div class="row pt-10 pb-10" style="border-top: 1px solid #eceff8; border-bottom: 1px solid #eceff8;">
+				<span class="col text-center" id="price-orig" style="color: #808080; font-size: 20px; border-top: 1px solid #eceff8; border-bottom: 1px solid #eceff8; text-decoration: line-through;">Cena: 300,- Kč</span>
+				<div class="col text-center" style="border-top: 1px solid #eceff8; border-bottom: 1px solid #eceff8;">
+					<sup style="color: red; padding: 10px;">AKCE!</sup>
+					<span class="cool" id="price-total" style="font-size: 20px; color: #808080;">250,- Kč</span>
+					<sup style="color: red; padding: 10px;">AKCE!</sup>
+				</div>
+			</div>*}
+
+			<div class="form-group row pt-20 mb-0">
+				{input send, class => 'pl-0 pr-0 btn btn-primary btn-block'}
+			</div>
+		</div>
+	{/form}
+</div>

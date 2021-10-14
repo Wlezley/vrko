@@ -1,0 +1,81 @@
+parameters:
+	# Rezervace (not implemented yet)
+	reservation:
+		hourStart: 16
+		hourCount: 6
+		unitsPerHour: 3
+
+	# mPDF (not implemented yet)
+	mpdf_config:
+		#tempDir: %tempDir%
+		tempDir: '../temp'
+		ignore_invalid_utf8: true
+		useOnlyCoreFonts: false
+
+	# SMS Brana (not implemented yet, but we have some progress)
+	smsbrana_api:
+		url: https://api.smsbrana.cz/smsconnect/
+		login: ''
+		password: ''
+		sender_id: 0
+
+	# Ecomail API (not implemented yet, but we have some progress)
+	ecomail_api:
+		url: https://api2.ecomailapp.cz/
+		#url: https://apinew.ecomailapp.cz/
+		key: ''
+		response: 'JSONArray' # JSONObject, JSONArray or PlainText
+
+	# Dotykacka API (partially implemented)
+	dotykacka_api:
+		url: https://api.dotykacka.cz/v2/
+		refreshToken: ''
+		cloudId: ''
+		branchId: ''
+		warehouseId: ''
+		tables: [
+			'',	# 0: Table 1
+			'',	# 1: Table 2
+			'',	# 2: Table 3
+		]
+
+	# Comgate API - PRODUCTION
+#	agmo_payments:
+#		paymentsUrl: https://payments.comgate.cz/v1.0/create
+#		merchant: ''
+#		test: false
+#		secret: ''
+#		paymentsUrl2: NULL
+#		dataFolderName: %tempDir%/comgate
+
+	# Comgate API - DEVELOPMENT
+	agmo_payments:
+		paymentsUrl: https://payments.comgate.cz/v1.0/create
+		merchant: ''
+		test: true
+		secret: ''
+		paymentsUrl2: NULL
+		dataFolderName: %tempDir%/comgate
+
+
+mail:
+	smtp: true # use SmtpMailer instead of SendmailMailer
+	host: ''
+	port: 587
+	username: ''
+	password: ''
+	# possible values are ssl, tls or null
+	secure: tls
+
+
+# WWW-DEV
+database:
+	dsn: 'mysql:host=127.0.0.1;dbname='
+	user: ''
+	password: ''
+
+# WEDOS
+#database:
+#	dsn: 'mysql:host=;dbname='
+#	user: ''
+#	password: ''

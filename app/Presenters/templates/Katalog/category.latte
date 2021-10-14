@@ -1,0 +1,129 @@
+{*block title}{$category['nameP']} | VR Hry{/block*}
+{block title}VR Hry - {$category['pageTitle']}{/block}
+{block description}Nejlepší {$category['pageTitle']} ve virtuální realitě v Plzni. Přijďte si zahrát přes 40 herních titulů pro VR!{/block}
+
+{block head}
+{include parent}
+<style>
+.gamelist-main {
+	background-color: #000000;
+	padding: 20px;
+}
+
+.gamelist-main h2,
+.gamelist-main h3,
+.gamelist-main h4 {
+	color: #e13175;
+}
+
+.gamelist-main h2 {
+	font-size: 40px;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+
+.gamelist-main h3 {
+	font-size: 35px; /* LARGE */
+	/*font-size: 20px; /* TINY */
+	margin-bottom: 0;
+}
+
+.gamelist-main h4 {
+	font-size: 25px;
+	margin-bottom: 0;
+}
+
+.gamelist-main hr {
+	border-color: #e13175;
+	margin: 0 0 25px 0;
+}
+
+.gamelist-counter {
+	font-size: 16px;
+}
+/* ====================================================== */
+.gamelist-item:hover .gamelist-thumb img {
+	box-shadow: 0px 2px 21px 0px rgba(17, 8, 23, 0.16);
+	opacity: .9;
+}
+/*.gamelist-item:hover .gamelist-thumb::before {
+	opacity: .9;
+}*/
+.gamelist-item:hover .gamelist-content h3 {
+	color: #ffffff;
+	/*color: #2b96cc;*/
+	/*background-color: #101010;*/
+}
+/* ====================================================== */
+.gamelist-thumb {
+	position: relative;
+	margin-bottom: 0;
+	overflow: hidden;
+	background-color: #ffffff;
+}
+.gamelist-thumb img {
+	width: 100%;
+	transition: .3s linear;
+}
+.gamelist-content h3 {
+	color: #e13175;
+	background-color: #000000;
+	transition: .3s linear;
+	min-height: 85px; /* LARGE */
+	/*min-height: 50px;  /* TINY */
+}
+</style>
+{/block}
+
+
+{block content}
+	<main>
+		<section class="area-bg-four pt-30 pb-30">
+			<div class="container">
+
+				<div class="gamelist-main">
+
+					<div class="row">
+						<div class="col-12">
+							<div class="mb-10">
+								<h2 class="d-none d-md-block">{$category['pageTitle']}</h2>{* DESKTOP *}
+								<h2 class="d-block d-md-none text-center">{$category['pageTitle']}</h2>{* MOBILE *}
+								<p class="gamelist-counter"><a href="{link Katalog:default}">Katalog her</a> / {$category['nameP']}</p>
+								{*<p class="gamelist-counter"><a href="{link Katalog:default}">Katalog her</a> / {$category['nameP']} ({$category['count']})</p>*}
+							</div>
+						</div>
+					</div>
+
+					<div class="row mb-0">
+					{if $gamelist}
+					{foreach $gamelist as $item}
+						<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3">{* LARGE *}
+						{*<div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">{* TINY *}
+							<div class="gamelist-item text-center mb-0">
+								<div class="gamelist-thumb">
+									{*<a href="{link Katalog:gamepage $category['url'], $item['url']}">*}
+									<a href="{link Katalog:gamepage $item['mainCategory'], $item['url']}">
+										<img src="{$item['imageMain']}" alt="{$item['fullName']}">
+									</a>
+								</div>
+								{*<a class="gamelist-content" href="{link Katalog:gamepage $category['url'], $item['url']}">*}
+								<a class="gamelist-content" href="{link Katalog:gamepage $item['mainCategory'], $item['url']}">
+									<h3 class="gamelist-title">{$item['fullName']}</h3>
+								</a>
+							</div>
+						</div>
+					{/foreach}
+					{else}
+						<div class="col-12 pt-100 pb-100">
+							<p class="text-center font-italic">Tato kategorie neobsahuje žádné hry.</p>
+							<!--p class="text-center font-italic">Prosím, <a href="{link Katalog:default}">vyberte jinou kategorii</a>.</p-->
+						</div>
+					{/if}
+					</div>
+
+				</div>
+
+			</div>
+		</section>
+	</main>
+{/block}

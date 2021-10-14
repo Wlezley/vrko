@@ -1,0 +1,145 @@
+{if $error}
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+</body></html>
+{else}
+{*<div><pre>{$debug}</pre></div>*}
+<div class="reservation-item">
+	<table>
+		<tr class="head">
+			<td colspan=1>{$prevMonthHtml|noescape}</td>
+			<td colspan=5><h2>{$monthName}</h2></td>
+			<td colspan=1>{$nextMonthHtml|noescape}</td>
+		</tr>
+		<tr class="sub-head">
+			<td colspan=7><div>{$pagination['year']}</div></td>
+		</tr>
+		<tr class="day-names">
+		{foreach $dayNames as $id => $dayName}
+			{continueIf $id == 0}
+			<th>{$dayName}</th>
+		{/foreach}
+		</tr>
+	{foreach $calMonthPage as $day}
+		{if $day['dow'] == 1}
+		<tr class="week-row">
+		{/if}
+			{if $day['skip']}
+			<td>&nbsp;</td>
+			{elseif $day['disabled']}
+			<td style="background-color: {$day['bkg_col']|noescape};">
+				<a class="disabled-cell-day">
+					<div>{$day['d']}</div>
+				</a>
+			</td>
+			{else}
+			<td style="background-color: {$day['bkg_col']|noescape};">
+				<a class="clickable-cell-day" data-y="{$day['y']}" data-m="{$day['m']}" data-d="{$day['d']}">
+				{if $day['today']}
+					<div style="color: #FFF;">{$day['d']}</div>
+				{else}
+					<div>{$day['d']}</div>
+				{/if}
+				</a>
+			</td>
+			{/if}
+		{if $day['dow'] == 0}
+		</tr>
+		{/if}
+	{/foreach}
+	</table>
+</div>
+{* LEGEND *}
+<div class="reservation-item pb-0 mb-0">
+	<div class="container">
+		<div class="row legend-header">
+			<div class="col-12">Obsazenost</div>
+		</div>
+		<div class="row legend-inner">
+			<div class="col-6 legend-min">MIN.</div>
+			<div class="col-6 legend-max">MAX.</div>
+		</div>
+		<div class="row legend-table">
+			<table>
+				<tr>
+				{foreach $palette as $key => $palItem}
+					<td style="background-color: {$palItem|noescape};">&nbsp;</td>
+				{/foreach}
+				</tr>
+			</table>
+		</div>
+		<div class="row legend-description">
+			<div class="w-100">Barevné označení informuje o obsazenosti konkrétního dne.</div>
+		</div>
+	</div>
+</div>
+
+{* DEBUG * }
+<div class="reservation-item">
+	<div class="container">
+		<div class="row" style="color: #E13175; text-align: left; vertical-align: middle; font-family: 'Oxanium', cursive; font-size: 1.50em;">
+			<div class="col-12" style="text-align: center;">DEBUG - DAY</div>
+		</div>
+		<div class="row">
+			<pre>{$debug|noescape}</pre>
+		</div>
+	</div>
+</div>
+{* *}
+
+{* SCRIPTS *}
+<script>
+jQuery(document).ready(function($) {
+	$(".clickable-cell-day").click(function() {
+		$("#selecthour").html("\
+						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
+							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
+								<img src=\"/img/icon/loading-data.svg\" alt=\"Loading...\">\
+							</h2>\
+						</div>"); // INIT LOADING
+		var request = { year: $(this).data("y"), month: $(this).data("m"), day: $(this).data("d") };
+		$.ajax({ url: '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+		$("#reservation_date").html($(this).data("y") + '-' + $(this).data("m") + '-' + $(this).data("d")); // RDF set
+		$("#reservation_units").html('[]'); // RUF reset
+		if(!$('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').addClass('nolink'); }
+		if(!$('#bc-mobile-2').hasClass('nolink')) { $('#bc-mobile-2').addClass('nolink'); }
+		$("#wizard").steps("next");
+	});
+	$("#redir-month-prev").click(function() {
+		var request = { year: {$pagination['yearPrev']}, month: {$pagination['monthPrev']} };
+		$.ajax({ url: '/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
+		resetHourSelector({$pagination['yearPrev']}, {$pagination['monthPrev']});
+	});
+	$("#redir-month-next").click(function() {
+		var request = { year: {$pagination['yearNext']}, month: {$pagination['monthNext']} };
+		$.ajax({ url: '/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
+		resetHourSelector({$pagination['yearNext']}, {$pagination['monthNext']});
+	});
+	function resetHourSelector(y, m) {
+		$("#reservation_units").html('[]'); // RUF reset
+		if(y == {$now['year']} && m == {$now['month']}) {
+			var request = { year: {$now['year']}, month: {$now['month']}, day: {$now['day']} };
+			$.ajax({ url: '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+			$("#reservation_date").html({$now['year']} + '-' + {$now['month']} + '-' + {$now['day']} ); // RDF set
+		}
+		else {
+			$("#reservation_date").html(''); // RDF reset
+			$("#selecthour").html("\
+						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
+							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
+								Vyberte den\
+							</h2>\
+						</div>");
+		}
+		if(!$('#bc-desktop-1').hasClass('nolink')) { $('#bc-desktop-1').addClass('nolink'); }
+		if(!$('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').addClass('nolink'); }
+		if(!$('#bc-mobile-1').hasClass('nolink')) { $('#bc-mobile-1').addClass('nolink'); }
+		if(!$('#bc-mobile-2').hasClass('nolink')) { $('#bc-mobile-2').addClass('nolink'); }
+	}
+});
+</script>
+{/if}

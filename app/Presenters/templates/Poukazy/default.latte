@@ -1,0 +1,212 @@
+{block title}Herní poukazy{/block}
+{block description}Udělejte radost svému blízkému nebo kamarádovi. Darujte mu herního poukaz na akční zážitek ve virtuální realitě!{/block}
+
+{block head}
+{include parent}
+	<link rel="stylesheet" href="/css/rezervace.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
+<style>
+.voucher-item {
+	display: flex;
+	align-items: center;
+	background: #ffffff;
+	box-shadow: 0px 1px 13px 0px rgba(128, 18, 40, 0.1);
+	position: relative;
+	z-index: 1;
+	padding: 20px 20px 20px;
+	margin: 20px 10px;
+}
+.voucher-item h5 {
+	font-size: 18px;
+	color: #1c1121;
+	text-transform: uppercase;
+	margin-top: 20px;
+	margin-bottom: 0;
+}
+.voucher-item img.poster {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+.voucher-item div.ikona img {
+	width: 80px;
+	height: 80px;
+	display: block;
+	margin: 10px auto 10px 0;
+}
+.voucher-item .ikona {
+	width: 95px;
+	float: left;
+}
+.voucher-item .ikona-popis {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+.voucher-item .ikona-popis h5 {
+	font-size: 18px;
+	color: #1c1121;
+	text-transform: uppercase;
+	margin: 0;
+}
+.voucher-item h5 span {
+	color: #e13175;
+}
+.voucher-item p {
+	font-size: 14px;
+	color: #6c6c6c;
+	margin-bottom: 0;
+	line-height: normal;
+}
+
+/* AUXILIARY / GLOBAL */
+.text-italic {
+	font-style: italic;
+}
+a.anchor {
+    display: block;
+    position: relative;
+    top: -100px;
+    visibility: hidden;
+}
+.strikethrough {
+	position: relative;
+}
+.strikethrough:before {
+	position: absolute;
+	content: "";
+	left: 0;
+	top: 50%;
+	right: 0;
+	border-top: 1px solid;
+	border-color: inherit;
+
+	-webkit-transform:rotate(-5deg);
+	-moz-transform:rotate(-5deg);
+	-ms-transform:rotate(-5deg);
+	-o-transform:rotate(-5deg);
+	transform:rotate(-5deg);
+}
+</style>{/block}
+
+{block content}
+	<main>
+		<section class="game-single-area area-bg-four pt-50 pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="game-single-content">
+							{* NADPIS *}
+							<div class="game-single-title mb-10">
+								<h4 class="d-none d-md-block">Herní poukazy <span>VRKO</span></h4>{* DESKTOP *}
+								<h4 class="d-block d-md-none text-center">Herní poukazy <span>VRKO</span></h4>{* MOBILE *}
+							</div>
+
+							{include '../layout/alerts.latte'}
+
+							<div class="row pb-0 mb-0">
+								<div class="col-xl-6 col-lg-12 d-xl-none d-flex" id="resform" style="padding: 0 5px;">{* MOBILE *}
+									<div class="voucher-item d-block">
+										{block info-text}
+										{*<img class="poster" src="/img/poukazy/poukaz3s.jpg" alt="" />*}
+										<img class="poster" src="/img/poukazy/vizualizace.jpg" alt="poukaz" />
+										<p class="font-weight-normal text-center pt-10 pb-20">Nevíte si rady při výběru dárku a rádi byste udělali radost svému blízkému nebo kamarádovi? Věnujte jim akční zážitek ve virtuální realitě v podobě herního poukazu. Teď už je jen na Vás, koho potěšíte!</p>
+										<div class="row mb-0">
+											<div class="col-12 wow fadeInUp" data-wow-delay="0.10s">
+												<div class="ikona">
+													<img src="/img/poukazy/ikona8s.png" alt="Jak poukázku zakoupit">
+												</div>
+												<div class="ikona-popis">
+													<h5><span>Zakoupení</span> poukazu</h5>
+													<p class="font-weight-normal">Poukaz můžete objednat pomocí <a href="#voucherForm">objednávkového formuláře</a>. Platba probíhá online platební metodou nebo převodem na bankovní účet.</p>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-12 wow fadeInUp" data-wow-delay="0.20s">
+												<div class="ikona">
+													<img src="/img/poukazy/ikona7s.png" alt="Doručení herního poukazu">
+												</div>
+												<div class="ikona-popis">
+													<h5><span>Doručení</span> poukazu</h5>
+													<p class="font-weight-normal">Poukaz Vám doručíme elektronicky do Vaší e-mailové schránky. Herní poukaz je přenosný - lze ho tak předat kamarádovi jako dárek.</p>
+												</div>
+											</div>
+										</div>
+										<div class="row mb-0">
+											<div class="col-12 wow fadeInUp" data-wow-delay="0.30s">
+												<div class="ikona">
+													<img src="/img/poukazy/ikona9s.png" alt="Jak poukaz uplatnit">
+												</div>
+												<div class="ikona-popis">
+													<h5><span>Uplatnění</span> poukazu</h5>
+													<p class="font-weight-normal">Po zakoupení poukazu proveďte <a href="{link Rezervace:}" target="_blank">rezervaci</a> a poukaz v elektronické nebo tištěné podobě předložíte obsluze v herně.</p>
+												</div>
+											</div>
+										</div>
+										{*<p class="text-italic text-center mt-30">Platnost poukazu je 180 dní od zakoupení.</p>*}
+										<p class="text-italic text-center mt-30 font-weight-bold">Jeden herní poukaz platí pro 1 VR box na 30 minut hraní včetně instruktáže.
+										Poukazy lze kombinovat. 2 poukazy tak můžete využít k pronájmu 1 boxu na 60 minut, nebo na dva herní boxy po 30 minutách.
+										<span class="font-weight-normal" style="color: #6c6c6c;">Platnost poukazu je 180 dní od zakoupení.</span></p>
+										{/block}
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-12 d-block" style="padding: 0 5px;">{* VOUCHER FORM *}
+									<a class="anchor" id="voucherForm"></a>
+									<div class="voucher-item">
+										{control voucherForm}
+									</div>
+								</div>
+								<div class="col-xl-6 col-lg-12 d-xl-flex d-none" style="padding: 0 5px;">{* DESKTOP *}
+									<div class="voucher-item d-block">
+										{include info-text}
+									</div>
+								</div>
+							</div>
+							<div class="row mb-0 mt-20">
+								<div class="col-12">
+									<p class="font-weight-normal text-italic text-center">Online platby pro nás zajišťuje platební brána <a href="https://www.comgate.cz/" target="_blank">ComGate</a>. Poskytovatel služby, společnost ComGate Payments, a.s., je licencovaná Platební instituce působící pod dohledem České národní banky. Platby probíhající skrze platební bránu jsou plně zabezpečeny a veškeré informace jsou šifrovány.</p>
+								</div>
+							</div>
+
+{* DEBUG * }
+<div class="reservation-item">
+	<div class="container">
+		<div class="row" style="color: #E13175; text-align: left; vertical-align: middle; font-family: 'Oxanium', cursive; font-size: 1.50em;">
+			<div class="col-12" style="text-align: center;">DEBUG - VOUCHER</div>
+		</div>
+		<div class="row">
+			<pre>{$debug|noescape}</pre>
+		</div>
+	</div>
+</div>
+{* *}
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}
+
+{block scripts}
+{include parent}
+
+<script>
+jQuery(document).ready(function($) {
+	var origPrice = 300;
+	var basePrice = 250;
+	var prefix = ' ';
+	var postfix = ',- Kč';
+	$("#price-orig").html( prefix+(origPrice)+postfix);
+	$("#price-total").html(prefix+(basePrice)+postfix);
+	$("#frm-voucherForm-form-vouchery").on('change', function (e) {
+		$("#price-orig").html( prefix+(origPrice * this.value)+postfix);
+		$("#price-total").html(prefix+(basePrice * this.value)+postfix);
+	});
+});
+</script>
+
+{/block}

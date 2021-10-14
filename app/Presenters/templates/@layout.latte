@@ -1,0 +1,135 @@
+{**
+ * @param string	$basePath		web base path
+ * @param string	$title			page title
+ * @param string	$description	meta description
+ * @param string	$keywords		meta keywords
+ * @param string	$robots			meta robots
+ *}
+{var $debug = true}
+{*var $description = "Zažijte ty nejlepší hry ve virtuální realitě! Hrajte již od 250Kč! Užijte si s kamarády jedinečný VR zážitek a vstupte do jedinečného virtuálního světa, ve kterém se stanete svým vysněným hrdinou!"*}
+{*var $description = "Zažijte ty nejlepší hry ve virtuální realitě v Plzni! Užijte si s kamarády jedinečný VR zážitek! Vstupte do virtuálního světa, ve kterém se stanete svým vysněným hrdinou!"*}
+{var $description_default = "Zažijte nejlepší hry ve virtuální realitě v Plzni! Nabízíme 3 herní boxy, dárkové poukazy, občerstvení a posezení v kavárně. Najdete nás v Plzni na Slovanech."}
+{var $keywords_default = "virtuální realita plzeň, herna virtuální reality plzeň, vr herna, vr kavárna, htc vive"}
+{if $debug}
+	{var $robots = "noindex,nofollow"}
+{else}
+	{var $robots = "index,follow"}
+{/if}
+{var $csVer = "?v=2021090401"}
+{var $jsVer = "?v=2021090401"}
+{*{ifset $csVer}{$csVer}{/ifset}
+{ifset $jsVer}{$jsVer}{/ifset}*}
+<!DOCTYPE html>
+<html lang="cs-CZ">
+<head>
+{* META *}
+	<meta charset="utf-8">
+	<meta http-equiv="Content-Type"	content="text/html; charset=UTF-8">
+	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta http-equiv="content-language" content="cs-CZ">
+	{*<meta name="viewport"			content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">*}
+	<meta name="viewport"			content="width=device-width, initial-scale=1.0">
+	{block headoverride}
+	<meta name="author"				content="Ladislav Alexa, Filip Koželuh">
+	<meta name="designer"			content="Ladislav Alexa">
+	{*<meta name="designer"			content="Kryštof Henzl, Ladislav Alexa">*}
+	<meta name="programmer"			content="Ladislav Alexa">
+	{*<meta name="description"		content="{$description_default|striptags}">*}
+	<meta name="description"		content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
+	<meta name="keywords"			content="{$keywords_default|striptags}">
+	<meta name="rating"				content="All">
+	<meta name="robots"				content="{$robots|striptags}">
+	<meta name="googlebot"			content="{$robots|striptags}">
+	<meta name="copyright"			content="666% zábavy s.r.o.">
+	<meta name="publisher"			content="666% zábavy s.r.o.">
+	<meta property="og:title"		content="{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz">
+	<meta property="og:type"		content="website">
+	<meta property="og:url"			content="https://vrko.cz/">
+	<meta property="og:email"		content="info@vrko.cz">
+	<meta property="og:image"		content="{$baseUrl}/img/logo/logo.png">
+	{*<meta property="og:image:width"	content="1280"><meta property="og:image:height" content="720">*}
+	{*<meta property="og:description"	content="{$description_default|striptags}">*}
+	<meta property="og:description"	content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
+	<meta property="og:determiner"	content="VRko.cz">
+	<meta property="og:locale"		content="cs_CZ">
+	<meta property="og:site_name"	content="Virtuální Realita Plzeň | VRko.cz">
+	{*<link rel="canonical" href="{$baseUrl}/{$basePath}">*}
+{* TITLE *}
+	<title>{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz</title>
+{* CSS *}
+{if $debug}
+	<link rel="stylesheet" href="/css/bootstrap.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/animate.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/magnific-popup.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/fontawesome-all.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/odometer.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/aos.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/owl.carousel.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/meanmenu.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/slick.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/default.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/style.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/responsive.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
+{else}
+	<link rel="stylesheet" href="/all-styles.css{ifset $csVer}{$csVer}{/ifset}">
+{/if}
+{* FONTS *}
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css?family=Oswald:400,300,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
+	<link rel="apple-touch-icon" type="image/png" href="/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="/favicon.png">
+	<link rel="favicon" type="image/png" href="/favicon.png">
+	<link rel="icon" type="image/png" href="/favicon.png">{/block}
+{* JAVA SCRIPT *}
+	{*block javascript}
+	{/block*}
+{* HEAD BLOCK *}
+	{block head}
+	{/block}
+{if !$debug}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=G-WNPZ8XM1KF"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){ dataLayer.push(arguments); }
+		gtag('js', new Date());
+		gtag('config', 'G-WNPZ8XM1KF');
+	</script>
+{/if}
+</head>
+<body>
+	{*block styles}
+	{/block*}
+	{include './layout/header.latte'}
+	{include content}
+	{include './layout/footer.latte'}
+	{block scripts}
+	{*<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>*}
+	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
+{if $debug}
+	<script src="/js/vendor/jquery-3.4.1.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/popper.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/bootstrap.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/isotope.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/slick.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.meanmenu.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/wow.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/aos.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.lettering.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.textillate.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.odometer.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.appear.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/owl.carousel.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.countdown.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.scrollUp.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/imagesloaded.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/jquery.magnific-popup.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/plugins.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="/js/main.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+{else}
+	<script src="/all-scripts.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+{/if}
+	{/block}
+</body>
+</html>

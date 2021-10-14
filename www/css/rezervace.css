@@ -1,0 +1,502 @@
+/* Units - Next button disabled style */
+.btn-next.disabled, .btn-next:disabled {
+	color: #fff;
+	background-color: #505050;
+	border-color: #007bff;
+	cursor: default;
+}
+
+/* Reservation (main) */
+.reservation-item {
+	display: flex;
+	align-items: center;
+	background: #ffffff;
+	box-shadow: 0px 1px 13px 0px rgba(128, 18, 40, 0.1);
+	position: relative;
+	z-index: 1;
+	padding: 20px 20px 20px;
+	margin: 20px 10px;
+}
+
+/* Table */
+.reservation-item table {
+	width: 100%;
+	vertical-align: middle;
+	text-align: center;
+	font-family: 'Oxanium', cursive;
+}
+.reservation-item table,
+.reservation-item th,
+.reservation-item td {
+	border: 3px solid #ffffff;
+}
+
+/* <TR> Head */
+.reservation-item tr.head { color: #E13175; }
+.reservation-item tr.head td a { cursor: pointer; }
+.reservation-item tr.head td h2 { color: #E13175; text-align: center; }
+.reservation-item tr.head td a div { height: 100%; width: 100%; font-size: 1.75em; }
+#redir-month-prev div { /*text-align: left;*/ text-align: center; }
+#redir-month-next div { /*text-align: right;*/ text-align: center; }
+
+/* <TR> Sub-Head */
+.reservation-item tr.sub-head td div { color: #000000; text-align: center; margin-top: -15px; margin-bottom: 10px; }
+
+/* <TR> Selector, Week-Row */
+.reservation-item tr.selector,
+.reservation-item tr.week-row { color: #000000; }
+
+/* <TR> Day-Names */
+.reservation-item tr.day-names th { color: #808080; padding-top: 15px; padding-bottom: 5px; }
+
+/* Stage select */
+.reservation-item th.stage { background-color: #fafafa; color: #808080; width: 25%; }
+
+/* Clickable cell - Day select */
+.clickable-cell-day { cursor: pointer; }
+.clickable-cell-day div { height: 100%; width: 100%; font-size: 1.75em; }
+.clickable-cell-day div.today { border-bottom: 3px solid #000000; margin-bottom: -3px; }
+
+/* Disabled cell - Day select */
+.disabled-cell-day { cursor: default; /*cursor: not-allowed;*/ }
+.disabled-cell-day div { height: 100%; width: 100%; font-size: 1.75em; }
+.disabled-cell-day div.today { border-bottom: 3px solid #000000; margin-bottom: -3px; }
+
+/* Unit */
+.unit.available				{ background-color: #eeeeee; font-size: 1.75em; cursor: pointer; }
+.unit.selected				{ background-color: #33cc33; font-size: 1.75em; cursor: pointer; }
+.unit.occupied				{ background-color: #ff3333; font-size: 1.75em; cursor: default; }
+
+.unit.available:hover		{ background-color: #dddddd; }
+.unit.selected:hover		{ background-color: #22bb22; }
+.unit.occupied:hover		{ background-color: #ee2222; }
+
+.unit.available i:before	{ font-weight: 400; /* far */ content: "\f0c8"; /* fa-square */ }
+.unit.selected i:before		{ font-weight: 900; /* fas */ content: "\f00c"; /* fa-check */ }
+.unit.occupied i:before		{ font-weight: 900; /* fas */ content: "\f05e"; /* fa-ban */ }
+/*.unit.occupied-2 i:before	{ font-weight: 400; /* far * / content: "\f057"; /* times-circle * / }
+.unit.occupied-3 i:before	{ font-weight: 900; /* fas * / content: "\f057"; /* times-circle * / }*/
+
+/* Selector Unit Icon Base */
+.reservation-item tr.selector td div i {
+	width: 50px;
+	text-align: center;
+	vertical-align: middle;
+	font-family: "Font Awesome 5 Free";
+	-moz-osx-font-smoothing: grayscale;
+	-webkit-font-smoothing: antialiased;
+	display: inline-block;
+	font-style: normal;
+	font-variant: normal;
+	text-rendering: auto;
+	line-height: 1;
+}
+
+/* Cell day / Level colors */
+.cell-day { color: #000000; }
+.cell-day.level0 { background-color: #ffffff; }
+.cell-day.level1 { background-color: #33cc33; }
+.cell-day.level2 { background-color: #ffaa44; }
+.cell-day.level3 { background-color: #ff3333; }
+
+
+/* ################################################## LEGEND ################################################## */
+.legend-header {
+	color: #E13175;
+	text-align: center;
+	margin: -10px 0;
+	font-family: 'Oxanium', cursive;
+	font-size: 1.50em;
+}
+
+.legend-inner {
+	margin-top: 20px;
+	margin-bottom: -25px;
+	text-align: left;
+	/*vertical-align: middle;*/
+	font-family: 'Oxanium', cursive;
+	font-size: 0.85em;
+}
+
+.legend-inner .legend-min {
+	text-align: left;
+	color: #333333;
+	font-weight: 900;
+}
+.legend-inner .legend-max {
+	text-align: right;
+	color: #e8e8e8;
+	font-weight: 900;
+}
+
+.legend-table {
+	color: #000000;
+	font-family: 'Oxanium', cursive;
+	font-size: 1.125em;
+}
+.legend-table table {
+	width: 100%;
+	border-style: none;
+}
+.legend-table tr {
+	width: 100%;
+	text-align: center;
+	border-style: none;
+}
+.legend-table td {
+	width: 5,2631%;
+	border-style: none;
+}
+
+.legend-description {
+	width: 100%;
+	text-align: center;
+	color: #808080;
+	font-family: 'Oxanium', cursive;
+	font-size: 1.125em;
+	font-style: italic;
+	margin: 10px auto;
+}
+
+
+/* ######################################### RESERVATION "STEPS" MENU ######################################### */
+.breadcrumb {
+	background-color: transparent;
+	padding: 0;
+	margin-bottom: 2rem;
+}
+
+.breadcrumb a {
+	color: #535050;
+	transition: none;
+}
+
+li.breadcrumb-item::before {
+	/*font-family: "fontello";*/
+	font-family: 'Oxanium', cursive;
+	content: "";
+	margin-right: .5rem;
+	color: #535050;
+}
+
+.breadcrumb-item.active {
+	color: #e13175;
+}
+
+.breadcrumb-arrow {
+	display: inline-block;
+	width: auto !important;
+	height: 4rem;
+	padding: 0;
+	line-height: 4rem;
+	list-style: none;
+	background-color: #ede9e9;
+	margin-bottom: 2rem;
+}
+.breadcrumb-arrow li:first-child a {
+	border-radius: 4px 0 0 4px;
+	-webkit-border-radius: 4px 0 0 4px;
+	-moz-border-radius: 4px 0 0 4px;
+}
+.breadcrumb-arrow li,
+.breadcrumb-arrow li a,
+.breadcrumb-arrow li span {
+	display: inline-block;
+	vertical-align: top;
+}
+.breadcrumb-arrow li:not(:first-child) {
+	margin-left: -5px;
+}
+.breadcrumb-arrow li + li:before {
+	padding: 0;
+	content: "";
+}
+.breadcrumb-arrow li span {
+	padding: 0 10px;
+}
+.breadcrumb-arrow li span,
+.breadcrumb-arrow li a {
+	font-family: "Oxanium";
+}
+.breadcrumb-arrow li:first-child a {
+	line-height: 4rem;
+}
+.breadcrumb-arrow li a.center,
+.breadcrumb-arrow li:not(:first-child) a.center {
+	line-height: 4rem;
+	padding: 0 1rem 0 1.5rem;
+}
+.breadcrumb-arrow li a,
+.breadcrumb-arrow li:not(:first-child) span {
+	height: 4rem;
+	text-align: center;
+	padding: 1rem 1rem 0 1.5rem;
+	line-height: 1rem;
+}
+.breadcrumb-arrow li:first-child a {
+	padding: 0 10px;
+}
+.breadcrumb-arrow li a.nolink {
+	font-family: "Oxanium";
+	cursor: default;
+}
+.breadcrumb-arrow li a.nolink.bg-light {
+	background-color: #e03070 !important;
+	border-color: #e03070 !important;
+}
+.breadcrumb-arrow li a.nolink.bg-light:before,
+.breadcrumb-arrow li a.nolink.bg-light:before {
+	border-left-color: #e03070 !important;
+}
+.breadcrumb-arrow li a.nolink.bg-light:focus,
+.breadcrumb-arrow li a.nolink.bg-light:hover {
+	background-color: #e03070 !important;
+	border: 1px solid #e03070 !important;
+}
+.breadcrumb-arrow li a.nolink.bg-light:focus:before,
+.breadcrumb-arrow li a.nolink.bg-light:hover:before {
+	border-left-color: #e03070 !important;
+}
+.breadcrumb-arrow li a.nolink.nobg:hover {
+	background-color: #ede9e9;
+	border-color: #ede9e9;
+}
+.breadcrumb-arrow li a.nolink.nobg:focus,
+.breadcrumb-arrow li a.nolink.nobg:hover {
+	background-color: #ede9e9;
+	border: 1px solid #ede9e9;
+}
+.breadcrumb-arrow li a.nolink.nobg:focus:before,
+.breadcrumb-arrow li a.nolink.nobg:hover:before {
+	border-left-color: #ede9e9;
+}
+.breadcrumb-arrow li a.nobg {
+	color: #393939;
+	background-color: #ede9e9;
+	border: 1px solid #ede9e9;
+}
+.breadcrumb-arrow li a.nobg:before {
+	border-left-color: #ede9e9;
+}
+.breadcrumb-arrow li a.nobg:after {
+	border-left: 11px solid #f06fa3;
+}
+.breadcrumb-arrow li a {
+	position: relative;
+	color: #fbfbfb;
+	text-decoration: none;
+	background-color: #e13175;
+	border: 1px solid #e13175;
+}
+.breadcrumb-arrow li:first-child a {
+	padding-left: 10px;
+}
+.breadcrumb-arrow li a:after,
+.breadcrumb-arrow li a:before {
+	position: absolute;
+	top: -1px;
+	width: 0;
+	height: 0;
+	content: "";
+	border-top: 2rem solid transparent;
+	border-bottom: 2rem solid transparent;
+}
+.breadcrumb-arrow li a:before {
+	right: -10px;
+	z-index: 3;
+	border-left-color: #e13175;
+	border-left-style: solid;
+	border-left-width: 11px;
+}
+.breadcrumb-arrow li a:after {
+	right: -11px;
+	z-index: 2;
+	border-left: 11px solid #e13175;
+}
+.breadcrumb-arrow li a:focus,
+.breadcrumb-arrow li a:hover {
+	background-color: #f06fa3;
+	border: 1px solid #f06fa3;
+}
+.breadcrumb-arrow li a:focus:before,
+.breadcrumb-arrow li a:hover:before {
+	border-left-color: #f06fa3;
+}
+.breadcrumb-arrow li a:active {
+	background-color: #e13175;
+	border: 1px solid #e13175;
+}
+.breadcrumb-arrow li a:active:after,
+.breadcrumb-arrow li a:active:before {
+	border-left-color: #e13175;
+}
+.breadcrumb-arrow li span {
+	color: #393939;
+}
+.breadcrumb-arrow li:last-child a:before,
+.breadcrumb-arrow li:last-child a:after {
+	border-top: none;
+	border-bottom: none;
+}
+.breadcrumb-arrow li:last-child a {
+	border-top-right-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+
+
+/* ############################################# RESERVATION FORM ############################################# */
+/* The my-checkbox */
+.my-checkbox {
+	display: block;
+	position: relative;
+	padding-left: 35px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: 16px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.my-checkbox input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 25px;
+	width: 25px;
+	background-color: #eee;
+	border: 1px #808080 solid;
+}
+
+/* On mouse-over, add a grey background color */
+.my-checkbox:hover input ~ .checkmark {
+	background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.my-checkbox input:checked ~ .checkmark {
+	background-color: #e13175;
+	border: 1px #e13175 solid;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+/* Show the checkmark when checked */
+.my-checkbox input:checked ~ .checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator */
+.my-checkbox .checkmark:after {
+	left: 7px;
+	top: 3px;
+	width: 9px;
+	height: 14px;
+	border: solid white;
+	border-width: 0 3px 3px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.my-checkbox input:required {
+	box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85);
+}
+
+
+/* ############################################# RESERVATION FORM ############################################# */
+/* The my-checkbox * /
+.my-checkbox {
+	/*display: block;* /
+	position: relative;
+	padding-left: 55px;
+	margin-top: 0px;
+	margin-bottom: 12px;
+	cursor: pointer;
+	font-size: 16px;
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	height: 45px;
+
+	display: inline-block;
+	vertical-align: middle;
+}
+
+/* Hide the browser's default checkbox * /
+.my-checkbox input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}
+
+/* Create a custom checkbox * /
+.checkmark {
+	position: absolute;
+	top: 5px;
+	left: 0;
+	height: 39px;
+	width: 39px;
+	background-color: #eee;
+	border: 1px #808080 solid;
+}
+
+/* On mouse-over, add a grey background color * /
+.my-checkbox:hover input ~ .checkmark {
+	background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background * /
+.my-checkbox input:checked ~ .checkmark {
+	background-color: #e13175;
+	border: 1px #e13175 solid;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) * /
+.checkmark:after {
+	content: "";
+	position: absolute;
+	display: none;
+}
+
+/* Show the checkmark when checked * /
+.my-checkbox input:checked ~ .checkmark:after {
+	display: block;
+}
+
+/* Style the checkmark/indicator * /
+.my-checkbox .checkmark:after {
+    left: 10px;
+    top: 2px;
+    width: 18px;
+    height: 28px;
+	border: solid white;
+	border-width: 0 5px 5px 0;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+}
+
+.my-checkbox input:required {
+	box-shadow: 4px 4px 20px rgba(200, 0, 0, 0.85);
+}
+*/

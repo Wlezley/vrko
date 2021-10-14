@@ -1,0 +1,7 @@
+<div n:if="$flashes" class="row mt-20 pb-0 mb-0">
+	<div class="col">
+		<div n:foreach="$flashes as $flash" class="alert alert-{$flash->type}" style="margin-bottom: 5px;">
+			{$flash->message}
+		</div>
+	</div>
+</div>

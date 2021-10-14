@@ -1,0 +1,38 @@
+	<div id="preloader">
+		<div id="loading-center">
+			<div id="loading-center-absolute">
+				<img src="/img/icon/preloader.svg" alt="Loading...">
+			</div>
+		</div>
+	</div>
+	<header class="mb-100">
+		{*<div id="sticky-header" class="main-header">*}
+		<div class="main-header sticky-menu">
+			<div class="container-fluid container-full-padding">
+				<div class="row">
+					<div class="col-12">
+						<div class="main-menu">
+							<nav>
+								<h1 class="logo">
+									<a href="{link Homepage:}" title="Virtuální Realita Plzeň | VRko.cz"><img src="/img/logo/logo.png" alt="Virtuální Realita Plzeň | VRko.cz"></a>
+								</h1>
+								<div id="mobile-menu" class="navbar-wrap d-none d-lg-flex">
+									<ul>
+										<li n:class="$presenter->name == 'Homepage' && $presenter->action == 'default'		? show"><a href="{link Homepage:default}">Úvod</a></li>
+										<li n:class="$presenter->name == 'Rezervace'										? show"><a href="{link Rezervace:default}">Rezervace</a></li>
+										<li n:class="$presenter->name == 'Poukazy'											? show"><a href="{link Poukazy:default}">Vouchery</a></li>
+										<li n:class="$presenter->name == 'Homepage' && $presenter->action == 'oherne'		? show"><a href="{link Homepage:oherne}">O herně</a></li>
+										{*<li n:class="$presenter->name == 'Homepage' && $presenter->action == 'katalogher'	? show"><a href="{link Homepage:katalogher}">Katalog her</a></li>*}
+										<li n:class="$presenter->name == 'Katalog'											? show"><a href="{link Katalog:default}">Katalog her</a></li>
+										<li n:class="$presenter->name == 'Homepage' && $presenter->action == 'cenik'		? show"><a href="{link Homepage:cenik}">Ceník</a></li>
+										<li n:class="$presenter->name == 'Homepage' && $presenter->action == 'kontakt'		? show"><a href="{link Homepage:kontakt}">Kontakt</a></li>
+									</ul>
+								</div>
+							</nav>
+						</div>
+						<div class="mobile-menu"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</header>

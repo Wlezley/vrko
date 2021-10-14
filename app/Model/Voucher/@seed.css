@@ -1,0 +1,31 @@
+h1 {
+	font-size: 1.5em;
+	color: #222;
+}
+h2 {
+	font-size: .9em;
+}
+h3 {
+	font-size: 1.2em;
+	font-weight: 300;
+	line-height: 2em;
+}
+p {
+	font-size: .7em;
+	color: #333;
+	line-height: 1.2em;
+}
+table {
+	width: 100%;
+	border-collapse: collapse;
+}
+td {
+	padding: 5px 0 5px 15px;
+	border: 1px solid #000;
+}
+td.bottomline {
+	border-bottom: 2px solid #000;
+}
+.topline {
+	border-top: 2px solid #000;
+}

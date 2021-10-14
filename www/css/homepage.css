@@ -1,0 +1,120 @@
+/* ############################################### TEAMBUILDING ############################################### */
+.teambuilding h5 {
+	font-size: 18px;
+	color: #1c1121;
+	text-transform: uppercase;
+	/*margin-bottom: 0;
+	margin-top: 30px;*/
+}
+.teambuilding img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+/* ################################################# O  HERNE ################################################# */
+.o-herne-title h2,
+.o-herne-title h3 {
+	font-size: 40px;
+	color: #1c1121;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+.o-herne-title h2 span,
+.o-herne-title h3 span {
+	color: #e13175;
+}
+.o-herne-img img {
+	width: 80px;
+	height: 80px;
+	margin-bottom: 30px;
+	/*margin-top: -5px;*/
+}
+.o-herne-img {
+	margin-top: 40px;
+	margin-bottom: 5px;
+}
+.o-herne-img h4 {
+	font-size: 18px;
+	color: #1c1121;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+.o-herne-img p {
+	font-size: 14px;
+	color: #6c6c6c;
+	margin-bottom: 0;
+	line-height: normal;
+}
+.o-herne-img .ikona {
+	width: 95px;
+	float: left;
+}
+.o-herne-img .ikona-popis {
+	margin-top: 5px;
+	margin-bottom: 10px;
+}
+.o-herne-img .ikona-popis .white {
+	/*color: #ffffff;*/
+	font-size: 15px;
+	font-weight: 500;
+	line-height: 25px;
+	color: #cbcbcb;
+}
+.o-herne-text p {
+	/*text-indent: 30px;*/
+	line-height: normal;
+}
+.o-herne-gallery img {
+	width: 100%;
+	margin-top: 30px;
+}
+
+/* ################################################ ZAJIMAVOSTI ############################################### */
+.zajimavosti {
+	color: #1c1121;
+}
+.zajimavosti p {
+	margin-bottom: 10px;
+	/*text-indent: 30px;*/
+	color: #1c1121;
+}
+.zajimavosti h5 {
+	font-size: 18px;
+	color: #1c1121;
+	text-transform: uppercase;
+}
+.zajimavosti img {
+	max-width: 100%;
+	height: auto;
+	display: block;
+	/*margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;*/
+	margin: 20px auto;
+}
+
+/* ################################################## OSTATNI ################################################# */
+.text-indent-30 {
+	text-indent: 30px;
+}
+
+.almost-white p {
+	color: #cbcbcb;
+}
+
+.homepage-alertbox {
+	position: absolute;
+	top: 100px;
+	left: 25%;
+	right: auto;
+	width: 50%;
+	text-align: center;
+}
+
+.footer-gray-anchor {
+	color: #90949c;
+}

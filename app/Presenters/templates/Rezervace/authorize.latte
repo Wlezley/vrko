@@ -1,0 +1,59 @@
+{block title}Rezervace{/block}
+
+{block head}
+{include parent}
+	<link rel="stylesheet" href="/css/rezervace.css{ifset $csVer}{$csVer}{/ifset}">{/block}
+
+{block content}
+	<main>
+		<section class="game-single-area area-bg-four pt-50 pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="game-single-content">
+							{* NADPIS + UVOD *}
+							<div class="game-single-title mb-10">
+								<h4 class="d-none d-md-block">Potvrzení <span>rezervace</span></h4>{* DESKTOP *}
+								<h4 class="d-block d-md-none text-center">Potvrzení <span>rezervace</span></h4>{* MOBILE *}
+							</div>
+							{*<div class="row mb-0">
+								<div class="col">
+									<p class="mb-0">
+										<span class="font-weight-bold">Info text, BOLD.</span><br />
+										<span class="font-weight-normal">Info text, NORMAL.</span>
+									</p>
+									<p class="text-left">
+										<span class="font-weight-bold font-italic" style="color: #e13175; font-size: 0.9em;">
+											Info text, ITALIC.
+										</span>
+									</p>
+								</div>
+							</div>*}
+							{* ALERTY *}
+							<div class="mt-0">
+								{include '../layout/alerts.latte'}
+							</div>
+							{* AUTHORIZE FORM *}
+							<div style="min-height: 600px;">
+								<div class="row pb-0 mb-0">
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+									<div class="col-xl-6 col-lg-12 d-block" style="padding: 0 5px;">
+										<a class="anchor" id="reservationForm"></a>
+										<div class="reservation-item">
+											{control reservationAuthorizeForm}
+										</div>
+									</div>
+									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}
+
+{*block scripts}
+{include parent}
+{/block*}

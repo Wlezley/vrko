@@ -1,0 +1,11 @@
+/**/node_modules/*
+/**/bower_components/*
+app/config/local.neon
+vendor/
+/**/log/*
+/**/cache/*
+/**/builds/*
+/**/temp/*
+.vscode/
+!.gitignore
+!.htaccess

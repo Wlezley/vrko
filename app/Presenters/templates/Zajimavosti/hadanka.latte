@@ -1,0 +1,49 @@
+{block title}Zajímavosti - Hádanka{/block}
+
+{block head}
+{include parent}
+	<link rel="stylesheet" href="/css/homepage.css">
+	<style>
+	#hadanka-retry::before {
+		background-image: none;
+	}
+	</style>{/block}
+
+
+{block content}
+	<main>
+		<section class="game-single-area area-bg-four pt-50 pb-50">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						<div class="game-single-content">
+							{* NADPIS + UVOD *}
+							<div class="game-single-title mb-10">
+								<h4 class="d-none d-md-block text-center"><span>Zajímavosti</span> - Hádanka</h4>{* DESKTOP *}
+								<h4 class="d-block d-md-none text-center"><span>Zajímavosti</span><br>Hádanka</h4>{* MOBILE *}
+							</div>
+							<div class="row mb-0">
+								<div class="col">
+									<h5 class="mt-30 mb-30" style="color: #000;">Je to tvé, ale tví přítelé to používají více než ty. Co je to?</h5>
+									{* ALERTY *}
+									<div class="mt-0">
+										{include '../layout/alerts.latte'}
+									</div>
+									{* HADANKA FORM *}
+									{if !$flashes}
+										{control hadankaForm}
+									{else}
+										<a id="hadanka-retry" href="{link Zajimavosti:hadanka}" class="mt-30 pl-0 pr-0 btn btn-primary btn-block">ZKUSIT ZNOVU?</a>
+										<div class="mt-35 embed-responsive embed-responsive-16by9" style="border-radius: 5px;">
+											<iframe class="embed-responsive-item" src="https://ellisonleao.github.io/clumsy-bird/" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+										</div>
+									{/if}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}

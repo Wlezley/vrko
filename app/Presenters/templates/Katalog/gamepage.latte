@@ -1,0 +1,207 @@
+{block title}{$gamepage['fullName']}{/block}
+{block description}{$gamepage['descriptionShort']}{/block}
+
+{block head}
+{include parent}
+<style>
+.video-container {
+	position: relative;
+	padding-bottom: 56.25%; /*16:9*/
+	/*padding-top: 30px;*/
+	height: 0;
+	overflow: hidden;
+}
+
+.video-container iframe,
+.video-container object,
+.video-container embed {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+.gamepage-main {
+	background-color: #000000;
+	padding: 20px;
+}
+
+.gamepage-main h2,
+.gamepage-main h3,
+.gamepage-main h4 {
+	color: #e13175;
+}
+
+.gamepage-main h2 {
+	font-size: 40px;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+
+.gamepage-main h3 {
+	font-size: 35px;
+	margin-bottom: 0;
+}
+
+.gamepage-main h4 {
+	font-size: 25px;
+	margin-bottom: 0;
+}
+
+.gamepage-main hr {
+	border-color: #e13175;
+	margin: 0 0 25px 0;
+}
+
+.gamepage-counter {
+	font-size: 16px;
+}
+
+.gamepage-description p {
+	color: #ffffff;
+	font-weight: 200;
+}
+
+.gamepage-description span {
+	color: #e13175;
+	font-weight: 800;
+}
+
+.gamepage-params {
+	margin-bottom: 0;
+}
+
+.gamepage-params ul {
+	margin: 0px;
+	padding: 0px;
+}
+
+.gamepage-params ul li {
+	display: block;
+	font-size: 16px;
+	font-weight: 500;
+	color: #ffffff;
+	margin-bottom: 10px;
+	padding-left: 0;
+	padding-right: 0;
+}
+
+.gamepage-params ul li span {
+	color: #ffffff;
+	font-weight: 400;
+	margin-right: 10px;
+}
+
+.released-game-icon {
+	margin-right: 45px;
+	margin-bottom: 5px;
+	position: relative;
+	z-index: 2;
+}
+</style>
+{/block}
+
+
+{block content}
+	<main>
+		<section class="area-bg-four pt-30 pb-30">
+			<div class="container">
+				<div class="row">
+					<div class="col-12">
+						{*<div class="game-single-content">*}
+						<div class="gamepage-main">
+							<div class="mb-10">
+								<h2 class="d-none d-md-block">{$gamepage['fullName']}</h2>{* DESKTOP *}
+								<h2 class="d-block d-md-none text-center">{$gamepage['fullName']}</h2>{* MOBILE *}
+								<p class="gamepage-counter">
+									<a href="{link Katalog:default}">Katalog her</a> /
+									<a href="{link Katalog:category $gamepage['categoryData']['url']}">{$gamepage['categoryData']['nameP']}</a> /
+									<a>{$gamepage['fullName']}</a>
+								</p>
+							</div>
+							<div class="mb-0">
+
+								{*<div class="row mt-20">
+									<div class="col-6 mb-25">
+										<div class="video-container">
+											<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=0&rel=0"
+													title="YouTube video player" frameborder="0"
+													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+													allowfullscreen></iframe>
+										</div>
+									</div>
+									<div class="col-6 mb-25">
+										<h3>Parametry</h3>
+										<hr>
+										<div class="gamepage-params mb-15">
+											<ul>
+												<li><span class="released-game-icon"><img src="{$params['category']['icon']}" alt="{$params['category']['nameS']}"></span><span>{$params['category']['nameS']}</span></li>
+												<li><span class="released-game-icon"><img src="{$params['players']['icon']}" alt="{$params['players']['desc']}"></span><span>{$params['players']['desc']}</span></li>
+												<li><span class="released-game-icon"><img src="{$params['skills']['icon']}" alt="{$params['skills']['desc']}"></span><span>{$params['skills']['desc']}</span></li>
+												<li><span class="released-game-icon"><img src="{$params['difficulty']['icon']}" alt="{$params['difficulty']['desc']}"></span><span>{$params['difficulty']['desc']}</span></li>
+											</ul>
+										</div>
+										<p class="font-italic">Debug: Popis hry... (TODO)</p>
+									</div>
+								</div>{* DESKTOP TEST 1 *}
+
+								<div class="row mb-0 mt-0">
+									<div class="col-12">
+										<div class="video-container mb-25">
+											{*<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=1&loop=1&rel=0&playlist={$gamepage['youtubeId']}"*}
+											<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=0&loop=0&rel=0"
+													title="YouTube video player" frameborder="0"
+													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+													allowfullscreen></iframe>
+										</div>
+									</div>
+								</div>
+								<div class="row mb-0 mt-0">
+									<div class="col-12 mb-0">
+										{*<h3>Parametry</h3>
+										<hr>*}
+										<div class="gamepage-params mb-15">
+											<ul class="row">
+												<li class="col-lg-6 col-xl-3">
+													<span class="released-game-icon">
+														<img src="{$params['category']['icon']}" alt="{$params['category']['nameS']}">
+													</span>
+													<span>{$params['category']['nameS']}</span>
+												</li>
+												<li class="col-lg-6 col-xl-3">
+													<span class="released-game-icon">
+														<img src="{$params['players']['icon']}" alt="{$params['players']['desc']}">
+													</span>
+													<span>{$params['players']['desc']}</span>
+												</li>
+												<li class="col-lg-6 col-xl-3">
+													<span class="released-game-icon">
+														<img src="{$params['skills']['icon']}" alt="{$params['skills']['desc']}">
+													</span>
+													<span>{$params['skills']['desc']}</span>
+												</li>
+												<li class="col-lg-6 col-xl-3">
+													<span class="released-game-icon">
+														<img src="{$params['difficulty']['icon']}" alt="{$params['difficulty']['desc']}">
+													</span>
+													<span>{$params['difficulty']['desc']}</span>
+												</li>
+											</ul>
+										</div>
+									</div>
+									<div class="col-12 mt-25">
+										<h3>Popis hry</h3>
+										<hr>
+										<div class="gamepage-description">{$gamepage['descriptionFull']|noescape}</div>
+									</div>
+								</div>{* MOBILE TEST 1 *}
+
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}

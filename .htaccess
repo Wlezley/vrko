@@ -1,0 +1,55 @@
+# Display PHP errors - .htaccess
+#php_flag display_errors on
+#php_value error_reporting 6143
+###################################
+
+#Order Deny,Allow
+
+# local host
+Allow from 127.0.0.0/24
+
+# local net
+Allow from 192.168.0.0/21
+
+# ladius-nat
+Allow from 81.201.56.243
+
+# COMGATE
+Allow from 89.185.236.55/32
+
+# Filip
+Allow from 84.242.75.218
+Allow from 212.79.110.175
+Allow from 88.101.55.121
+Allow from 89.102.116.110
+Allow from 89.102.247.177
+
+# Textar
+Allow from 85.70.49.157
+
+# Grafik
+Allow from 90.179.143.80
+
+#<Location "/partials/selectday/2021/2/">
+#    Allow from All
+#</Location>
+
+#SetEnvIf Request_URI ^/partials/selectday/2021/2/.* allow from all
+
+# zbytek sveta
+Deny from All
+
+RewriteEngine On
+RewriteBase /
+
+# Rewrite INDEX to ./www
+RewriteRule ^$ www/ [L]
+RewriteRule (.*) www/$1 [L]
+
+# Rewrite INDEX to ./www (Alt.)
+#RewriteRule ^$ www/ [L]
+#RewriteCond %{REQUEST_FILENAME} !-f
+#RewriteCond %{REQUEST_FILENAME} !-d
+#RewriteCond %{REQUEST_URI} !^/www/
+#RewriteRule ^(.*)$ /$1
+

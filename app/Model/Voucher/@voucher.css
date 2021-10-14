@@ -1,0 +1,24 @@
+@page {
+	margin: 0mm;
+	margin-header: 0mm;
+	margin-footer: 0mm;
+	background-image: url('{$backgroundImg}');
+	background-repeat: no-repeat;
+	background-position: center;
+	/*background-size: cover;*/
+}
+body {
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+}
+table, th, td {
+	margin: 0;
+	padding: 0;
+	border: 0px solid green;
+}
+.barcodecell, .barcode {
+	margin: 0;
+	padding: 0;
+}

@@ -1,0 +1,60 @@
+http:
+	headers:
+		X-Powered-By: false
+
+php:
+	date.timezone: Europe/Prague
+
+application:
+	errorPresenter: Error
+	mapping:
+		*: App\*Module\Presenters\*Presenter
+
+session:
+	autoStart: true
+	expiration: 14 days
+	debugger: false
+	#name: vrko
+	#savePath: %tempDir%/sessions
+
+services:
+	# Model: Dotykacka API
+	#- App\Model\Dotykacka\DotykackaApi
+	- App\Model\Dotykacka\DotykackaApi2(%dotykacka_api%)
+	#- App\Model\Dotykacka\DotykackaApi2(%dotykacka_api.url%, %dotykacka_api.refreshToken%, %dotykacka_api.cloudId%, %dotykacka_api.branchId%, %dotykacka_api.warehouseId%, %dotykacka_api.tables%)
+
+	# Model: Comgate API
+	- App\Model\AgmoPayments\AgmoPaymentsException
+	- App\Model\AgmoPayments\AgmoPaymentsSimpleProtocol(%agmo_payments.paymentsUrl%, %agmo_payments.merchant%, %agmo_payments.test%, %agmo_payments.secret%, %agmo_payments.paymentsUrl2%)
+	- App\Model\AgmoPayments\AgmoPaymentsSimpleDatabase(%agmo_payments.dataFolderName%, %agmo_payments.merchant%, %agmo_payments.test%)
+
+	# Model: Ecomail API
+	- App\Model\Ecomail\EcomailApi(%ecomail_api.url%, %ecomail_api.key%)
+	#- App\Model\Ecomail\EcomailApi2(%ecomail_api.url%, %ecomail_api.key%, %ecomail_api.response%)
+
+	# Model: SMS Brana API
+	- App\Model\SmsBrana\SmsBrana(%smsbrana_api.url%, %smsbrana_api.login%, %smsbrana_api.password%, %smsbrana_api.sender_id%)
+
+	# Model: Katalog
+	- App\Model\Katalog\Katalog
+
+	# Model: Rezervace
+	- App\Model\Reservation
+	- App\Model\Reservation\Calendar
+	- App\Model\Reservation\Calendar2
+
+	# Model: Hodnoceni
+	- App\Model\Reviews\Reviews
+
+	# Model: Voucher
+	- App\Model\Voucher\Voucher
+
+	# Forms
+	- App\Forms\IReservationFormFactory
+	- App\Forms\IReservationAuthorizeFormFactory
+	- App\Forms\IVoucherFormFactory
+	- App\Forms\IHadankaFormFactory
+	- App\Forms\IReviewFormFactory
+
+	router: App\Router\RouterFactory::createRouter
+	#authenticator: App\Model\User\Authenticator 

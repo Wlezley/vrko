@@ -1,0 +1,170 @@
+{block title}Katalog Her{/block}
+{block description}Nejlepší hry virtuální reality v Plzni. Přijďte si zahrát přes 40 herních titulů pro VR!{/block}
+
+{block head}
+{include parent}
+<style>
+.categorylist-main {
+	background-color: #000000;
+	padding: 20px;
+}
+
+.categorylist-main h2,
+.categorylist-main h3,
+.categorylist-main h4 {
+	color: #e13175;
+}
+
+.categorylist-main h2 {
+	font-size: 40px;
+	text-transform: uppercase;
+	margin-bottom: 0;
+}
+
+.categorylist-main h3 {
+	font-size: 35px;
+	margin-bottom: 0;
+}
+
+.categorylist-main h4 {
+	font-size: 25px;
+	margin-bottom: 0;
+}
+
+.categorylist-main hr {
+	border-color: #e13175;
+	margin: 0 0 25px 0;
+}
+
+.categorylist-counter {
+	font-size: 16px;
+}
+
+.categorylist-category-item {
+	background-color: #101010;
+	padding-top: 30px;
+	padding-bottom: 5px;
+	text-align: center;
+	margin: 5px -10px;
+	transition: .3s linear;
+}
+
+.categorylist-category-item h3 {
+	transition: .3s linear;
+}
+
+.categorylist-category-item:hover {
+	/*background-color: #404080;*/
+	/*background: #e13175;*/
+	background: #151515;
+	transition: .3s linear;
+}
+
+.categorylist-category-item:hover h3 {
+	color: #ffffff;
+	/*color: #2b96cc;*/
+	transition: .3s linear;
+}
+
+.categorylist-category-description {
+	font-size: 12px;
+}
+</style>
+{/block}
+
+
+{block content}
+	<main>
+		<section class="area-bg-four pt-30 pb-30">
+			<div class="container">
+				<div class="categorylist-main">
+
+					<div class="row">
+						<div class="col-12">
+							<div class="mb-10">
+								<h2 class="d-none d-md-block">Katalog her</h2>{* DESKTOP *}
+								<h2 class="d-block d-md-none text-center">Katalog her</h2>{* MOBILE *}
+								<p class="categorylist-counter mb-0"><a href="{link Katalog:category vsechny-hry}">Všechny hry</a></p>
+								{*<p class="categorylist-counter mb-0"><a href="{link Katalog:category vsechny-hry}">Všechny hry</a> ({$gamesTotal})</p>*}
+							</div>
+						</div>
+					</div>
+
+					{* TODO: Move Padding correction to CSS section... *}
+					<div class="row mb-40" style="padding: 0 10px;">
+					{foreach $categories as $item}
+						<a href="{link Katalog:category $item['url']}" class="col-sm-12 col-md-6 col-xl-4">
+							<div class="categorylist-category-item">
+								<h3 n:if="!$item['icon']">{$item['nameP']}</h3>
+								<h3 n:if="$item['icon']"><img src="{$item['icon']}" /> {$item['nameP']}</h3>
+								<p class="categorylist-category-description">Počet her: {$item['count']}</p>
+							</div>
+						</a>
+					{/foreach}
+					</div>
+
+					<div class="row mb-30">
+						<div class="col-12">
+							<div class="mb-10">
+								<h2 class="d-none d-md-block">Oblíbené hry</h2>{* DESKTOP *}
+								<h2 class="d-block d-md-none text-center">Oblíbené hry</h2>{* MOBILE *}
+							</div>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-12">
+							<div class="latest-games-active owl-carousel">
+								<div class="latest-games-items mb-30">
+									<div class="latest-games-thumb">
+										<a href="/hry/strilecky/half-life-alyx"><img src="/img/product/nejhry_1.jpg" alt="Half-Life Alyx"></a>
+									</div>
+									<div class="latest-games-content">
+										<div class="lg-tag">
+											<a>střílečka</a>
+										</div>
+										<h3><a>Half-Life: Alyx</a></h3>
+									</div>
+								</div>
+								<div class="latest-games-items mb-30">
+									<div class="latest-games-thumb">
+										<a href="/hry/hudebni/beat-saber"><img src="/img/product/nejhry_2.jpg" alt="Beat Saber"></a>
+									</div>
+									<div class="latest-games-content">
+										<div class="lg-tag">
+											<a>hudební hra</a>
+										</div>
+										<h3><a>Beat Saber</a></h3>
+									</div>
+								</div>
+								{*<div class="latest-games-items mb-30">
+									<div class="latest-games-thumb">
+										<a href="/hry/strilecky/superhot"><img src="/img/product/nejhry_3.jpg" alt="Super Hot"></a>
+									</div>
+									<div class="latest-games-content">
+										<div class="lg-tag">
+											<a>střílečka</a>
+										</div>
+										<h3><a>Super Hot</a></h3>
+									</div>
+								</div>*}
+								<div class="latest-games-items mb-30">
+									<div class="latest-games-thumb">
+										<a href="/hry/simulatory/job-simulator"><img src="/img/product/nejhry_4.jpg" alt="Job Simulator"></a>
+									</div>
+									<div class="latest-games-content">
+										<div class="lg-tag">
+											<a>simulátor</a>
+										</div>
+										<h3><a>Job Simulator</a></h3>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}

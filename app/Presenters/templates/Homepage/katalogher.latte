@@ -1,0 +1,757 @@
+{block title}Katalog Her{/block}
+{block description}Nejlepší hry virtuální reality v Plzni. Přijďte si zahrát přes 40 herních titulů pro VR!{/block}
+
+{*block head}
+{include parent}
+{/block*}
+
+
+{*
+Teoreticky:
+-----------
+- Přidat kategorie
+- Jedna hra na stránku:
+	- Obrázky
+	- Video z youtube
+	- Přeložený popis ze Steamu, vlastní slova...
+	- Hodnocení hry na Steamu, IGN možná, MetaCritic atd...
+
+Technicky:
+----------
+- Vlastní presenter (!) - KatalogherPresenter.php + template:
+	- default (přehled / seznam / vyhledávání)
+	- kategorie ?
+	- hra = šablona pro builder stránky pro jednotlivé hry
+- Naprogramovat CMS wrapper pro podstránky
+- DATA builder:
+	- Title (+ name zvlášť?)
+	- Meta OG:Description (možná jenom zkrátit obsah recenze)
+	- Meta OG:IMAGE, OG:IMAGE:WIDTH, OG:IMAGE:HEIGHT
+	- Meta og:steam, og:steam:id?
+
+*}
+
+
+{block content}
+	<main>
+		<section class="released-games-area area-bg-three pt-115 pb-70">
+			{* HLAVNI HRY *}
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra1.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Half-Life <span>Alyx</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost3.png" alt=""></span><span>Pro zkušené hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka2.png" alt=""></span><span>Fyzicky středně náročné</span></li>
+										</ul>
+									</div>
+									<p>Half-Life: Alyx popisuje události mezi prvním a druhým dílem oceňované série.</p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra2.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Beat <span>Saber</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/hudebni.png" alt=""></span><span>Hudební hra</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče </span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka3.png" alt=""></span><span>Fyzicky velmi náročné</span></li>
+										</ul>
+									</div>
+									<p>Beat Saber je VR rytmická hra, ve které ničíte "rytmy" hudby, které letí směrem k vám.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra3.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Super <span>Hot</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost2.png" alt=""></span><span>Pro mírně pokročilé</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka2.png" alt=""></span><span>Fyzicky středně náročné</span></li>
+										</ul>
+									</div>
+									<p>Svět se hýbe, jen když se hýbete také. Pokud stojíte na místě, stojí i nepřátelé.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra4.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Job <span>Simulator</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/simulator.png" alt=""></span><span>Simulátor</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Roboti se stali služebníky člověka a čistí, spravují a organizují svět s precizností a rychlostí.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra5.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Arizona <span>Sunshine</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu2.png" alt=""></span><span>Pro 1 nebo 2 hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost2.png" alt=""></span><span>Pro mírně pokročilé</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka3.png" alt=""></span><span>Fyzicky velmi náročné</span></li>
+										</ul>
+									</div>
+									<p>Vydej se do sluncem opékané pustiny arizonské pouště a bojuj o přežití proti zombíkům.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra8.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4><span>Pavlov</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu3.png" alt=""></span><span>PvP Multiplayer</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost3.png" alt=""></span><span>Pro zkušené hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka3.png" alt=""></span><span>Fyzicky velmi náročné</span></li>
+										</ul>
+									</div>
+									<p>Multiplayerová VR střílečka s mnoho herními módy a reálnými soupeři.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra7.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Ocean <span>Rift</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/simulator.png" alt=""></span><span>Simulátor</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Plavte se, prozkoumávejte a komunikujte s mořskými tvory na 12 jedinečných stanovištích.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra6.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>the<span>Blu</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/simulator.png" alt=""></span><span>Simulátor</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Zažijte zázračný hluboký oceán a poznejte úžasná mořská zvířata a rostliny.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra9.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4><span>Payday 2</span> VR</h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu3.png" alt=""></span><span>Až pro 4 hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost3.png" alt=""></span><span>Pro zkušené hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka2.png" alt=""></span><span>Fyzicky středně náročné</span></li>
+										</ul>
+									</div>
+									<p>Staňte se zločincem, který dělá loupeže, vykrádá banky a mnohé další.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra10.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4><span>Doom </span> VFR</h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/strilecka.png" alt=""></span><span>Střílečka</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost2.png" alt=""></span><span>Pro mírně pokročilé</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka2.png" alt=""></span><span>Fyzicky středně náročné</span></li>
+										</ul>
+									</div>
+									<p>Budete vyzbrojeni nejen širokým arzenálem zbraní, ale i možností teleportace a uskakování.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra11.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>VR Super <span>Sports</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/sport.png" alt=""></span><span>Sportovní</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka2.png" alt=""></span><span>Fyzicky středně náročné</span></li>
+										</ul>
+									</div>
+									<p>Konečně sportovní zážitek ve VR. Můžete zkusit spoustu skvělých sportů.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra12.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Google <span>Earth</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/simulator.png" alt=""></span><span>Simulátor</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Google Earth VR vám umožní prozkoumat svět ze zcela nových perspektiv ve virtuální realitě.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra13.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>The <span>Golf Club</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/sport.png" alt=""></span><span>Sportovní</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu1.png" alt=""></span><span>Pro jednoho hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost2.png" alt=""></span><span>Pro mírně pokročilé </span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Hra je rozmanitá a detailní, lze zde vytvářet i vlastní hřiště. Nechybí ani žebříčky a tabulky.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-xl-6 col-lg-12">
+						<div class="released-game-carousel">
+							<div class="released-game-item">
+								<div class="released-game-item-bg"></div>
+								<div class="released-game-img">
+									<img src="/img/images/hra14.jpg" alt="">
+								</div>
+								<div class="released-game-content">
+									<h4>Rec <span>Room</span></h4>
+									<div class="released-game-list mb-15">
+										<ul>
+											<li><span class="released-game-icon"><img src="/img/icon/multizanr.png" alt=""></span><span>Multižánrové</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/pocethracu3.png" alt=""></span><span>MMO</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/narocnost1.png" alt=""></span><span>Pro všechny hráče</span></li>
+											<li><span class="released-game-icon"><img src="/img/icon/fyzicka1.png" alt=""></span><span>Fyzicky nenáročné</span></li>
+										</ul>
+									</div>
+									<p>Bavte se s přáteli z celého světa a prozkoumávejte MILIONY, hráči vytvořených, místností.<p>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="spacer">&nbsp;</div>
+				{* VEDLEJSI HRY *}
+				<div class="row">
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_1.jpg" alt="">
+								<div class="team-member-social"><p>Space Pirate</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_2.jpg" alt="">
+								<div class="team-member-social"><p>Serious Sam 3</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_3.jpg" alt="">
+								<div class="team-member-social"><p>Serious Sam - The Last Hope</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_4.jpg" alt="">
+								<div class="team-member-social"><p>Creed: Rise to Glory</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_5.jpg" alt="">
+								<div class="team-member-social"><p>Curious Cases</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_6.jpg" alt="">
+								<div class="team-member-social"><p>Deserving Life</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_7.jpg" alt="">
+								<div class="team-member-social"><p>Epic Roller Coaster</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_8.jpg" alt="">
+								<div class="team-member-social"><p>Goalie Challenge</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_9.jpg" alt="">
+								<div class="team-member-social"><p>The Lab</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_10.jpg" alt="">
+								<div class="team-member-social"><p>Richie's Plank Experience</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_11.jpg" alt="">
+								<div class="team-member-social"><p>Gorn</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_12.jpg" alt="">
+								<div class="team-member-social"><p>Spider-Man: Far From Home</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_13.jpg" alt="">
+								<div class="team-member-social"><p>Tales of Escape The Mine</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_14.jpg" alt="">
+								<div class="team-member-social"><p>QuiVR</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_15.jpg" alt="">
+								<div class="team-member-social"><p>Raw Data</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_16.jpg" alt="">
+								<div class="team-member-social"><p>Snow Fortress</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_17.jpg" alt="">
+								<div class="team-member-social"><p>The Brookhaven experiment</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_18.jpg" alt="">
+								<div class="team-member-social"><p>The Last sniper</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_19.jpg" alt="">
+								<div class="team-member-social"><p>Surgeon Simulator - Meet the Medic</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_20.jpg" alt="">
+								<div class="team-member-social"><p>Zombie Training Simulator</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_21.jpg" alt="">
+								<div class="team-member-social"><p>Tilt brush by google</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_22.jpg" alt="">
+								<div class="team-member-social"><p>Lightblade</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_23.jpg" alt="">
+								<div class="team-member-social"><p>SenzaPeso</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_24.jpg" alt="">
+								<div class="team-member-social"><p>InMind</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_25.jpg" alt="">
+								<div class="team-member-social"><p>Irrational Exuberance: Prolugue</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_26.jpg" alt="">
+								<div class="team-member-social"><p>A-10</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_27.jpg" alt="">
+								<div class="team-member-social"><p>Cloudlands: VR minigolf</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_28.jpg" alt="">
+								<div class="team-member-social"><p>Cyberpong</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_29.jpg" alt="">
+								<div class="team-member-social"><p>Destinations</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_30.jpg" alt="">
+								<div class="team-member-social"><p>Eleven: Table Tennis</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_31.jpg" alt="">
+								<div class="team-member-social"><p>Final Goalie</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_32.jpg" alt="">
+								<div class="team-member-social"><p>Fruit Ninja</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_33.jpg" alt="">
+								<div class="team-member-social"><p>Hoops</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_34.jpg" alt="">
+								<div class="team-member-social"><p>Hover Junkers</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_35.jpg" alt="">
+								<div class="team-member-social"><p>La Peri</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_36.jpg" alt="">
+								<div class="team-member-social"><p>Old Friend</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_37.jpg" alt="">
+								<div class="team-member-social"><p>The Night Cafe</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_38.jpg" alt="">
+								<div class="team-member-social"><p>Trickster</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_39.jpg" alt="">
+								<div class="team-member-social"><p>VR Fun House</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_40.jpg" alt="">
+								<div class="team-member-social"><p>Waterbears</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_41.jpg" alt="">
+								<div class="team-member-social"><p>AirMech Command</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_42.jpg" alt="">
+								<div class="team-member-social"><p>Belko VR</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_43.jpg" alt="">
+								<div class="team-member-social"><p>Fancy Skiing</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_44.jpg" alt="">
+								<div class="team-member-social"><p>Home</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_45.jpg" alt="">
+								<div class="team-member-social"><p>Island 359</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_46.jpg" alt="">
+								<div class="team-member-social"><p>Nature Treks</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_47.jpg" alt="">
+								<div class="team-member-social"><p>Rick and Morty</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_48.jpg" alt="">
+								<div class="team-member-social"><p>Call Starseed</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_49.jpg" alt="">
+								<div class="team-member-social"><p>To The Top</p></div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-3 col-sm-6">
+						<div class="team-member-box text-center mb-50">
+							<div class="team-member-thumb">
+								<img src="/img/images/hra_vedlejsi_50.jpg" alt="">
+								<div class="team-member-social"><p>Waltz of wizard</p></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</main>
+{/block}

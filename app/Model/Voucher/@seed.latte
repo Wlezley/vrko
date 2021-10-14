@@ -1,0 +1,40 @@
+<div>
+	<img src="{$logoImg}" style="width: 20%; height: 20%;" alt="Herna virtuální reality VRKO">
+
+	<h2 style="text-align: center;">666% zábavy s.r.o.</h2>
+
+	<p>
+		Koterovská 607/45,326 00 Plzeň<br>
+		IČ: 09828320 (Neplátce DPH)<br>
+		+420 373 700 366 | <a href="mailto:info@vrko.cz" target="_blank">info@vrko.cz</a><br>
+	</p>
+
+	<div>
+		<table>
+			<tr>
+				<td><h2>Položka</h2></td>
+				<td><h2>Počet kusů</h2></td>
+				<td><h2>Cena za kus</h2></td>
+			</tr>
+			<tr>
+				<td class="bottomline"><p>Herní poukaz VRko.cz (30 minut / 1 ks VR jednotky)</p></td>
+				<td class="bottomline"><p>{$voucherPocet} ks</p></td>
+				<td class="bottomline"><p>{$priceItem},- Kč</p></td>
+			</tr>
+			<tr>
+				<td colspan="2" style="border-right: none;"><h2>Cena celkem:</h2></td>
+				<td style="border-left: none;"><h2>{$priceTotal},- Kč</h2></td>
+			</tr>
+		</table>
+	</div>
+
+	<div>
+		<p>
+			Účtenka č.: {$seedId}<br>
+			Datum a čas platby: {$dateTodayFull|date:'%d.%m.%Y %H:%M:%S'}<br>
+			Pokladna: WEB<br>
+			Způsob platby: Online
+		</p>
+	</div>
+
+</div>
