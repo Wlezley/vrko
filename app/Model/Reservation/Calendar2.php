@@ -108,21 +108,22 @@ class Calendar2 extends Reservation
 			$isToday = (Carbon::now()->year == $calendar->year && Carbon::now()->month == $calendar->month && Carbon::now()->day == $calendar->day);
 			$bgColor = $this->getColorByPercentil($unitsCount['free'] / $unitsCount['total'], 0, 1);
 
-			if($disabled) // RESERVATION_FAKE
-			{
+			// RESERVATION_FAKE
+			if ($disabled) {
 				$randomFree = (int)rand(0, $unitsCount['total'] - 8);
 				$dbDateString = $calendar->year."-".$calendar->month."-".$calendar->day;
 
 				$result = $this->database->query('SELECT * FROM reservation_fake WHERE date = ? LIMIT 1', $dbDateString);
-				if($result && $result->getRowCount() == 1)
+				if ($result && $result->getRowCount() == 1) {
 					$randomFree = (int)$result->fetch()['randomFree'];
-				else
+				}
+				else {
 					$this->database->query('REPLACE INTO reservation_fake', ['date' => $dbDateString, 'randomFree' => $randomFree]);
+				}
 
 				$bgColor = $this->getColorByPercentil($randomFree / $unitsCount['total'], 0, 1);
 			}
-			else if($isToday) // TODAY - BLUE MARK
-			{
+			else if ($isToday) {
 				$bgColor = "#007BFF";
 			}
 
@@ -146,8 +147,7 @@ class Calendar2 extends Reservation
 		// COLOR PALETTE (Legend)
 		$palette = [];
 		$seatsTotal = $this->getUnitsCountTotal();
-		for($p = $seatsTotal; $p >= 0; $p--)
-		{
+		for ($p = $seatsTotal; $p >= 0; $p--) {
 			$palette[] = $this->getColorByPercentil($p / $seatsTotal, 0, 1);
 		}
 
@@ -206,12 +206,13 @@ class Calendar2 extends Reservation
 	/* ###################################################################################### */
 
 	/** Get UNITS Data
-	 * @return	Object|NULL		$unitsData[...]
+	 * @return	Object|null		$unitsData[...]
 	 */
 	public function getUnitsData()
 	{
 		$result = $this->database->query('SELECT * FROM units ORDER BY hour ASC, unitID ASC');
-		return ($result && $result->getRowCount() > 0) ? $result->fetchAll() : NULL;
+
+		return ($result && $result->getRowCount() > 0) ? $result->fetchAll() : null;
 	}
 
 	/** Get UNITS Count - Total
@@ -220,6 +221,7 @@ class Calendar2 extends Reservation
 	public function getUnitsCountTotal()
 	{
 		$units = $this->getUnitsData();
+
 		return ($units ? count($units) : 0);
 	}
 
@@ -236,12 +238,14 @@ class Calendar2 extends Reservation
 		$free = 0;
 		$occupied = 0;
 
-		foreach($this->getOccupancy($year, $month, $day) as /*$unitName =>*/ $value)
-		{
-			switch($value)
-			{
-				case 0: $free++; break;
-				case 1: $occupied++; break;
+		foreach ($this->getOccupancy($year, $month, $day) as /*$unitName =>*/ $value) {
+			switch ($value) {
+				case 0:
+					$free++;
+					break;
+				case 1:
+					$occupied++;
+					break;
 			}
 		}
 
@@ -260,38 +264,46 @@ class Calendar2 extends Reservation
 	 */
 	public function isUnitEnabled(string $unit)
 	{
-		if(strlen($unit) !== 3)
+		if (strlen($unit) !== 3) {
 			return false;
+		}
 
 		$alphabet = range('A', 'Z');
-		foreach($this->getUnitsData() as $item)
-		{
+
+		foreach ($this->getUnitsData() as $item) {
 			$unitName = $item->hour . $alphabet[$item->unitID];
-			if($unit === $unitName)
+
+			if ($unit === $unitName) {
 				return true;
+			}
 		}
+
 		return false;
 	}
 
 	/** Get Dotykacka TableID by Reservation UnitName
 	 * @param	string			$unit		// Unit string (eg. '16A')
 	 * 
-	 * @return	string|NULL		$result
+	 * @return	string|null		$result
 	 */
 	public function getTableIdByUnitName(string $unit)
 	{
-		if(strlen($unit) !== 3)
-			return NULL;
+		if (strlen($unit) !== 3) {
+			return null;
+		}
 
 		$alphabet = range('A', 'Z');
 		$tables = $this->doty2->getTables();
-		foreach($this->getUnitsData() as $item)
-		{
+
+		foreach ($this->getUnitsData() as $item) {
 			$unitName = $item->hour . $alphabet[$item->unitID];
-			if($unit === $unitName && $item->unitID < count($tables))
+
+			if ($unit === $unitName && $item->unitID < count($tables)) {
 				return $tables[$item->unitID];
+			}
 		}
-		return NULL;
+
+		return null;
 	}
 
 	/** GET Reservation First Hour as integer
@@ -302,12 +314,15 @@ class Calendar2 extends Reservation
 	public function getReservationFirstHour($units)
 	{
 		$result = 24; // ERROR = 24 (hour)
-		foreach(json_decode($units) as $item)
-		{
+
+		foreach (json_decode($units) as $item) {
 			$hour = (int)substr($item, 0, 2);
-			if($hour < $result)
+
+			if ($hour < $result) {
 				$result = $hour;
+			}
 		}
+
 		return (int)$result;
 	}
 
@@ -320,7 +335,7 @@ class Calendar2 extends Reservation
 	 * @param	integer			$month
 	 * @param	integer			$day
 	 * 
-	 * @return	array|NULL		$units
+	 * @return	array|null		$units
 	 */
 	public function renderOccupancy($year, $month, $day)
 	{
@@ -335,30 +350,27 @@ class Calendar2 extends Reservation
 
 		// Units array prepare
 		$alphabet = range('A', 'Z');
-		foreach($this->getUnitsData() as $item)
-		{
+		foreach ($this->getUnitsData() as $item) {
 			$unitName = $item->hour . $alphabet[$item->unitID];
 			$units[$unitName] = ($today && $item->hour < $hourLimit) ? 1 : 0;
 		}
-		if(empty($units))
-			return NULL;
+		if (empty($units)) {
+			return null;
+		}
 
 		// Get all reservations for day
 		//$resultR = $this->database->query('SELECT units FROM reservation WHERE date = ? AND (state = ? OR state = ?) ORDER BY id ASC', $date, 'new', 'active');
 		$resultR = $this->database->query('SELECT units FROM reservation WHERE date = ? LIMIT 1', $date);
-		if($resultR && $resultR->getRowCount() === 1)
-		{
-			foreach($resultR->fetchAll() as $unitString)
-			{
-				foreach(json_decode($unitString->units) as $unitName)
-				{
+		if ($resultR && $resultR->getRowCount() === 1) {
+			foreach ($resultR->fetchAll() as $unitString) {
+				foreach (json_decode($unitString->units) as $unitName) {
 					$units[$unitName] = 1;
 				}
 			}
 		}
 
 		// Update occupancy fields
-		$resultO = $this->database->query('REPLACE INTO occupancy', [
+		$this->database->query('REPLACE INTO occupancy', [
 			'date' => $date,
 			'occupancyData' => json_encode($units),
 		]);
@@ -371,19 +383,19 @@ class Calendar2 extends Reservation
 	 * @param	integer			$month
 	 * @param	integer			$day
 	 * 
-	 * @return	array|NULL		$units
+	 * @return	array|null
 	 */
 	public function getOccupancy($year, $month, $day)
 	{
-		$units = array();
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 
-		// Get occupancy fields
 		$result = $this->database->query('SELECT occupancyData FROM occupancy WHERE date = ?', $date);
-		if($result && $result->getRowCount() > 0)
+		if ($result && $result->getRowCount() > 0) {
 			return json_decode($result->fetch()->occupancyData);
-		else
+		}
+		else {
 			return $this->renderOccupancy($year, $month, $day);
+		}
 	}
 
 	/* ###################################################################################### */
@@ -437,8 +449,9 @@ class Calendar2 extends Reservation
 	public function checkReservationSlot($_tableId, Carbon $date, $minutes = 60)
 	{
 		// Validate _tableId
-		if(!in_array($_tableId, $this->doty2->getTables()))
+		if (!in_array($_tableId, $this->doty2->getTables())) {
 			return false;
+		}
 
 		// Construct DATE
 		$startDate	= Carbon::create($date->year, $date->month, $date->day, $date->hour, 0, 0);
@@ -455,15 +468,15 @@ class Calendar2 extends Reservation
 		// Get result from DTK API v2
 		$result = $this->doty2->getReservationList($sfpl);
 
-		if(!empty($result))
-		{
-			if(empty($result->data))
+		if (!empty($result)) {
+			if (empty($result->data)) {
 				return false; // ERROR ?! CATCH THE ERROR MESSAGES [ !! HERE !! ]
+			}
 
-			foreach($result->data as $reservation)
-			{
-				if($reservation->status != 'CANCELLED')
+			foreach ($result->data as $reservation) {
+				if ($reservation->status != 'CANCELLED') {
 					return false; // FOUND & NOT CANCELLED == NOT FREE
+				}
 			}
 		}
 
@@ -488,8 +501,7 @@ class Calendar2 extends Reservation
 		$startDate	= Carbon::create($year, $month, $day, $hour, 0, 0);
 		$endDate	= Carbon::create($year, $month, $day, $hour, 0, 0)->addMinutes($minutes);
 		
-		if($this->checkReservationSlot($_tableId, $startDate, $minutes) == false)
-		{
+		if ($this->checkReservationSlot($_tableId, $startDate, $minutes) == false) {
 			return false;
 		}
 
@@ -537,12 +549,10 @@ class Calendar2 extends Reservation
 
 		$units = [];
 		$reservations = [];
-		if(!empty($reservationList))
-		{
-			foreach($reservationList->data as $reservation)
-			{
-				if($reservation->status == 'CANCELLED')
-				{
+
+		if (!empty($reservationList)) {
+			foreach ($reservationList->data as $reservation) {
+				if ($reservation->status == 'CANCELLED') {
 					continue;
 				}
 
@@ -597,11 +607,12 @@ class Calendar2 extends Reservation
 			'phone'		=> $phone,
 			'subscribe'	=> $subscribe,
 		];
+
 		return $this->createReservationRequest($date, $units, $customer);
 	}
 
 	/** Create Reservation request in Database (COMPLEX)
-	 * @param	Carbon			$date			// Datum (staci jenom rok, mesic a den; zbytek NULL (hodina se generuje z UNITS))
+	 * @param	Carbon			$date			// Datum (staci jenom rok, mesic a den; zbytek null (hodina se generuje z UNITS))
 	 * @param	array			$units			// Pole s popisem rezervovanych hernich jednotek
 	 * @param	array			$customer		// Pole s informacemi o zakaznikovi
 	 * 
@@ -609,70 +620,80 @@ class Calendar2 extends Reservation
 	 */
 	public function createReservationRequest(Carbon $date, array $units, array $customer)
 	{
-		// 1.) Kontrola - DATE
-		if(Carbon::now("Europe/Prague")->startOfDay() > $date) // Starsi nez dnesni datum
+		// CHECK: Date must be today or more
+		if (Carbon::now("Europe/Prague")->startOfDay() > $date) {
 			return false;
+		}
 
-		// 2.) Kontrola - BANLIST (Email + Telefon)
+		// CHECK: Blacklist - EMAIL
 		$resBlEmail = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'EMAIL', $customer['email']);
-		if($resBlEmail && $resBlEmail->getRowCount() > 0) // Email BAN
+		if ($resBlEmail && $resBlEmail->getRowCount() > 0) {
 			return false;
+		}
 
+		// CHECK: Blacklist - PHONE
 		$resBlPhone = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'PHONE', $customer['phone']);
-		if($resBlPhone && $resBlPhone->getRowCount() > 0) // Telefon BAN
+		if ($resBlPhone && $resBlPhone->getRowCount() > 0) {
 			return false;
+		}
 
-		// 3.) Kontrola - UNITS
-		if(count($units /*, COUNT_RECURSIVE*/) > $this->getUnitsCountTotal()) // Prilis mnoho Units
+		// CHECK: Units count
+		if (count($units /*, COUNT_RECURSIVE*/) > $this->getUnitsCountTotal()) {
 			return false;
+		}
 
-		foreach($units as $item)
-		{
+		// CHECK: Unit name and slot occupancy
+		foreach ($units as $item) {
 			$_tableId = $this->getTableIdByUnitName($item);
 
-			if(empty($_tableId) || $_tableId == NULL) // Chybi _tableId (neplatny Unit Name?)
+			if (empty($_tableId) || $_tableId == null) {
 				return false;
+			}
 
 			$unitHour = (int)substr($item, 0, 2);
 			$startDate = Carbon::create($date->year, $date->month, $date->day, $unitHour, 0, 0);
 
-			if($this->checkReservationSlot($_tableId, $startDate, 60) == false) // Slot jiz byl obsazen
+			if ($this->checkReservationSlot($_tableId, $startDate, 60) == false) {
 				return false;
+			}
 		}
 
-		// 4.) Zapsat data 'customer' do DB -> ziskam customerID
+		// STORE DATA: 'customer' (gets customerID)
 		$resultC = $this->database->table('customer')->insert($customer);
-		if(!$resultC) // Nepodarilo se zapsat do DB
+		if (!$resultC) {
 			return false;
+		}
 		$customerID = $resultC->id;
 
-		// 5.) Vygenerovani Auth Code
+		// GENERATE: Auth Code
 		$authCode = $this->getRandomAuthCode(4);
-		if($authCode == str_repeat('9', 4)) // Nepodarilo se najit unikatni AuthCode
+		if ($authCode == str_repeat('9', 4)) {
 			return false;
+		}
 
-		// 6.) Zapsat data 'reservation_request' do DB
+		// STORE DATA: 'reservation_request'
 		$resultR = $this->database->table('reservation_request')->insert([
 			'customerID'	=> $customerID,
 		//	'created'		=> Carbon::now(),
 			'date'			=> (string)sprintf("%4d-%02d-%02d", (int)$date->year, (int)$date->month, (int)$date->day),
 		//	'firstHour'		=> $this->getReservationFirstHour(json_encode($units)),
-			'firstHour'		=> NULL, // MOVED TO THE COMPLETE RES. REQ. PROCESS
+			'firstHour'		=> null, // MOVED TO THE COMPLETE RES. REQ. PROCESS
 			'units'			=> json_encode($units),
 			'authCode'		=> $authCode,
 			'status'		=> 'NEW',
 			'reminder'		=> 'DISABLED',
 		]);
-		if(!$resultR) // Nepodarilo se zapsat do DB
+		if (!$resultR) {
 			return false;
+		}
 
-		// 7.) Odeslat SMS (tam bude authCode)
+		// SEND SMS: Auth Code
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
 			$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
 		}
 
-		// Hotovo ???
-		//return (string)$authCode; // AUTH-OVERRIDE (TEMP)
+		// DONE
+		//return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
 		return true; // "OK: Reservation Request Created...";
 	}
 
@@ -686,8 +707,9 @@ class Calendar2 extends Reservation
 	{
 		// 1.) Ziskat 'reservation_request' z DB (podle $authCode a ...?)
 		$resultR = $this->database->query('SELECT * FROM reservation_request WHERE authCode = ? AND status = ? LIMIT 1', $authCode, 'NEW');
-		if(!$resultR || $resultR->getRowCount() != 1) // Nepodarilo ziskat data z DB
+		if (!$resultR || $resultR->getRowCount() != 1) {
 			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB01;
+		}
 
 		$reservationRequest = $resultR->fetch();
 
@@ -696,35 +718,37 @@ class Calendar2 extends Reservation
 
 		// 2.) Ziskat 'customer' z DB (podle 'reservation_request'.'customerID')
 		$resultC = $this->database->query('SELECT * FROM customer WHERE id = ?', $reservationRequest['customerID']);
-		if(!$resultC || $resultC->getRowCount() != 1) // Nepodarilo ziskat data z DB
+		if (!$resultC || $resultC->getRowCount() != 1) {
 			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB02-A;
+		}
 
 		$customer = $resultC->fetch();
 
 		// !!! HARDCODED: Kontrola emailove adresy zakaznika
-		if($customer['email'] !== $email)
+		if ($customer['email'] !== $email) {
 			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB02-B;
+		}
 
 		// 3.) Vytvorit zakaznika v Dotykacce => Ziskam 'dotykackaID'
-		// (POUZE kdyz 'customer'.'dotykackaID' == NULL; jinak ziskat z DB)
+		// (POUZE kdyz 'customer'.'dotykackaID' == null; jinak ziskat z DB)
 		$dotykackaID = (string)$customer['dotykackaID'];
-		if(empty($dotykackaID))
-		{
+		if (empty($dotykackaID)) {
 			$newCustomer = $this->doty2->createCustomers([
 				$this->doty2->CustomerSchema($customer['name'], $customer['surname'], $customer['email'], $customer['phone'])
 			]);
 
-			if(empty($newCustomer[0]->id)) // Nepodarilo se vytvorit zakaznika v Dotykacce (nedostali jsme ID)
+			// Nepodarilo se vytvorit zakaznika v Dotykacce (nedostali jsme ID)
+			if (empty($newCustomer[0]->id)) {
 				return "Chyba: Nepodařilo se vytvořit záznam zákazníka."; // EB03
+			}
 
 			$dotykackaID = $newCustomer[0]->id;
 		}
 
 		// 4.) Vytvorit zaznam v EcoMailu => Ziskam 'ecomailID'
-		// (POUZE kdyz 'customer'.'subscribe' == 1 && 'customer'.'ecomailID' == NULL)
+		// (POUZE kdyz 'customer'.'subscribe' == 1 && 'customer'.'ecomailID' == null)
 		$ecomailID = $customer['ecomailID'];
-		/*if($customer['subscribe'] == 1 && empty($ecomailID))
-		{
+		/*if ($customer['subscribe'] == 1 && empty($ecomailID)) {
 			$ecomailData = $this->ecomail->addSubscriber(2, [	// <<<<<<<<<<< BRZDA???
 				'name'		=> $customer['name'],
 				'surname'	=> $customer['surname'],
@@ -733,7 +757,7 @@ class Calendar2 extends Reservation
 				'vokativ'	=> $customer['name'],
 				'vokativ_s'	=> $customer['surname'],
 				], FALSE, TRUE, TRUE);
-			$ecomailID = (!isset($ecomailData['id'])) ? NULL : $ecomailData['id']; // V pripade chyby je NULL
+			$ecomailID = (!isset($ecomailData['id'])) ? null : $ecomailData['id']; // V pripade chyby je null
 		}*/
 
 		// 5.) Aktualizovat 'customer' v DB ('dotykackaID', 'ecomailID')
@@ -746,39 +770,46 @@ class Calendar2 extends Reservation
 		$startHour = 24;
 		$note = $customer['name']." ".$customer['surname']." / ".$customer['phone'];
 		$reservations = [];
-		foreach($units as $item)
-		{
+		foreach ($units as $item) {
 			$_tableId = $this->getTableIdByUnitName($item);
 
-			if(empty($_tableId) || $_tableId == NULL) // Chybi _tableId (neplatny Unit Name?)
+			// Chybi _tableId (neplatny Unit Name?)
+			if (empty($_tableId) || $_tableId == null) {
 				return "Chyba: Vámi vybrané místo se nám nepodařilo najít. Prosím, zkuste zadat novou rezervaci."; // EB06-A
+			}
 
 			$unitHour = (int)substr($item, 0, 2);
 
-			if($unitHour < $startHour)
+			if ($unitHour < $startHour) {
 				$startHour = $unitHour;
+			}
 
 			$reservation = $this->prepareReservationSlot($dotykackaID, $_tableId, $date->year, $date->month, $date->day, $unitHour, $note);
-			if($reservation == false) // Slot jiz byl obsazen
+
+			// Slot jiz byl obsazen?
+			if ($reservation == false) {
 				return "Chyba: Některé z vybraných míst je již obsazeno. Prosím, vyberte jiný čas rezervace."; // EB06-B
+			}
 
 			$reservations[] = $reservation;
 		}
 
 		// 7.) Vytvorit Rezervace v Dotykacce
-		if(empty($reservations))
+		if (empty($reservations)) {
 			return "Chyba: Data o rezervaci nejsou k dispozici. Prosím, kontaktujte nás."; // EB07-A
+		}
 
 		$resultDtk = $this->doty2->createReservations($reservations);
-		if(empty($resultDtk[0]->id))
+		if (empty($resultDtk[0]->id)) {
 			return "Chyba: Rezervaci se nepodařilo založit. Prosím, kontaktujte nás."; // EB07-B
+		}
 
 		// 8.) Aktualizovat 'reservation_request' v DB (status = 'CONFIRMED', [vymazat 'authCode' ??? ])
 		$this->database->query('UPDATE reservation_request SET', [
 			'firstHour'		=> $startHour,
 			'status'		=> 'CONFIRMED',
 			'reminder'		=> 'WAITING',
-			'authCode'		=> NULL,
+			'authCode'		=> null,
 		], 'WHERE id = ?', $reservationRequest['id']);
 
 		// 9.) TODO: Odeslat Email (Potvrzeni o Rezervaci)
@@ -805,10 +836,11 @@ class Calendar2 extends Reservation
 			$customer['phone'],
 			$reservationRequest['id']
 		);
-		/*if($reviewRequestResult === false)
-			return "Chyba: Nepodařilo se vytvořit požadavek na hodnocení zážitku."; // EB11*/
+		/*if ($reviewRequestResult === false) {
+			return "Chyba: Nepodařilo se vytvořit požadavek na hodnocení zážitku."; // EB11
+		}*/
 
-		// Hotovo ???
+		// DONE
 		return true; // "OK: Reservation Request Completed...";
 	}
 
