@@ -155,11 +155,11 @@
 		$("#selecthour").html("\
 						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
 							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
-								<img src=\"{$baseUrl}/img/icon/loading-data.svg\" alt=\"Loading...\">\
+								<img src=\"" + {$baseUrl} + "/img/icon/loading-data.svg\" alt=\"Loading...\">\
 							</h2>\
 						</div>"); // INIT LOADING
 
-		$.get("{$baseUrl}/partials/selectday", { year: year, month: month }, function(data, status) {
+		$.get({$baseUrl} + "/partials/selectday", { year: year, month: month }, function(data, status) {
 			if(status == "success") {
 				$("#selectday").html(data);
 				$("#reservation_date").html(year + '-' + month + '-' + dnow); // RESERVATION_DATE form set
@@ -167,7 +167,7 @@
 		});
 
 		/*if(year == ynow && month == mnow) {
-			$.get("{$baseUrl}/partials/selecthour", { year: ynow, month: mnow, day: dnow }, function(data, status) {
+			$.get({$baseUrl} + "/partials/selecthour", { year: ynow, month: mnow, day: dnow }, function(data, status) {
 				if(status == "success") {
 					$("#selecthour").html(data);
 				}
