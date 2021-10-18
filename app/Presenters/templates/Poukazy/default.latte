@@ -3,8 +3,8 @@
 
 {block head}
 {include parent}
-	<link rel="stylesheet" href="/css/rezervace.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/rezervace.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
 <style>
 .voucher-item {
 	display: flex;
@@ -109,13 +109,13 @@ a.anchor {
 								<div class="col-xl-6 col-lg-12 d-xl-none d-flex" id="resform" style="padding: 0 5px;">{* MOBILE *}
 									<div class="voucher-item d-block">
 										{block info-text}
-										{*<img class="poster" src="/img/poukazy/poukaz3s.jpg" alt="" />*}
-										<img class="poster" src="/img/poukazy/vizualizace.jpg" alt="poukaz" />
+										{*<img class="poster" src="{$baseUrl}/img/poukazy/poukaz3s.jpg" alt="" />*}
+										<img class="poster" src="{$baseUrl}/img/poukazy/vizualizace.jpg" alt="poukaz" />
 										<p class="font-weight-normal text-center pt-10 pb-20">Nevíte si rady při výběru dárku a rádi byste udělali radost svému blízkému nebo kamarádovi? Věnujte jim akční zážitek ve virtuální realitě v podobě herního poukazu. Teď už je jen na Vás, koho potěšíte!</p>
 										<div class="row mb-0">
 											<div class="col-12 wow fadeInUp" data-wow-delay="0.10s">
 												<div class="ikona">
-													<img src="/img/poukazy/ikona8s.png" alt="Jak poukázku zakoupit">
+													<img src="{$baseUrl}/img/poukazy/ikona8s.png" alt="Jak poukázku zakoupit">
 												</div>
 												<div class="ikona-popis">
 													<h5><span>Zakoupení</span> poukazu</h5>
@@ -126,7 +126,7 @@ a.anchor {
 										<div class="row mb-0">
 											<div class="col-12 wow fadeInUp" data-wow-delay="0.20s">
 												<div class="ikona">
-													<img src="/img/poukazy/ikona7s.png" alt="Doručení herního poukazu">
+													<img src="{$baseUrl}/img/poukazy/ikona7s.png" alt="Doručení herního poukazu">
 												</div>
 												<div class="ikona-popis">
 													<h5><span>Doručení</span> poukazu</h5>
@@ -137,7 +137,7 @@ a.anchor {
 										<div class="row mb-0">
 											<div class="col-12 wow fadeInUp" data-wow-delay="0.30s">
 												<div class="ikona">
-													<img src="/img/poukazy/ikona9s.png" alt="Jak poukaz uplatnit">
+													<img src="{$baseUrl}/img/poukazy/ikona9s.png" alt="Jak poukaz uplatnit">
 												</div>
 												<div class="ikona-popis">
 													<h5><span>Uplatnění</span> poukazu</h5>

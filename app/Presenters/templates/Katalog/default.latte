@@ -90,13 +90,12 @@
 						</div>
 					</div>
 
-					{* TODO: Move Padding correction to CSS section... *}
-					<div class="row mb-40" style="padding: 0 10px;">
+					<div class="row mb-40 pt-0 pr-10 pb-0 pl-10">
 					{foreach $categories as $item}
 						<a href="{link Katalog:category $item['url']}" class="col-sm-12 col-md-6 col-xl-4">
 							<div class="categorylist-category-item">
 								<h3 n:if="!$item['icon']">{$item['nameP']}</h3>
-								<h3 n:if="$item['icon']"><img src="{$item['icon']}" /> {$item['nameP']}</h3>
+								<h3 n:if="$item['icon']"><img src="{$baseUrl}{$item['icon']}" /> {$item['nameP']}</h3>
 								<p class="categorylist-category-description">Počet her: {$item['count']}</p>
 							</div>
 						</a>
@@ -117,7 +116,7 @@
 							<div class="latest-games-active owl-carousel">
 								<div class="latest-games-items mb-30">
 									<div class="latest-games-thumb">
-										<a href="/hry/strilecky/half-life-alyx"><img src="/img/product/nejhry_1.jpg" alt="Half-Life Alyx"></a>
+										<a href="{$baseUrl}/hry/strilecky/half-life-alyx"><img src="{$baseUrl}/img/product/nejhry_1.jpg" alt="Half-Life Alyx"></a>
 									</div>
 									<div class="latest-games-content">
 										<div class="lg-tag">
@@ -128,7 +127,7 @@
 								</div>
 								<div class="latest-games-items mb-30">
 									<div class="latest-games-thumb">
-										<a href="/hry/hudebni/beat-saber"><img src="/img/product/nejhry_2.jpg" alt="Beat Saber"></a>
+										<a href="{$baseUrl}/hry/hudebni/beat-saber"><img src="{$baseUrl}/img/product/nejhry_2.jpg" alt="Beat Saber"></a>
 									</div>
 									<div class="latest-games-content">
 										<div class="lg-tag">
@@ -139,7 +138,7 @@
 								</div>
 								{*<div class="latest-games-items mb-30">
 									<div class="latest-games-thumb">
-										<a href="/hry/strilecky/superhot"><img src="/img/product/nejhry_3.jpg" alt="Super Hot"></a>
+										<a href="{$baseUrl}/hry/strilecky/superhot"><img src="{$baseUrl}/img/product/nejhry_3.jpg" alt="Super Hot"></a>
 									</div>
 									<div class="latest-games-content">
 										<div class="lg-tag">
@@ -150,7 +149,7 @@
 								</div>*}
 								<div class="latest-games-items mb-30">
 									<div class="latest-games-thumb">
-										<a href="/hry/simulatory/job-simulator"><img src="/img/product/nejhry_4.jpg" alt="Job Simulator"></a>
+										<a href="{$baseUrl}/hry/simulatory/job-simulator"><img src="{$baseUrl}/img/product/nejhry_4.jpg" alt="Job Simulator"></a>
 									</div>
 									<div class="latest-games-content">
 										<div class="lg-tag">

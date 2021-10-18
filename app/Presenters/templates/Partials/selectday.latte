@@ -98,11 +98,11 @@ jQuery(document).ready(function($) {
 		$("#selecthour").html("\
 						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
 							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
-								<img src=\"/img/icon/loading-data.svg\" alt=\"Loading...\">\
+								<img src=\"{$baseUrl}/img/icon/loading-data.svg\" alt=\"Loading...\">\
 							</h2>\
 						</div>"); // INIT LOADING
 		var request = { year: $(this).data("y"), month: $(this).data("m"), day: $(this).data("d") };
-		$.ajax({ url: '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+		$.ajax({ url: '{$baseUrl}/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
 		$("#reservation_date").html($(this).data("y") + '-' + $(this).data("m") + '-' + $(this).data("d")); // RDF set
 		$("#reservation_units").html('[]'); // RUF reset
 		if(!$('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').addClass('nolink'); }
@@ -111,19 +111,19 @@ jQuery(document).ready(function($) {
 	});
 	$("#redir-month-prev").click(function() {
 		var request = { year: {$pagination['yearPrev']}, month: {$pagination['monthPrev']} };
-		$.ajax({ url: '/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
+		$.ajax({ url: '{$baseUrl}/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
 		resetHourSelector({$pagination['yearPrev']}, {$pagination['monthPrev']});
 	});
 	$("#redir-month-next").click(function() {
 		var request = { year: {$pagination['yearNext']}, month: {$pagination['monthNext']} };
-		$.ajax({ url: '/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
+		$.ajax({ url: '{$baseUrl}/partials/selectday', type: "GET", data: request, success: function (response) { $("#selectday").html(response); } });
 		resetHourSelector({$pagination['yearNext']}, {$pagination['monthNext']});
 	});
 	function resetHourSelector(y, m) {
 		$("#reservation_units").html('[]'); // RUF reset
 		if(y == {$now['year']} && m == {$now['month']}) {
 			var request = { year: {$now['year']}, month: {$now['month']}, day: {$now['day']} };
-			$.ajax({ url: '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+			$.ajax({ url: '{$baseUrl}/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
 			$("#reservation_date").html({$now['year']} + '-' + {$now['month']} + '-' + {$now['day']} ); // RDF set
 		}
 		else {

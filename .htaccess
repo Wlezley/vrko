@@ -3,7 +3,7 @@
 #php_value error_reporting 6143
 ###################################
 
-#Order Deny,Allow
+Order Deny,Allow
 
 # local host
 Allow from 127.0.0.0/24
@@ -24,12 +24,6 @@ Allow from 88.101.55.121
 Allow from 89.102.116.110
 Allow from 89.102.247.177
 
-# Textar
-Allow from 85.70.49.157
-
-# Grafik
-Allow from 90.179.143.80
-
 #<Location "/partials/selectday/2021/2/">
 #    Allow from All
 #</Location>
@@ -40,7 +34,7 @@ Allow from 90.179.143.80
 Deny from All
 
 RewriteEngine On
-RewriteBase /
+#RewriteBase /
 
 # Rewrite INDEX to ./www
 RewriteRule ^$ www/ [L]

@@ -75,7 +75,7 @@ final class KatalogPresenter extends BasePresenter
 		$this->template->params['category'] = [
 			'url'	=> $data['categoryData']['url'],
 			'nameS'	=> $data['categoryData']['nameS'],
-			'icon'	=> $data['categoryData']['icon'],
+			'icon'	=> empty($data['categoryData']['icon']) ? "" : $this->template->baseUrl . $data['categoryData']['icon'],
 		];
 
 		switch($data['players'])
@@ -153,5 +153,9 @@ final class KatalogPresenter extends BasePresenter
 				$this->template->params['difficulty']['desc'] = "Náročnost neznámá";
 				break;
 		}
+		
+		$this->template->params['players']['icon'] = $this->template->baseUrl . $this->template->params['players']['icon'];
+		$this->template->params['skills']['icon'] = $this->template->baseUrl . $this->template->params['skills']['icon'];
+		$this->template->params['difficulty']['icon'] = $this->template->baseUrl . $this->template->params['difficulty']['icon'];
 	}
 }

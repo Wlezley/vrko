@@ -58,29 +58,29 @@
 	<title>{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz</title>
 {* CSS *}
 {if $debug}
-	<link rel="stylesheet" href="/css/bootstrap.min.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/animate.min.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/magnific-popup.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/fontawesome-all.min.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/odometer.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/aos.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/owl.carousel.min.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/meanmenu.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/slick.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/default.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/style.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/responsive.css{ifset $csVer}{$csVer}{/ifset}">
-	<link rel="stylesheet" href="/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/bootstrap.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/animate.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/magnific-popup.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/fontawesome-all.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/odometer.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/aos.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/owl.carousel.min.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/meanmenu.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/slick.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/default.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/style.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/responsive.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/css/homepage.css{ifset $csVer}{$csVer}{/ifset}">
 {else}
-	<link rel="stylesheet" href="/all-styles.css{ifset $csVer}{$csVer}{/ifset}">
+	<link rel="stylesheet" href="{$baseUrl}/all-styles.css{ifset $csVer}{$csVer}{/ifset}">
 {/if}
 {* FONTS *}
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	<link href="https://fonts.googleapis.com/css?family=Oswald:400,300,700&amp;subset=latin,latin-ext" rel="stylesheet" type="text/css">
-	<link rel="apple-touch-icon" type="image/png" href="/favicon.png">
-	<link rel="shortcut icon" type="image/png" href="/favicon.png">
-	<link rel="favicon" type="image/png" href="/favicon.png">
-	<link rel="icon" type="image/png" href="/favicon.png">{/block}
+	<link rel="apple-touch-icon" type="image/png" href="{$baseUrl}/favicon.png">
+	<link rel="shortcut icon" type="image/png" href="{$baseUrl}/favicon.png">
+	<link rel="favicon" type="image/png" href="{$baseUrl}/favicon.png">
+	<link rel="icon" type="image/png" href="{$baseUrl}/favicon.png">{/block}
 {* JAVA SCRIPT *}
 	{*block javascript}
 	{/block*}
@@ -108,27 +108,27 @@
 	{*<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>*}
 	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
 {if $debug}
-	<script src="/js/vendor/jquery-3.4.1.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/popper.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/bootstrap.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/isotope.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/slick.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.meanmenu.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/wow.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/aos.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.lettering.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.textillate.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.odometer.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.appear.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/owl.carousel.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.countdown.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.scrollUp.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/imagesloaded.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/jquery.magnific-popup.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/plugins.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
-	<script src="/js/main.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/vendor/jquery-3.4.1.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/popper.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/bootstrap.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/isotope.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/slick.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.meanmenu.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/wow.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/aos.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.lettering.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.textillate.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.odometer.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.appear.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/owl.carousel.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.countdown.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.scrollUp.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/imagesloaded.pkgd.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/jquery.magnific-popup.min.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/plugins.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/js/main.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
 {else}
-	<script src="/all-scripts.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
+	<script src="{$baseUrl}/all-scripts.js{ifset $jsVer}{$jsVer}{/ifset}"></script>
 {/if}
 	{/block}
 </body>
