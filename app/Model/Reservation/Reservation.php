@@ -30,7 +30,7 @@ class Reservation
 	protected $database;
 
 	/** @var Dotykacka\DotykackaApi2 */
-	private $doty2;
+	protected $doty2;
 
 	/** @var Model\SmsBrana\SmsBrana */
 	protected $smsbrana;
@@ -42,7 +42,7 @@ class Reservation
 	protected $reviews;
 
 	/** @var Nette\Mail\Mailer @inject */
-	public $mailer;
+	protected $mailer;
 
 	/** @var Model\Reservation\ReservationOccupancy @inject */
 	public $reservationOccupancy;
