@@ -102,6 +102,21 @@ class Reservation
 		7 => "Neděle"
 	];
 
+	public function getAZ(): array
+	{
+		return range('A', 'Z');
+	}
+
+	public function getAZbyID($id): string
+	{
+		return range('A', 'Z')[$id];
+	}
+
+	public function getIDbyAZ($az): int
+	{
+		return array_search($az, range('A', 'Z'));
+	}
+
 	/* ##################################### TRANSLATOR ##################################### */
 	/* #################################### ARRAY GETTER #################################### */
 

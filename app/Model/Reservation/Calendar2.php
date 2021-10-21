@@ -268,10 +268,8 @@ class Calendar2 extends Reservation
 			return false;
 		}
 
-		$alphabet = range('A', 'Z');
-
 		foreach ($this->getUnitsData() as $item) {
-			$unitName = $item->hour . $alphabet[$item->unitID];
+			$unitName = $item->hour . $this->getAZbyID($item->unitID);
 
 			if ($unit === $unitName) {
 				return true;
@@ -292,11 +290,10 @@ class Calendar2 extends Reservation
 			return null;
 		}
 
-		$alphabet = range('A', 'Z');
 		$tables = $this->doty2->getTables();
 
 		foreach ($this->getUnitsData() as $item) {
-			$unitName = $item->hour . $alphabet[$item->unitID];
+			$unitName = $item->hour . $this->getAZbyID($item->unitID);
 
 			if ($unit === $unitName && $item->unitID < count($tables)) {
 				return $tables[$item->unitID];
@@ -349,9 +346,8 @@ class Calendar2 extends Reservation
 		$today = ($dateNow == $dateRes) ? true : false;
 
 		// Units array prepare
-		$alphabet = range('A', 'Z');
 		foreach ($this->getUnitsData() as $item) {
-			$unitName = $item->hour . $alphabet[$item->unitID];
+			$unitName = $item->hour . $this->getAZbyID($item->unitID);
 			$units[$unitName] = ($today && $item->hour < $hourLimit) ? 1 : 0;
 		}
 		if (empty($units)) {
@@ -559,7 +555,7 @@ class Calendar2 extends Reservation
 				$reservations[] = (array)$reservation;
 				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone('Europe/Prague');
 
-				$tableChar = range('A', 'Z')[array_search($reservation->_tableId, $this->doty2->getTables())];
+				$tableChar = $this->getAZbyID(array_search($reservation->_tableId, $this->doty2->getTables()));
 				$units[] = $rsDate->hour . $tableChar;
 			}
 		}
