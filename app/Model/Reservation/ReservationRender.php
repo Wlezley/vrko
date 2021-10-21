@@ -26,7 +26,7 @@ class ReservationRender extends Reservation
 	 */
 	public function getRenderData_Selectday(int $year, int $month): array
 	{
-		if (!$this->checkDate($year, $month, 1)) {
+		if (!$this->checkDate($year, $month)) {
 			return [];
 		}
 

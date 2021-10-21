@@ -206,7 +206,7 @@ class Reservation
 	}
 
 	/** Checks if date is in correct format */
-	public function checkDate(int $year, int $month, int $day): bool
+	public function checkDate(int $year, int $month, int $day = 1): bool
 	{
 		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
 			!Validators::is($month, 'numericint:1..12') ||
