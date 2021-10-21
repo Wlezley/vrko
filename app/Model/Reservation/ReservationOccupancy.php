@@ -26,6 +26,10 @@ class ReservationOccupancy extends Reservation
 	 */
 	public function renderOccupancy(int $year, int $month, int $day): array
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return [];
+		}
+
 		$units = array();
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 
@@ -76,6 +80,10 @@ class ReservationOccupancy extends Reservation
 	 */
 	public function getOccupancy(int $year, int $month, int $day): array
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return [];
+		}
+
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 
 		$result = $this->database->query('SELECT occupancyData FROM occupancy WHERE date = ?', $date);
