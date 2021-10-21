@@ -19,17 +19,15 @@ class ReservationRender extends Reservation
 	}
 
 	/** Get RenderData for SELECT-DAY
-	 * @param	integer			$year
-	 * @param	integer			$month
+	 * @param	int				$year
+	 * @param	int				$month
 	 * 
-	 * @return	array|bool		$renderData[...]
+	 * @return	array			$renderData[...]
 	 */
-	public function getRenderData_Selectday($year, $month)
+	public function getRenderData_Selectday(int $year, int $month): array
 	{
-		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
-			!Validators::is($month, 'numericint:1..12') || strlen((string)$year) != 4 || strlen((string)$month) > 2)
-		{
-			return false;
+		if (!$this->checkDate($year, $month, 1)) {
+			return [];
 		}
 
 		$carbon = new Carbon;
@@ -119,20 +117,16 @@ class ReservationRender extends Reservation
 	}
 
 	/** Get RenderData for SELECT-HOUR
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
-	 * @return	array|bool		$renderData[...]
+	 * @return	array			$renderData[...]
 	 */
-	public function getRenderData_Selecthour($year, $month, $day)
+	public function getRenderData_Selecthour(int $year, int $month, int $day): array
 	{
-		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
-			!Validators::is($month, 'numericint:1..12') ||
-			!Validators::is($day, 'numericint:1..' . Carbon::create($year, $month, 1)->daysInMonth) ||
-			strlen((string)$year) != 4 || strlen((string)$month) > 2 || strlen((string)$day) > 2)
-		{
-			return false;
+		if (!$this->checkDate($year, $month, $day)) {
+			return [];
 		}
 
 		// RESYNC Reservations
@@ -150,7 +144,7 @@ class ReservationRender extends Reservation
 		return $renderData;
 	}
 
-	public function _RENDER_DEBUG_DATA_()
+	public function _RENDER_DEBUG_DATA_(): mixed
 	{
 		return "N/A";
 

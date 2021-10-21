@@ -25,6 +25,7 @@ class Reservation
 {
 	// DEBUG MODE
 	protected static $_DEBUG_ = false;
+	protected static $_TIMEZONE_ = "Europe/Prague";
 
 	/** @var Nette\Database\Explorer */
 	protected $database;
@@ -202,6 +203,20 @@ class Reservation
 			'minute'	=> $now->minute,
 			'second'	=> $now->second,
 		];
+	}
+
+	/** Checks if date is in correct format */
+	public function checkDate(int $year, int $month, int $day): bool
+	{
+		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
+			!Validators::is($month, 'numericint:1..12') ||
+			!Validators::is($day, 'numericint:1..' . Carbon::create($year, $month, 1)->daysInMonth))
+			//strlen((string)$year) != 4 || strlen((string)$month) > 2 || strlen((string)$day) > 2
+		{
+			return false;
+		}
+
+		return true;
 	}
 
 	/** Generate Random AuthCode (SMS) */

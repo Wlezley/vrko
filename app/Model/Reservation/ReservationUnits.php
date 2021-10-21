@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace App\Model\Reservation;
 
 use App\Model\Reservation;
-
+use Nette\Database\Row;
 
 class ReservationUnits extends Reservation
 {
@@ -17,9 +17,9 @@ class ReservationUnits extends Reservation
 	}
 
 	/** Get UNITS Data
-	 * @return	Object|null		$unitsData[...]
+	 * @return	Row[]			$unitsData[...]
 	 */
-	public function getUnitsData()
+	public function getUnitsData(): array
 	{
 		$result = $this->database->query('SELECT * FROM units ORDER BY hour ASC, unitID ASC');
 
@@ -27,9 +27,9 @@ class ReservationUnits extends Reservation
 	}
 
 	/** Get UNITS Count - Total
-	 * @return	integer			$unitsTotal
+	 * @return	int				$unitsTotal
 	 */
-	public function getUnitsCountTotal()
+	public function getUnitsCountTotal(): int
 	{
 		$units = $this->getUnitsData();
 
@@ -37,14 +37,18 @@ class ReservationUnits extends Reservation
 	}
 
 	/** Get UNITS Counter - Array
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
 	 * @return	array			$unitsCount ['total','free','occupied','error']
 	 */
-	public function getUnitsCount($year, $month, $day)
+	public function getUnitsCount(int $year, int $month, int $day): array
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return [];
+		}
+
 		$total = $this->getUnitsCountTotal();
 		$free = 0;
 		$occupied = 0;
@@ -75,7 +79,7 @@ class ReservationUnits extends Reservation
 	 * 
 	 * @return	bool			$result
 	 */
-	public function isUnitEnabled(string $unit)
+	public function isUnitEnabled(string $unit): bool
 	{
 		if (strlen($unit) !== 3) {
 			return false;
@@ -97,7 +101,7 @@ class ReservationUnits extends Reservation
 	 * 
 	 * @return	string|null		$result
 	 */
-	public function getTableIdByUnitName(string $unit)
+	public function getTableIdByUnitName(string $unit): string
 	{
 		if (strlen($unit) !== 3) {
 			return null;
@@ -116,14 +120,14 @@ class ReservationUnits extends Reservation
 		return null;
 	}
 
-	/** GET Reservation First Hour as integer
+	/** GET Reservation First Hour as int	
 	 * @param	string			$units		// Units string (eg. '16A')
 	 * 
-	 * @return	integer			$result
+	 * @return	int				$result		// 24 == ERROR
 	 */
-	public function getReservationFirstHour($units)
+	public function getReservationFirstHour(string $units): int
 	{
-		$result = 24; // ERROR = 24 (hour)
+		$result = 24;
 
 		foreach (json_decode($units) as $item) {
 			$hour = (int)substr($item, 0, 2);

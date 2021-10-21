@@ -21,9 +21,9 @@ class ReservationRequest extends Reservation
 	}
 
 	/** Create Reservation request in Database (RAW)
-	 * @param	integer			$year			// Datum - Rok
-	 * @param	integer			$month			// Datum - Mesic
-	 * @param	integer			$day			// Datum - Den
+	 * @param	int				$year			// Datum - Rok
+	 * @param	int				$month			// Datum - Mesic
+	 * @param	int				$day			// Datum - Den
 	 * @param	string			$unitsJson		// Units - JSON String s popisem rezervovanych hernich jednotek
 	 * @param	string			$name			// Zakaznik - Jmeno
 	 * @param	string			$surname		// Zakaznik - Prijmeni
@@ -31,10 +31,15 @@ class ReservationRequest extends Reservation
 	 * @param	string			$phone			// Zakaznik - Telefon
 	 * @param	bool			$subscribe		// Zakaznik - Odber novinek
 	 * 
-	 * @return	bool|string		$result			// Uspech == TRUE / Chyba == FALSE
+	 * @return	bool|string		$result			// Uspech == TRUE / Chyba == FALSE / Debug AUTHCODE string
 	 */
-	public function createReservationRequest_raw($year, $month, $day, $unitsJson, $name, $surname, $email, $phone, $subscribe)
+	public function createReservationRequest_raw(int $year, int $month, int $day, string $unitsJson,
+		string $name, string $surname, string $email, string $phone, bool $subscribe): mixed
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return false;
+		}
+
 		$date = Carbon::create($year, $month, $day, 0, 0, 0, "Europe/Prague");
 		$units = json_decode($unitsJson);
 		$customer = [
@@ -53,9 +58,9 @@ class ReservationRequest extends Reservation
 	 * @param	array			$units			// Pole s popisem rezervovanych hernich jednotek
 	 * @param	array			$customer		// Pole s informacemi o zakaznikovi
 	 * 
-	 * @return	bool|string		$result			// Uspech == TRUE / Chyba == FALSE
+	 * @return	bool|string		$result			// Uspech == TRUE / Chyba == FALSE / Debug AUTHCODE string
 	 */
-	public function createReservationRequest(Carbon $date, array $units, array $customer)
+	public function createReservationRequest(Carbon $date, array $units, array $customer): mixed
 	{
 		// CHECK: Date must be today or more
 		if (Carbon::now("Europe/Prague")->startOfDay() > $date) {
@@ -140,9 +145,9 @@ class ReservationRequest extends Reservation
 	 * @param	string			$authCode		// Autorizacni kod
 	 * @param	string			$email			// Emailova adesa (!!! TODO !!!)
 	 * 
-	 * @return	bool			$result			// Uspech == TRUE / Chyba == FALSE
+	 * @return	string|bool		$result			// Uspech == TRUE / Chyba == FALSE / Chybova zprava (?)
 	 */
-	public function completeReservationRequest(string $authCode, string $email = '')
+	public function completeReservationRequest(string $authCode, string $email = ""): mixed
 	{
 		// 1.) Ziskat 'reservation_request' z DB (podle $authCode a ...?)
 		$resultR = $this->database->query('SELECT * FROM reservation_request WHERE authCode = ? AND status = ? LIMIT 1', $authCode, 'NEW');
@@ -260,7 +265,7 @@ class ReservationRequest extends Reservation
 			'units'			=> var_export($units, true),
 		//	'resultDtk'		=> var_export($resultDtk, true),
 		];
-		$this->sendMail($customer['email'], "@confirmationEmail", "Potvrzení o rezervaci VRko.cz", $mailTemplateData);
+		$this->sendConfirmationMail($customer['email'], "Potvrzení o rezervaci VRko.cz", "@confirmationEmail", $mailTemplateData);
 
 		// 10.) Synchronizace rezervaci pro cely den (podle 'reservation_request'.'date')
 		$this->reservationSlots->syncReservationsByDay($date->year, $date->month, $date->day); // SYNC
@@ -283,11 +288,16 @@ class ReservationRequest extends Reservation
 		return true; // "OK: Reservation Request Completed...";
 	}
 
-	// ### SEND MAIL ###
-	private function sendMail($recipient, $templateName, $subject, $data)
+	/** Send Comfirmation Mail
+	 * @param	string			$recipient		// Emailova adesa prijemce
+	 * @param	string			$subject		// Predmet mailu
+	 * @param	string			$templateName	// Nazev sablony
+	 * @param	array			$templateData	// Data pro sablonu
+	 */
+	private function sendConfirmationMail(string $recipient, string $subject, string $templateName, array $templateData): void
 	{
 		$latte = new Latte\Engine;
-		$template = $latte->renderToString(__DIR__ . "/" . $templateName . ".latte", $data);
+		$template = $latte->renderToString(__DIR__ . "/" . $templateName . ".latte", $templateData);
 
 		$mailMsg = new Mail\Message();
 		$mailMsg->setFrom("Rezervace VRko.cz <info@vrko.cz>");

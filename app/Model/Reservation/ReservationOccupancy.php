@@ -18,21 +18,21 @@ class ReservationOccupancy extends Reservation
 	}
 
 	/** RENDER Occupancy data for day
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
-	 * @return	array|null		$units
+	 * @return	array			$units
 	 */
-	public function renderOccupancy($year, $month, $day)
+	public function renderOccupancy(int $year, int $month, int $day): array
 	{
 		$units = array();
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 
 		// Time machine prevention
-		$hourLimit = Carbon::now('Europe/Prague')->addMinute(5)->hour + 1;
-		$dateRes = Carbon::create((int)$year, (int)$month, (int)$day)->setTimezone('Europe/Prague')->startOfDay();
-		$dateNow = Carbon::now('Europe/Prague')->startOfDay();
+		$hourLimit = Carbon::now(parent::$_TIMEZONE_)->addMinute(5)->hour + 1;
+		$dateRes = Carbon::create((int)$year, (int)$month, (int)$day)->setTimezone(parent::$_TIMEZONE_)->startOfDay();
+		$dateNow = Carbon::now(parent::$_TIMEZONE_)->startOfDay();
 		$today = ($dateNow == $dateRes) ? true : false;
 
 		$reservationUnits = new ReservationUnits();
@@ -42,8 +42,9 @@ class ReservationOccupancy extends Reservation
 			$unitName = $item->hour . $this->getAZbyID($item->unitID);
 			$units[$unitName] = ($today && $item->hour < $hourLimit) ? 1 : 0;
 		}
+
 		if (empty($units)) {
-			return null;
+			return [];
 		}
 
 		// Get all reservations for day
@@ -67,13 +68,13 @@ class ReservationOccupancy extends Reservation
 	}
 
 	/** GET Occupancy data for day
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
-	 * @return	array|null
+	 * @return	array
 	 */
-	public function getOccupancy($year, $month, $day)
+	public function getOccupancy(int $year, int $month, int $day): array
 	{
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 

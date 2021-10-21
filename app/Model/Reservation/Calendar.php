@@ -71,8 +71,8 @@ class Calendar extends Reservation
 	/* ###################################################################################### */
 
 	/** Get RenderData for SELECT-DAY
-	 * @param	integer			$year
-	 * @param	integer			$month
+	 * @param	int				$year
+	 * @param	int				$month
 	 * 
 	 * @return	array|bool		$renderData[...]
 	 */
@@ -170,9 +170,9 @@ class Calendar extends Reservation
 	/* ###################################################################################### */
 
 	/** Get RenderData for SELECT-HOUR
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
 	 * @return	array|bool		$renderData[...]
 	 */
@@ -215,7 +215,7 @@ class Calendar extends Reservation
 	}
 
 	/** Get UNITS Count - Total
-	 * @return	integer			$unitsTotal
+	 * @return	int				$unitsTotal
 	 */
 	public function getUnitsCountTotal()
 	{
@@ -224,9 +224,9 @@ class Calendar extends Reservation
 	}
 
 	/** Get UNITS Counter - Array
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
 	 * @return	array			$unitsCount ['total','free','occupied','error']
 	 */
@@ -294,10 +294,10 @@ class Calendar extends Reservation
 		return NULL;
 	}
 
-	/** GET Reservation First Hour as integer
+	/** GET Reservation First Hour as int	
 	 * @param	string			$units		// Units string (eg. '16A')
 	 * 
-	 * @return	integer			$result
+	 * @return	int				$result
 	 */
 	public function getReservationFirstHour($units)
 	{
@@ -316,9 +316,9 @@ class Calendar extends Reservation
 	/* ###################################################################################### */
 
 	/** RENDER Occupancy data for day
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
 	 * @return	array|NULL		$units
 	 */
@@ -328,9 +328,9 @@ class Calendar extends Reservation
 		$date = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
 
 		// Time machine prevention
-		$hourLimit = Carbon::now('Europe/Prague')->addMinute(5)->hour + 1;
-		$dateRes = Carbon::create((int)$year, (int)$month, (int)$day)->setTimezone('Europe/Prague')->startOfDay();
-		$dateNow = Carbon::now('Europe/Prague')->startOfDay();
+		$hourLimit = Carbon::now(parent::$_TIMEZONE_)->addMinute(5)->hour + 1;
+		$dateRes = Carbon::create((int)$year, (int)$month, (int)$day)->setTimezone(parent::$_TIMEZONE_)->startOfDay();
+		$dateNow = Carbon::now(parent::$_TIMEZONE_)->startOfDay();
 		$today = ($dateNow == $dateRes) ? true : false;
 
 		// Units array prepare
@@ -367,9 +367,9 @@ class Calendar extends Reservation
 	}
 
 	/** GET Occupancy data for day
-	 * @param	integer			$year
-	 * @param	integer			$month
-	 * @param	integer			$day
+	 * @param	int				$year
+	 * @param	int				$month
+	 * @param	int				$day
 	 * 
 	 * @return	array|NULL		$units
 	 */
@@ -425,9 +425,9 @@ class Calendar extends Reservation
 	}
 
 	/** DOTYKACKA: Checks if Reservation SLOT is FREE?
-	 * @param	integer			$_tableId		// ID Stolu
+	 * @param	int				$_tableId		// ID Stolu
 	 * @param	Carbon			$date			// Datum rezervace
-	 * @param	integer			$minutes = 60	// Doba trvani rezervace (vychozi: 60 minut)
+	 * @param	int				$minutes = 60	// Doba trvani rezervace (vychozi: 60 minut)
 	 * 
 	 * @return	bool			$isFree			// Je SLOT volny? (true: ano / false: ne)
 	 */
@@ -468,17 +468,17 @@ class Calendar extends Reservation
 	}
 
 	/** DOTYKACKA: Prepare SLOT data for the Reservation
-	 * @param	integer			$_customerId	// ID Zakaznika
-	 * @param	integer			$_tableId		// ID Stolu
-	 * @param	integer			$year			// Rok
-	 * @param	integer			$month			// Mesic
-	 * @param	integer			$day			// Den
-	 * @param	integer			$hour			// Hodina
+	 * @param	int				$_customerId	// ID Zakaznika
+	 * @param	int				$_tableId		// ID Stolu
+	 * @param	int				$year			// Rok
+	 * @param	int				$month			// Mesic
+	 * @param	int				$day			// Den
+	 * @param	int				$hour			// Hodina
 	 * @param	string			$note			// Poznamka
 	 * 
 	 * @return	array|bool		$result			// Data pro vytvoreni polozky v Dotykacce (nejsou-li data == FALSE)
 	 */
-	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $note = '')
+	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $note = "")
 	{
 		// Construct DATE
 		$minutes	= 60;
@@ -490,7 +490,7 @@ class Calendar extends Reservation
 			return false;
 		}
 
-		//ReservationSchema($tableId, $seats, $startDate, $endDate, $customerId = 0, $employeeId = 0, $note = '', $flags = 0, $status = 'CONFIRMED');
+		//ReservationSchema($tableId, $seats, $startDate, $endDate, $customerId = 0, $employeeId = 0, $note = "", $flags = 0, $status = 'CONFIRMED');
 		$result = $this->doty2->ReservationSchema(
 			$_tableId,							// ID Stolu
 			4,									// Pocet mist (zidli)
@@ -511,9 +511,9 @@ class Calendar extends Reservation
 	/* ###################################################################################### */
 
 	/** DOTYKACKA: Synchronize Reservations Database (DOTY -> DB)
-	 * @param	integer			$year			// Rok
-	 * @param	integer			$month			// Mesic
-	 * @param	integer			$day			// Den
+	 * @param	int				$year			// Rok
+	 * @param	int				$month			// Mesic
+	 * @param	int				$day			// Den
 	 * 
 	 * @return	array|bool		$result			// Pole dat s rezervacemi pro Dotykacku (nejsou-li data == FALSE)
 	 */
@@ -544,7 +544,7 @@ class Calendar extends Reservation
 				}
 
 				$reservations[] = (array)$reservation;
-				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone('Europe/Prague');
+				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone(parent::$_TIMEZONE_);
 
 				$tableChar = range('A', 'Z')[array_search($reservation->_tableId, $this->doty2->getTables())];
 				$units[] = $rsDate->hour . $tableChar;
@@ -571,9 +571,9 @@ class Calendar extends Reservation
 	/* ###################################################################################### */
 
 	/** Create Reservation request in Database (RAW)
-	 * @param	integer			$year			// Datum - Rok
-	 * @param	integer			$month			// Datum - Mesic
-	 * @param	integer			$day			// Datum - Den
+	 * @param	int				$year			// Datum - Rok
+	 * @param	int				$month			// Datum - Mesic
+	 * @param	int				$day			// Datum - Den
 	 * @param	string			$unitsJson		// Units - JSON String s popisem rezervovanych hernich jednotek
 	 * @param	string			$name			// Zakaznik - Jmeno
 	 * @param	string			$surname		// Zakaznik - Prijmeni
@@ -679,7 +679,7 @@ class Calendar extends Reservation
 	 * 
 	 * @return	bool			$result			// Uspech == TRUE / Chyba == FALSE
 	 */
-	public function completeReservationRequest(string $authCode, string $email = '')
+	public function completeReservationRequest(string $authCode, string $email = "")
 	{
 		// 1.) Ziskat 'reservation_request' z DB (podle $authCode a ...?)
 		$resultR = $this->database->query('SELECT * FROM reservation_request WHERE authCode = ? AND status = ? LIMIT 1', $authCode, 'NEW');

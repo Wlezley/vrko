@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace App\Model\Reservation;
 
 use App\Model\Reservation;
+use Nette\Utils\Validators;
 use Carbon\Carbon;
 
 
@@ -18,13 +19,13 @@ class ReservationSlots extends Reservation
 	}
 
 	/** DOTYKACKA: Checks if Reservation SLOT is FREE?
-	 * @param	integer			$_tableId		// ID Stolu
+	 * @param	int|string		$_tableId		// ID Stolu
 	 * @param	Carbon			$date			// Datum rezervace
-	 * @param	integer			$minutes = 60	// Doba trvani rezervace (vychozi: 60 minut)
+	 * @param	int				$minutes		// Doba trvani rezervace (vychozi: 60 minut)
 	 * 
 	 * @return	bool			$isFree			// Je SLOT volny? (true: ano / false: ne)
 	 */
-	public function checkReservationSlot($_tableId, Carbon $date, $minutes = 60)
+	public function checkReservationSlot(mixed $_tableId, Carbon $date, int $minutes = 60): bool
 	{
 		// Validate _tableId
 		if (!in_array($_tableId, $this->doty2->getTables())) {
@@ -62,18 +63,22 @@ class ReservationSlots extends Reservation
 	}
 
 	/** DOTYKACKA: Prepare SLOT data for the Reservation
-	 * @param	integer			$_customerId	// ID Zakaznika
-	 * @param	integer			$_tableId		// ID Stolu
-	 * @param	integer			$year			// Rok
-	 * @param	integer			$month			// Mesic
-	 * @param	integer			$day			// Den
-	 * @param	integer			$hour			// Hodina
+	 * @param	int|string		$_customerId	// ID Zakaznika
+	 * @param	int|string		$_tableId		// ID Stolu
+	 * @param	int				$year			// Rok
+	 * @param	int				$month			// Mesic
+	 * @param	int				$day			// Den
+	 * @param	int				$hour			// Hodina
 	 * @param	string			$note			// Poznamka
 	 * 
 	 * @return	array|bool		$result			// Data pro vytvoreni polozky v Dotykacce (nejsou-li data == FALSE)
 	 */
-	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $note = '')
+	public function prepareReservationSlot(mixed $_customerId, mixed $_tableId, int $year, int $month, int $day, int $hour, string $note = ""): mixed
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return false;
+		}
+
 		// Construct DATE
 		$minutes	= 60;
 		$startDate	= Carbon::create($year, $month, $day, $hour, 0, 0);
@@ -83,7 +88,7 @@ class ReservationSlots extends Reservation
 			return false;
 		}
 
-		//ReservationSchema($tableId, $seats, $startDate, $endDate, $customerId = 0, $employeeId = 0, $note = '', $flags = 0, $status = 'CONFIRMED');
+		//ReservationSchema($tableId, $seats, $startDate, $endDate, $customerId = 0, $employeeId = 0, $note = "", $flags = 0, $status = 'CONFIRMED');
 		$result = $this->doty2->ReservationSchema(
 			$_tableId,							// ID Stolu
 			4,									// Pocet mist (zidli)
@@ -100,14 +105,18 @@ class ReservationSlots extends Reservation
 	}
 
 	/** DOTYKACKA: Synchronize Reservations Database (DOTY -> DB)
-	 * @param	integer			$year			// Rok
-	 * @param	integer			$month			// Mesic
-	 * @param	integer			$day			// Den
+	 * @param	int				$year			// Rok
+	 * @param	int				$month			// Mesic
+	 * @param	int				$day			// Den
 	 * 
-	 * @return	array|bool		$result			// Pole dat s rezervacemi pro Dotykacku (nejsou-li data == FALSE)
+	 * @return	bool
 	 */
-	public function syncReservationsByDay($year, $month, $day)
+	public function syncReservationsByDay(int $year, int $month, int $day): bool
 	{
+		if (!$this->checkDate($year, $month, $day)) {
+			return false;
+		}
+
 		$tableString = implode(",", $this->doty2->getTables());
 
 		// Construct DATE
@@ -131,7 +140,7 @@ class ReservationSlots extends Reservation
 				}
 
 				$reservations[] = (array)$reservation;
-				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone('Europe/Prague');
+				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone(parent::$_TIMEZONE_);
 
 				$tableChar = $this->getAZbyID(array_search($reservation->_tableId, $this->doty2->getTables()));
 				$units[] = $rsDate->hour . $tableChar;
