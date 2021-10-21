@@ -8,17 +8,16 @@ declare(strict_types=1);
 namespace App\Model;
 
 use Nette;
-use App\Model;
-use Nette\Utils\Json;
+//use App\Model;
+//use Nette\Utils\Json;
 use Nette\Utils\Random;
-use Nette\Utils\ArrayHash;
+//use Nette\Utils\ArrayHash;
 use Nette\Utils\Validators;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
+//use Tracy\Debugger;
 
 // DATE / TIME
 use Carbon\Carbon;
-
 
 class Reservation
 {
@@ -32,8 +31,6 @@ class Reservation
 	{
 		$this->database = $database;
 	}
-
-	/* ####################################### ARRAYS ####################################### */
 
 	protected $monthNamesShort = [
 		1 => "Led",
@@ -102,23 +99,23 @@ class Reservation
 		7 => "Neděle"
 	];
 
+	/** Get Alphabet array (upper case) */
 	public function getAZ(): array
 	{
 		return range('A', 'Z');
 	}
 
-	public function getAZbyID($id): string
+	/** Get Alphabet character (upper case) by ID (A == 0) */
+	public function getAZbyID(int $id): string
 	{
 		return range('A', 'Z')[$id];
 	}
 
-	public function getIDbyAZ($az): int
+	/** Get ID (0 == A) by Alphabet character (upper case) */
+	public function getIDbyAZ(string $az): int
 	{
-		return array_search($az, range('A', 'Z'));
+		return array_search(strtoupper($az), range('A', 'Z'));
 	}
-
-	/* ##################################### TRANSLATOR ##################################### */
-	/* #################################### ARRAY GETTER #################################### */
 
 	/** Get MONTH Name / SHORT */
 	public function getMonthNameShort(int $month): string
@@ -149,8 +146,6 @@ class Reservation
 	{
 		return (Validators::is($day, 'numericint:0..7') ? $this->dayNamesFull[$day] : "UNKNOWN");
 	}
-
-	/* ###################################################################################### */
 
 	/** Get Today Date as Array ['year','month','day','hour','minute','second'] */
 	public function getDateNowArray(): array
@@ -190,8 +185,6 @@ class Reservation
 		return $errorCode;
 	}
 
-	/* ###################################################################################### */
-	
 	/** Color Converter: HSL (hue, saturation, luminiscence) to RGB Array ['r','g','b'] */
 	protected function ColorHSL2RGB(float $h, float $s, float $l): array
 	{

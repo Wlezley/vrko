@@ -158,11 +158,14 @@ class Calendar2 extends Reservation
 			'dayNamesShort'	=> $this->dayNamesShort,
 			'calMonthPage'	=> $calMonthPage,
 			'palette'		=> $palette,
-
-			// DEBUG: DUMMY
-			'debug'			=> "N/A",
-		//	'debug'			=> $this->_RENDER_DEBUG_DATA_(),
 		];
+
+		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
+			$renderData['debug'] = "N/A";
+		}
+		else {
+			$renderData['debug'] = $this->_RENDER_DEBUG_DATA_();
+		}
 
 		return $renderData;
 	}
@@ -687,9 +690,11 @@ class Calendar2 extends Reservation
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
 			$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
 		}
+		else {
+			return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
+		}
 
 		// DONE
-		//return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
 		return true; // "OK: Reservation Request Created...";
 	}
 
