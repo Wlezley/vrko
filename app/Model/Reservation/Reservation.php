@@ -7,29 +7,71 @@ declare(strict_types=1);
 
 namespace App\Model;
 
+use Latte;
 use Nette;
-//use App\Model;
-//use Nette\Utils\Json;
+use App\Model;
+use Nette\Utils\Json;
 use Nette\Utils\Random;
-//use Nette\Utils\ArrayHash;
+use Nette\Utils\ArrayHash;
 use Nette\Utils\Validators;
 use Nette\Database\Explorer;
-//use Tracy\Debugger;
-
-// DATE / TIME
+use Tracy\Debugger;
 use Carbon\Carbon;
+use Nette\Mail;
+use Nette\Application\UI\ITemplateFactory;
+
 
 class Reservation
 {
-	/** @var Nette\Database\Explorer */
-	protected $database;
-
 	// DEBUG MODE
 	protected static $_DEBUG_ = false;
 
-	public function __construct(Explorer $database)
+	/** @var Nette\Database\Explorer */
+	protected $database;
+
+	/** @var Dotykacka\DotykackaApi2 */
+	private $doty2;
+
+	/** @var Model\SmsBrana\SmsBrana */
+	protected $smsbrana;
+
+	/** @var Ecomail\EcomailApi */
+	protected $ecomail;
+
+	/** @var Model\Reviews\Reviews */
+	protected $reviews;
+
+	/** @var Nette\Mail\Mailer @inject */
+	public $mailer;
+
+	/** @var Model\Reservation\ReservationOccupancy @inject */
+	public $reservationOccupancy;
+
+	/** @var Model\Reservation\ReservationRender @inject */
+	public $reservationRender;
+
+	/** @var Model\Reservation\ReservationRequest @inject */
+	public $reservationRequest;
+
+	/** @var Model\Reservation\ReservationSlots @inject */
+	public $reservationSlots;
+
+	/** @var Model\Reservation\ReservationUnits @inject */
+	public $reservationUnits;
+
+	public function __construct(Explorer $database,
+								Dotykacka\DotykackaApi2 $doty2,
+								SmsBrana\SmsBrana $smsbrana,
+								Reviews\Reviews $reviews,
+								Ecomail\EcomailApi $ecomail,
+								Mail\Mailer $mailer)
 	{
 		$this->database = $database;
+		$this->doty2 = $doty2;
+		$this->smsbrana = $smsbrana;
+		$this->reviews = $reviews;
+		$this->ecomail = $ecomail;
+		$this->mailer = $mailer;
 	}
 
 	protected $monthNamesShort = [

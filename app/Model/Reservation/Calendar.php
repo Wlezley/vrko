@@ -400,9 +400,6 @@ class Calendar extends Reservation
 		// PREPARE RESERVATION SLOT
 		//return $this->prepareReservationSlot(123456, 7890123, 2021, 4, 18, 3, 'Poznamka');
 
-		// PREPARE RESERVATIONS
-		//return $this->prepareReservations();
-
 		// SYNC RESERVATIONS
 		//return $this->syncReservationsByDay(2021, 4, 18);
 
