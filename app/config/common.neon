@@ -41,7 +41,11 @@ services:
 	# Model: Rezervace
 	- App\Model\Reservation
 	- App\Model\Reservation\Calendar
-	- App\Model\Reservation\Calendar2
+	#- App\Model\Reservation\ReservationOccupancy
+	#- App\Model\Reservation\ReservationRender
+	#- App\Model\Reservation\ReservationRequest
+	#- App\Model\Reservation\ReservationSlots
+	#- App\Model\Reservation\ReservationUnits
 
 	# Model: Hodnoceni
 	- App\Model\Reviews\Reviews

@@ -37,7 +37,7 @@ class Calendar extends Reservation
 	protected $database;
 
 	/** @var Dotykacka\DotykackaApi2 */
-	private $doty2;
+	protected $doty2;
 
 	/** @var Model\SmsBrana\SmsBrana */
 	protected $smsbrana;
