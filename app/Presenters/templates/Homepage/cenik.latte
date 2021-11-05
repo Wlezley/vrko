@@ -1,8 +1,40 @@
 {block title}Ceník{/block}
 
-{*block head}
+{block head}
 {include parent}
-{/block*}
+<style>
+.corona-tab {
+	background-color: #E13175;
+	margin: 0 15px 10px 0;
+	padding: 10px 10px 1px 10px;*/
+}
+
+.corona-tab p {
+	color: #000;
+	line-height: 25px;
+	margin-bottom: 15px;
+	font-size: 20px;
+	font-family: 'Oxanium', cursive;
+	font-weight: 700;
+	font-style: italic;
+}
+
+.corona-tab a {
+	/*color: #002bbf;*/
+	color: #EEE;
+	/*text-decoration: underline;*/
+}
+
+.corona-tab a:hover {
+	color: #000;
+	/*text-decoration: none;*/
+}
+
+#kontakt-map {
+	height: 776px!important;
+}
+</style>
+{/block}
 
 {block content}
 	<main>
@@ -18,6 +50,10 @@
 								<div class="cenik-content">
 									<h1>Otevírací <span>doba</span></h1>
 									<div class="released-game-list mb-15">
+										<div class="corona-tab">
+											<p>Vzhledem k&nbsp;současným vládním opatřením, se&nbsp;naše&nbsp;otevírací doba řídí pouze na&nbsp;základě potvrzených <a href="{link Rezervace:}">rezervací</a> a&nbsp;předchozí <a href="{link :Kontakt}">telefonické domluvy!</a></p>
+											<p>Děkujeme za pochopení.</p>
+										</div>
 										<h3>Pondělí–Neděle</h3>
 										<div class="spacer"></div>
 										<h2>16:00–22:00</h2>
@@ -35,12 +71,12 @@
 												</span>
 												<span>Skvělé a útulné kavárny</span>
 											</li>
-											<li>
+											{*<li>
 												<span class="cenik-icon">
 													<img src="{$baseUrl}/img/icon/telefon.png" alt="">
 												</span>
 												<span>Jiné otevírácí doby dle domluvy</span>
-											</li>
+											</li>*}
 										</ul>
 									</div>
 								</div>
