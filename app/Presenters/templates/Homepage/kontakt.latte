@@ -21,18 +21,29 @@
 }
 
 .corona-tab a {
-	/*color: #002bbf;*/
 	color: #EEE;
-	/*text-decoration: underline;*/
 }
 
 .corona-tab a:hover {
 	color: #000;
-	/*text-decoration: none;*/
 }
 
-#kontakt-map {
-	height: 776px!important;
+.kontakt-map {
+	min-height: 625px;
+	height: 625px;
+	display: block;
+	box-shadow: 0px 2px 12.09px 0.91px rgba(184, 184, 184, 0.35);
+	padding: 20px;
+	margin: 20px 10px;
+}
+
+.kontakt-map-desktop {
+	height: 776px !important;
+}
+
+.kontakt-map-mobile {
+	min-height: 450px !important;
+	height: 450px !important;
 }
 </style>
 {/block}
@@ -49,8 +60,8 @@
 			</div>
 			<div class="container">
 				<div class="row">
-					<div class="col-lg-6 mt-10">
-						<div id="kontakt-map">
+					<div class="col-lg-6 mt-10 d-none d-lg-block">
+						<div class="kontakt-map kontakt-map-desktop">
 							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2578.4582562207165!2d13.389672116147555!3d49.739820779383585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470af1def03690ad%3A0x13bd58ff155941d6!2zS290ZXJvdnNrw6EgNjA3LzQ1LCAzMjYgMDAgUGx6ZcWIIDItU2xvdmFueS1Ww71jaG9kbsOtIFDFmWVkbcSbc3TDrQ!5e0!3m2!1scs!2scz!4v1608777816857!5m2!1scs!2scz" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 						</div>
 					</div>
@@ -97,6 +108,11 @@
 									</div>
 								</div>
 							</div>
+						</div>
+					</div>
+					<div class="col-lg-6 mt-10 d-block d-lg-none">
+						<div class="kontakt-map kontakt-map-mobile">
+							<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2578.4582562207165!2d13.389672116147555!3d49.739820779383585!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x470af1def03690ad%3A0x13bd58ff155941d6!2zS290ZXJvdnNrw6EgNjA3LzQ1LCAzMjYgMDAgUGx6ZcWIIDItU2xvdmFueS1Ww71jaG9kbsOtIFDFmWVkbcSbc3TDrQ!5e0!3m2!1scs!2scz!4v1608777816857!5m2!1scs!2scz" width="100%" height="100%" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
 						</div>
 					</div>
 				</div>
