@@ -1,0 +1,112 @@
+{if $error}
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+</body></html>
+{else}
+
+<div class="reservation-item">
+	<table>
+		<tr class="head">
+			<td colspan=4 style="border: none;"><h2>{$day}. {$monthName}</h2></td>
+		</tr>
+		<tr class="sub-head">
+			<td colspan=4 style="border: none;"><div>Vyberte čas a počet VR jednotek</div></td>
+		</tr>
+		{*foreach range(16, 21) as $hour}
+			{foreach ["00" => $hour.":30", "30" => ($hour+1).":00"] as $minute => $end}
+				<tr class="selector">
+					<th class="stage">&nbsp;{$hour}:{$minute}&nbsp;-&nbsp;{$end}&nbsp;</th>
+					{* Possible style classes: available, selected, occupied * }
+					<td n:foreach="range('A', 'C') as $unit"
+						n:class="unit, (!empty($occupancyData[$hour . '00' . $unit]) && $occupancyData[$hour . '00' . $unit]) ? occupied : available"
+						data-hour="{$hour}"
+						data-minute="{$minute}"
+						data-unit="{$unit}"
+						data-check="n">
+						<div><i></i></div>
+					</td>
+				</tr>
+			{/foreach}
+		{/foreach*}
+
+		{foreach $unitsData as $unitData}
+			<tr class="selector" id="{$iterator->counter}">
+			{foreach $unitData as $unit}
+				<th n:if="$iterator->first" class="stage">&nbsp;{$unit['hourBegin']}:{$unit['minuteBegin']}&nbsp;-&nbsp;{$unit['hourEnd']}:{$unit['minuteEnd']}&nbsp;</th>
+				{* Possible style classes: available, selected, occupied *}
+				<td n:class="unit, $occupancyData[$unit['unitCode']] ? occupied : available"
+					data-hour="{$unit['hourBegin']}"
+					data-minute="{$unit['minuteBegin']}"
+					data-unit="{$unit['unitLetter']}"
+					data-check="n">
+					<div><i></i></div>
+				</td>
+			{/foreach}
+			</tr>
+		{/foreach}
+
+	</table>
+</div>
+
+{* BUTTONS *}
+<div class="reservation-item">
+	<div class="container text-center pl-0 pr-0" style="font-family: 'Oxanium', cursive;">
+		<div class="row">
+			<div class="col-6">
+				<input type="submit" name="back" style="padding: 20px 0;" value="Zpět" class="btn btn-primary btn-block" onclick='$("#wizard").steps("previous");'>
+			</div>
+			<div class="col-6">
+				<input type="submit" name="next" style="padding: 20px 0;" value="Další" class="btn btn-primary btn-block btn-next" onclick='$("#wizard").steps("next");' disabled>
+			</div>
+		</div>
+	</div>
+</div>
+
+{* DEBUG * }
+<div class="reservation-item">
+	<div class="container">
+		<div class="row" style="color: #E13175; text-align: left; vertical-align: middle; font-family: 'Oxanium', cursive; font-size: 1.50em;">
+			<div class="col-12" style="text-align: center;">DEBUG - HOUR</div>
+		</div>
+		<div class="row">
+			<pre>{$debug|noescape}</pre>
+		</div>
+	</div>
+</div>
+{* *}
+
+{* SCRIPTS *}
+<script>
+jQuery(document).ready(function($) {
+	function selectedReservationUnits() {
+		var RegList = [];
+		$('.unit.selected').each(function () {
+			if($(this).data('check') == 'y') {
+				RegList.push( $(this).data('hour')+$(this).data('minute')+$(this).data('unit') );
+			}
+		});
+		if (RegList.length === 0) {
+			$(':input[name="next"]').prop('disabled', true);
+			if(!$('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').addClass('nolink'); }
+			if(!$('#bc-mobile-2').hasClass('nolink')) { $('#bc-mobile-2').addClass('nolink'); }
+		} else {
+			$(':input[name="next"]').prop('disabled', false);
+			if($('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').removeClass('nolink'); }
+			if($('#bc-mobile-2').hasClass('nolink')) { $('#bc-mobile-2').removeClass('nolink'); }
+		}
+		return RegList;
+	}
+	$(".unit.occupied").attr('title','Obsazeno');
+	$(".unit").click(function() {
+		var check = $(this).data('check');
+		if(check == 'n' && $(this).hasClass('available')) { $(this).removeClass('available').addClass('selected').data('check','y'); }
+		if(check == 'y' && $(this).hasClass('selected')) { $(this).removeClass('selected').addClass('available').data('check','n'); }
+		$("#reservation_units").html(JSON.stringify( selectedReservationUnits() )); // RUF set
+	});
+});
+</script>
+{/if}

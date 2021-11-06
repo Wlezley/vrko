@@ -7,6 +7,7 @@
 <p>The requested URL was not found on this server.</p>
 </body></html>
 {else}
+
 {*<div><pre>{$debug}</pre></div>*}
 <div class="reservation-item">
 	<table>
@@ -53,6 +54,7 @@
 	{/foreach}
 	</table>
 </div>
+
 {* LEGEND *}
 <div class="reservation-item pb-0 mb-0">
 	<div class="container">
@@ -95,14 +97,14 @@
 <script>
 jQuery(document).ready(function($) {
 	$(".clickable-cell-day").click(function() {
-		$("#selecthour").html("\
+		$("#selectunit").html("\
 						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
 							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
 								<img src=\"" + {$baseUrl} + "/img/icon/loading-data.svg\" alt=\"Loading...\">\
 							</h2>\
 						</div>"); // INIT LOADING
 		var request = { year: $(this).data("y"), month: $(this).data("m"), day: $(this).data("d") };
-		$.ajax({ url: {$baseUrl} + '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+		$.ajax({ url: {$baseUrl} + '/partials/selectunit', type: "GET", data: request, success: function (response) { $("#selectunit").html(response); } });
 		$("#reservation_date").html($(this).data("y") + '-' + $(this).data("m") + '-' + $(this).data("d")); // RDF set
 		$("#reservation_units").html('[]'); // RUF reset
 		if(!$('#bc-desktop-2').hasClass('nolink')) { $('#bc-desktop-2').addClass('nolink'); }
@@ -123,12 +125,12 @@ jQuery(document).ready(function($) {
 		$("#reservation_units").html('[]'); // RUF reset
 		if(y == {$now['year']} && m == {$now['month']}) {
 			var request = { year: {$now['year']}, month: {$now['month']}, day: {$now['day']} };
-			$.ajax({ url: {$baseUrl} + '/partials/selecthour', type: "GET", data: request, success: function (response) { $("#selecthour").html(response); } });
+			$.ajax({ url: {$baseUrl} + '/partials/selectunit', type: "GET", data: request, success: function (response) { $("#selectunit").html(response); } });
 			$("#reservation_date").html({$now['year']} + '-' + {$now['month']} + '-' + {$now['day']} ); // RDF set
 		}
 		else {
 			$("#reservation_date").html(''); // RDF reset
-			$("#selecthour").html("\
+			$("#selectunit").html("\
 						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
 							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
 								Vyberte den\

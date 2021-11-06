@@ -210,8 +210,27 @@ class Calendar extends Reservation
 	 */
 	public function getUnitsData()
 	{
-		$result = $this->database->query('SELECT * FROM units ORDER BY hour ASC, unitID ASC');
-		return ($result && $result->getRowCount() > 0) ? $result->fetchAll() : NULL;
+		$result = $this->database->query('SELECT * FROM units WHERE active = 1 ORDER BY hourBegin ASC, minuteBegin ASC, unitID ASC');
+		$resultData = $result->fetchAll();
+		$outputData = [];
+
+		$alphabet = range('A', 'Z');
+		foreach ($resultData as $item) {
+			$id = $item['id'];
+
+			$outputData[$id] = $item;
+			$outputData[$id] ['unitLetter'] = $alphabet[$item['unitID']];
+
+			$minuteBegin = $item['minuteBegin'] < 10 ? "0" . $item['minuteBegin'] : $item['minuteBegin'];
+			$outputData[$id] ['unitCode'] = $item['hourBegin'] . $minuteBegin . $alphabet[$item['unitID']];
+			$outputData[$id] ['minuteBegin'] = $minuteBegin;
+
+			$minuteEnd = $item['minuteEnd'] < 10 ? "0" . $item['minuteEnd'] : $item['minuteEnd'];
+			$outputData[$id] ['unitCodeEnd'] = $item['hourEnd'] . $minuteEnd . $alphabet[$item['unitID']];
+			$outputData[$id] ['minuteEnd'] = $minuteEnd;
+		}
+
+		return ($outputData && $result && $result->getRowCount() > 0) ? $outputData : NULL;
 	}
 
 	/** Get UNITS Count - Total
@@ -266,7 +285,7 @@ class Calendar extends Reservation
 		$alphabet = range('A', 'Z');
 		foreach($this->getUnitsData() as $item)
 		{
-			$unitName = $item->hour . $alphabet[$item->unitID];
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
 			if($unit === $unitName)
 				return true;
 		}
@@ -280,16 +299,16 @@ class Calendar extends Reservation
 	 */
 	public function getTableIdByUnitName(string $unit)
 	{
-		if(strlen($unit) !== 3)
+		if(strlen($unit) !== 5)
 			return NULL;
 
 		$alphabet = range('A', 'Z');
 		$tables = $this->doty2->getTables();
 		foreach($this->getUnitsData() as $item)
 		{
-			$unitName = $item->hour . $alphabet[$item->unitID];
-			if($unit === $unitName && $item->unitID < count($tables))
-				return $tables[$item->unitID];
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
+			if($unit === $unitName && $item['unitID'] < count($tables))
+				return $tables[$item['unitID']];
 		}
 		return NULL;
 	}
@@ -301,12 +320,12 @@ class Calendar extends Reservation
 	 */
 	public function getReservationFirstHour($units)
 	{
-		$result = 24; // ERROR = 24 (hour)
+		$result = 24; // ERROR = 24 (hourBegin)
 		foreach(json_decode($units) as $item)
 		{
-			$hour = (int)substr($item, 0, 2);
-			if($hour < $result)
-				$result = $hour;
+			$hourBegin = (int)substr($item, 0, 2);
+			if($hourBegin < $result)
+				$result = $hourBegin;
 		}
 		return (int)$result;
 	}
@@ -337,8 +356,8 @@ class Calendar extends Reservation
 		$alphabet = range('A', 'Z');
 		foreach($this->getUnitsData() as $item)
 		{
-			$unitName = $item->hour . $alphabet[$item->unitID];
-			$units[$unitName] = ($today && $item->hour < $hourLimit) ? 1 : 0;
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
+			$units[$unitName] = ($today && $item['hourBegin'] < $hourLimit) ? 1 : 0;
 		}
 		if(empty($units))
 			return NULL;
@@ -545,9 +564,10 @@ class Calendar extends Reservation
 
 				$reservations[] = (array)$reservation;
 				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone(parent::$_TIMEZONE_);
+				$rsMinute = $rsDate->minute < 10 ? "0" . $rsDate->minute : $rsDate->minute;
 
 				$tableChar = range('A', 'Z')[array_search($reservation->_tableId, $this->doty2->getTables())];
-				$units[] = $rsDate->hour . $tableChar;
+				$units[] = $rsDate->hour . $rsMinute . $tableChar;
 			}
 		}
 
@@ -608,45 +628,45 @@ class Calendar extends Reservation
 	{
 		// 1.) Kontrola - DATE
 		if(Carbon::now("Europe/Prague")->startOfDay() > $date) // Starsi nez dnesni datum
-			return false;
+			return "E1";
 
 		// 2.) Kontrola - BANLIST (Email + Telefon)
 		$resBlEmail = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'EMAIL', $customer['email']);
 		if($resBlEmail && $resBlEmail->getRowCount() > 0) // Email BAN
-			return false;
+			return "E2";
 
 		$resBlPhone = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'PHONE', $customer['phone']);
 		if($resBlPhone && $resBlPhone->getRowCount() > 0) // Telefon BAN
-			return false;
+			return "E3";
 
 		// 3.) Kontrola - UNITS
 		if(count($units /*, COUNT_RECURSIVE*/) > $this->getUnitsCountTotal()) // Prilis mnoho Units
-			return false;
+			return "E4";
 
 		foreach($units as $item)
 		{
 			$_tableId = $this->getTableIdByUnitName($item);
 
 			if(empty($_tableId) || $_tableId == NULL) // Chybi _tableId (neplatny Unit Name?)
-				return false;
+				return "E5";
 
 			$unitHour = (int)substr($item, 0, 2);
 			$startDate = Carbon::create($date->year, $date->month, $date->day, $unitHour, 0, 0);
 
 			if($this->checkReservationSlot($_tableId, $startDate, 60) == false) // Slot jiz byl obsazen
-				return false;
+				return "E6";
 		}
 
 		// 4.) Zapsat data 'customer' do DB -> ziskam customerID
 		$resultC = $this->database->table('customer')->insert($customer);
 		if(!$resultC) // Nepodarilo se zapsat do DB
-			return false;
+			return "E7";
 		$customerID = $resultC->id;
 
 		// 5.) Vygenerovani Auth Code
 		$authCode = $this->getRandomAuthCode(4);
 		if($authCode == str_repeat('9', 4)) // Nepodarilo se najit unikatni AuthCode
-			return false;
+			return "E8";
 
 		// 6.) Zapsat data 'reservation_request' do DB
 		$resultR = $this->database->table('reservation_request')->insert([
@@ -661,7 +681,7 @@ class Calendar extends Reservation
 			'reminder'		=> 'DISABLED',
 		]);
 		if(!$resultR) // Nepodarilo se zapsat do DB
-			return false;
+			return "E9";
 
 		// 7.) Odeslat SMS (tam bude authCode)
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {

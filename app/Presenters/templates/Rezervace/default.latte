@@ -72,7 +72,7 @@
 								<h5 class="d-none">Výber hodiny</h5>
 								<div class="row pb-0 mb-0">
 									<div class="col-xl-3 d-none d-xl-flex" style="padding: 0 5px;"></div>
-									<div class="col-xl-6 col-lg-12" id="selecthour" style="padding: 0 5px;">
+									<div class="col-xl-6 col-lg-12" id="selectunit" style="padding: 0 5px;">
 										<div class="kontakt-item" style="min-height: 388px;">
 											<h2 style="width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;">
 												Vyberte den
@@ -152,7 +152,7 @@
 		var year = a.data("year");
 		var month = a.data("month");
 
-		$("#selecthour").html("\
+		$("#selectunit").html("\
 						<div class=\"kontakt-item\" style=\"min-height: 388px;\">\
 							<h2 style=\"width: 100%; vertical-align: middle; text-align: center; color: #E13175; font-family: 'Oxanium', cursive;\">\
 								<img src=\"" + {$baseUrl} + "/img/icon/loading-data.svg\" alt=\"Loading...\">\
@@ -167,9 +167,9 @@
 		});
 
 		/*if(year == ynow && month == mnow) {
-			$.get({$baseUrl} + "/partials/selecthour", { year: ynow, month: mnow, day: dnow }, function(data, status) {
+			$.get({$baseUrl} + "/partials/selectunit", { year: ynow, month: mnow, day: dnow }, function(data, status) {
 				if(status == "success") {
-					$("#selecthour").html(data);
+					$("#selectunit").html(data);
 				}
 			});
 		}*/

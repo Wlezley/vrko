@@ -121,7 +121,72 @@ class PartialsPresenter extends BasePresenter
 		$this->template->debug = "N/A";
 	}
 
-	public function renderSelecthour($year, $month, $day) // TODO: Just parse DATE from one $string
+	public function renderSelectunit($year, $month, $day) // TODO: Just parse DATE from one $string
+	{
+		$this->template->error = true; // Error Handler (Default: true)
+
+		// Check input DATE before sending to major functions (Memory overflow protection)
+		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
+			!Validators::is($month, 'numericint:1..12') ||
+			!Validators::is($day, 'numericint:1..' . Carbon::create($year, $month, 1)->endOfMonth()->day))
+		{
+			header("HTTP/1.0 404 Not Found");
+			return false;
+		}
+
+		// Check input date range
+		$selDate = Carbon::create($year, $month, $day);						// SELECTED
+		$nowDate = Carbon::now()->startOfDay();								// NOW DATE
+		$endDate = Carbon::now()->addMonth()->endOfMonth()->startOfDay();	// END DATE
+		if($selDate < $nowDate || $selDate > $endDate)
+		{
+			header("HTTP/1.0 404 Not Found");
+			return false;
+		}
+
+		// Referer check
+		if (self::REFERER_CHECK !== false && (
+			empty($_SERVER['HTTP_REFERER']) || 
+			empty(parse_url($_SERVER['HTTP_REFERER'])) || 
+			parse_url($_SERVER['HTTP_REFERER'])['host'] !== self::REFERER_CHECK))
+		{
+			header("HTTP/1.0 404 Not Found");
+			return false;
+		}
+
+		// Render data
+		$renderData = $this->calendar->getRenderData_Selecthour($year, $month, $day);
+		if(!$renderData)
+		{
+			header("HTTP/1.0 404 Not Found");
+			return false;
+		}
+
+		// No error anymore...
+		$this->template->error = false;
+
+		$this->template->year		= (int)$year;
+		$this->template->month		= (int)$month;
+		$this->template->day		= (int)$day;
+
+		$this->template->monthName	= $renderData['monthName'];
+		//$this->template->dayName	= $renderData['dayName'];
+
+		$this->template->occupancyData = $renderData['occupancyData'];
+		//$this->template->unitsData = $this->calendar->getUnitsData();
+
+		$this->template->unitsData = [];
+		foreach ($this->calendar->getUnitsData() as $key => $unit) {
+			$unitStringID = $unit['hourBegin'] . $unit['minuteBegin'];
+
+			$this->template->unitsData[$unitStringID][$unit['unitID']] = $unit;
+		}
+
+		// DEBUG
+		$this->template->debug = "N/A";
+	}
+
+	/*public function renderSelecthour($year, $month, $day) // TODO: Just parse DATE from one $string
 	{
 		$this->template->error = true; // Error Handler (Default: true)
 
@@ -176,5 +241,5 @@ class PartialsPresenter extends BasePresenter
 
 		// DEBUG
 		$this->template->debug = "N/A";
-	}
+	}*/
 }

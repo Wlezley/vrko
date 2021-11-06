@@ -127,7 +127,7 @@ class ReservationFormFactory extends Control
 		// L2 Check: Format
 		$validateL2 = [
 			'reservation_date'	=> Validators::is($values->reservation_date, 'string:8..10'),	// String, lenght 8 to 10 (min. '2021-1-1' / max. '2021-01-01')
-			'reservation_units'	=> Validators::is($values->reservation_units, 'string:5..300'),	// String, lenght 5 to 300 (min. '[23A]' / typ. '["34A"]' / max. JSON_Array)
+			'reservation_units'	=> Validators::is($values->reservation_units, 'string:5..1000'),	// String, lenght 5 to 300 (min. '[23A]' / typ. '["34A"]' / max. JSON_Array)
 			'jmeno'				=> Validators::is($values->jmeno, 'string:1..30'),				// String, lenght 1 to 30
 			'prijmeni'			=> Validators::is($values->prijmeni, 'string:1..30'),			// String, lenght 1 to 30
 			'email'				=> Validators::is($values->email, 'string:7..64') &&			// String, lenght 7 to 64 (min. '1@34.67')
@@ -188,7 +188,7 @@ class ReservationFormFactory extends Control
 		];
 		$result = $this->calendar->createReservationRequest($date, json_decode($values->reservation_units), $customer);
 
-		if($result !== false)
+		if($result === true)
 		{
 			$params = [
 				'jmeno'				=> $values->jmeno,

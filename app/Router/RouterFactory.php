@@ -51,7 +51,8 @@ final class RouterFactory
 		// PARTIALS
 		$router->addRoute('partials/',									'Partials:default');
 		$router->addRoute('partials/selectday/<year>/<month>/',			'Partials:selectday');
-		$router->addRoute('partials/selecthour/<year>/<month>/<day>/',	'Partials:selecthour');
+	//	$router->addRoute('partials/selecthour/<year>/<month>/<day>/',	'Partials:selecthour');
+		$router->addRoute('partials/selectunit/<year>/<month>/<day>/',	'Partials:selectunit');
 
 		// HODNOCENI
 		$router->addRoute('hodnoceni/<reviewHash>',						'Hodnoceni:default');
