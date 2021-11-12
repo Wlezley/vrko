@@ -119,7 +119,7 @@ class Calendar extends Reservation
 					$this->database->query('REPLACE INTO reservation_fake', ['date' => $dbDateString, 'randomFree' => $randomFree]);
 				}
 
-				$bgColor = $this->getColorByPercentil($randomFree / $unitsCount['total'], 0, 1);
+				$bgColor = $this->getColorByPercentil($randomFree / $unitsCount['total'], 0, 1); // "#EEE";
 			}
 			else if($isToday) { // TODAY - BLUE MARK
 				$bgColor = "#007BFF";
@@ -213,19 +213,19 @@ class Calendar extends Reservation
 		$resultData = $result->fetchAll();
 		$outputData = [];
 
-		$alphabet = range('A', 'Z');
+		//$alphabet = range('A', 'Z');
 		foreach ($resultData as $item) {
 			$id = $item['id'];
 
 			$outputData[$id] = $item;
-			$outputData[$id] ['unitLetter'] = $alphabet[$item['unitID']];
+			$outputData[$id] ['unitLetter'] = $this->getAZbyID($item['unitID']);
 
 			$minuteBegin = $item['minuteBegin'] < 10 ? "0" . $item['minuteBegin'] : $item['minuteBegin'];
-			$outputData[$id] ['unitCode'] = $item['hourBegin'] . $minuteBegin . $alphabet[$item['unitID']];
+			$outputData[$id] ['unitCode'] = $item['hourBegin'] . $minuteBegin . $this->getAZbyID($item['unitID']);
 			$outputData[$id] ['minuteBegin'] = $minuteBegin;
 
 			$minuteEnd = $item['minuteEnd'] < 10 ? "0" . $item['minuteEnd'] : $item['minuteEnd'];
-			$outputData[$id] ['unitCodeEnd'] = $item['hourEnd'] . $minuteEnd . $alphabet[$item['unitID']];
+			$outputData[$id] ['unitCodeEnd'] = $item['hourEnd'] . $minuteEnd . $this->getAZbyID($item['unitID']);
 			$outputData[$id] ['minuteEnd'] = $minuteEnd;
 		}
 
@@ -276,14 +276,12 @@ class Calendar extends Reservation
 	 */
 	public function isUnitEnabled(string $unit)
 	{
-		if(strlen($unit) !== 3) {
+		if(strlen($unit) !== 5) {
 			return false;
 		}
 
-		$alphabet = range('A', 'Z');
-
 		foreach($this->getUnitsData() as $item) {
-			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $this->getAZbyID($item['unitID']);
 
 			if($unit === $unitName) {
 				return true;
@@ -304,11 +302,10 @@ class Calendar extends Reservation
 			return NULL;
 		}
 
-		$alphabet = range('A', 'Z');
 		$tables = $this->doty2->getTables();
 
 		foreach($this->getUnitsData() as $item) {
-			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $this->getAZbyID($item['unitID']);
 			if($unit === $unitName && $item['unitID'] < count($tables)) {
 				return $tables[$item['unitID']];
 			}
@@ -359,9 +356,9 @@ class Calendar extends Reservation
 		$today = ($dateNow == $dateRes) ? true : false;
 
 		// Units array prepare
-		$alphabet = range('A', 'Z');
+		//$alphabet = range('A', 'Z');
 		foreach($this->getUnitsData() as $item) {
-			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $alphabet[$item['unitID']];
+			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $this->getAZbyID($item['unitID']);
 			$units[$unitName] = ($today && $item['hourBegin'] < $hourLimit) ? 1 : 0;
 		}
 		if(empty($units)) {
@@ -454,7 +451,7 @@ class Calendar extends Reservation
 	 * 
 	 * @return	bool			$isFree			// Je SLOT volny? (true: ano / false: ne)
 	 */
-	public function checkReservationSlot($_tableId, Carbon $date, $minutes = 60)
+	public function checkReservationSlot($_tableId, Carbon $date, $minutes = 30)
 	{
 		// Validate _tableId
 		if(!in_array($_tableId, $this->doty2->getTables())) {
@@ -502,12 +499,12 @@ class Calendar extends Reservation
 	 * 
 	 * @return	array|bool		$result			// Data pro vytvoreni polozky v Dotykacce (nejsou-li data == FALSE)
 	 */
-	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $note = "")
+	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $minute, $note = "")
 	{
 		// Construct DATE
-		$minutes	= 60;
-		$startDate	= Carbon::create($year, $month, $day, $hour, 0, 0);
-		$endDate	= Carbon::create($year, $month, $day, $hour, 0, 0)->addMinutes($minutes);
+		$minutes	= 30;
+		$startDate	= Carbon::create($year, $month, $day, $hour, $minute, 0);
+		$endDate	= Carbon::create($year, $month, $day, $hour, $minute, 0)->addMinutes($minutes);
 		
 		if($this->checkReservationSlot($_tableId, $startDate, $minutes) == false) {
 			return false;
@@ -567,7 +564,8 @@ class Calendar extends Reservation
 				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'*/)->setTimezone(parent::$_TIMEZONE_);
 				$rsMinute = $rsDate->minute < 10 ? "0" . $rsDate->minute : $rsDate->minute;
 
-				$tableChar = range('A', 'Z')[array_search($reservation->_tableId, $this->doty2->getTables())];
+				//$tableChar = range('A', 'Z')[array_search($reservation->_tableId, $this->doty2->getTables())];
+				$tableChar = $this->getAZbyID(array_search($reservation->_tableId, $this->doty2->getTables()));
 				$units[] = $rsDate->hour . $rsMinute . $tableChar;
 			}
 		}
@@ -647,14 +645,17 @@ class Calendar extends Reservation
 
 		// 3.) Kontrola - UNITS
 		if(count($units /*, COUNT_RECURSIVE*/) > $this->getUnitsCountTotal()) {
-			return "E4"; // Prilis mnoho Units
+			return "E4_A"; // Prilis mnoho Units
+		}
+		if(empty($units)) {
+			return "E4_B"; // Prazdne Units
 		}
 
 		foreach($units as $item) {
 			$_tableId = $this->getTableIdByUnitName($item);
 
-			if(empty($_tableId) || $_tableId == NULL) {
-				return "E5"; // Chybi _tableId (neplatny Unit Name?)
+			if(empty($_tableId)) {
+				return "E5: " . $item; //"E5"; // Chybi _tableId (neplatny Unit Name?)
 			}
 
 			$unitHour = (int)substr($item, 0, 2);
@@ -685,6 +686,7 @@ class Calendar extends Reservation
 			'date'			=> (string)sprintf("%4d-%02d-%02d", (int)$date->year, (int)$date->month, (int)$date->day),
 		//	'firstHour'		=> $this->getReservationFirstHour(json_encode($units)),
 			'firstHour'		=> NULL, // MOVED TO THE COMPLETE RES. REQ. PROCESS
+			'firstMinute'	=> NULL, // MOVED TO THE COMPLETE RES. REQ. PROCESS
 			'units'			=> json_encode($units),
 			'authCode'		=> $authCode,
 			'status'		=> 'NEW',
@@ -694,14 +696,15 @@ class Calendar extends Reservation
 			return "E9"; // Nepodarilo se zapsat do DB
 		}
 
-		// 7.) Odeslat SMS (tam bude authCode)
+		// 7.) SEND SMS: Auth Code
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
 			$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
+		} else {
+			return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
 		}
 
-		// Hotovo ???
-		//return (string)$authCode; // AUTH-OVERRIDE (TEMP)
-		return true; // "OK: Reservation Request Created...";
+		// DONE
+		return true; // "OK: Reservation Request Created...";		
 	}
 
 	/** Complete Reservation from Reservation request in Database
@@ -773,23 +776,29 @@ class Calendar extends Reservation
 		], 'WHERE id = ?', $reservationRequest['customerID']);
 
 		// 6.) Pripravit data pro Rezervace (a zkontrolovat jestli je SLOT volny!)
-		$startHour = 24;
-		$note = $customer['name']." ".$customer['surname']." / ".$customer['phone'];
+		$startHour = 24;	// 24 == error
+		$startMinute = 60;	// 60 == error
+		$note = $customer['name'] . " " . $customer['surname'] . " / " . $customer['phone'];
 		$reservations = [];
 		foreach($units as $item) {
 			$_tableId = $this->getTableIdByUnitName($item);
 
-			if(empty($_tableId) || $_tableId == NULL) { // Chybi _tableId (neplatny Unit Name?)
+			if(empty($_tableId)) { // Chybi _tableId (neplatny Unit Name?)
 				return "Chyba: Vámi vybrané místo se nám nepodařilo najít. Prosím, zkuste zadat novou rezervaci."; // EB06-A
 			}
 
 			$unitHour = (int)substr($item, 0, 2);
+			$unitMinute = (int)substr($item, 2, 2);
 
 			if($unitHour < $startHour) {
 				$startHour = $unitHour;
 			}
 
-			$reservation = $this->prepareReservationSlot($dotykackaID, $_tableId, $date->year, $date->month, $date->day, $unitHour, $note);
+			if($unitMinute < $startMinute) {
+				$startMinute = $unitMinute;
+			}
+
+			$reservation = $this->prepareReservationSlot($dotykackaID, $_tableId, $date->year, $date->month, $date->day, $unitHour, $unitMinute, $note);
 			if($reservation == false) { // Slot jiz byl obsazen
 				return "Chyba: Některé z vybraných míst je již obsazeno. Prosím, vyberte jiný čas rezervace."; // EB06-B
 			}
@@ -810,6 +819,7 @@ class Calendar extends Reservation
 		// 8.) Aktualizovat 'reservation_request' v DB (status = 'CONFIRMED', [vymazat 'authCode' ??? ])
 		$this->database->query('UPDATE reservation_request SET', [
 			'firstHour'		=> $startHour,
+			'firstMinute'	=> $startMinute,
 			'status'		=> 'CONFIRMED',
 			'reminder'		=> 'WAITING',
 			'authCode'		=> NULL,
@@ -821,6 +831,7 @@ class Calendar extends Reservation
 			'date'			=> $date->format('d.m.Y'),
 		//	'hour'			=> getReservationFirstHour($reservationRequest['units']),
 			'hour'			=> $startHour,
+			'minute'		=> ($startMinute < 10 ? "0" : "") . $startMinute,
 			'units'			=> var_export($units, true),
 		//	'resultDtk'		=> var_export($resultDtk, true),
 		];

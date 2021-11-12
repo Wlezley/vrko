@@ -142,10 +142,6 @@
 	// jQuery Main Trigger
 	jQuery(document).ready(function($) {
 		var a = $("#ajax-data");
-		/*var yprv = a.data("yprv");
-		var ynxt = a.data("ynxt");
-		var mprv = a.data("mprv");
-		var mnxt = a.data("mnxt");*/
 		var ynow = a.data("ynow");
 		var mnow = a.data("mnow");
 		var dnow = a.data("dnow");
@@ -165,14 +161,6 @@
 				$("#reservation_date").html(year + '-' + month + '-' + dnow); // RESERVATION_DATE form set
 			}
 		});
-
-		/*if(year == ynow && month == mnow) {
-			$.get({$baseUrl} + "/partials/selectunit", { year: ynow, month: mnow, day: dnow }, function(data, status) {
-				if(status == "success") {
-					$("#selectunit").html(data);
-				}
-			});
-		}*/
 	});
 	</script>
 

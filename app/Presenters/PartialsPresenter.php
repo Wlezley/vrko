@@ -39,28 +39,7 @@ class PartialsPresenter extends BasePresenter
 
 	public function renderDefault()
 	{
-		/* TEST REZERVACE
-		$this->template->date = "30.04.2021";
-		$this->template->hour = 16;
-
-		// TEST VOUCHER
-		$this->template->orderId = 123456789;
-		$this->template->pocetPoukazu = 3;
-
-		// VOUCHER COUNT SPELLING
-		$spelling = "herních poukazů"; // Default
-		switch((int)$this->template->pocetPoukazu)
-		{
-			case 1: $spelling = "herní poukaz"; break;
-			case 2: case 3: case 4: $spelling = "herní poukazy"; break;
-		}
-		$this->template->spelling = $spelling;
-		*/
-	}
-
-	public function actionDefault($hash)
-	{
-		//return false;
+		$this->template->error = true;
 	}
 
 	public function renderSelectday($year, $month) // TODO: Just parse DATE from one $string
@@ -185,61 +164,4 @@ class PartialsPresenter extends BasePresenter
 		// DEBUG
 		$this->template->debug = "N/A";
 	}
-
-	/*public function renderSelecthour($year, $month, $day) // TODO: Just parse DATE from one $string
-	{
-		$this->template->error = true; // Error Handler (Default: true)
-
-		// Check input DATE before sending to major functions (Memory overflow protection)
-		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
-			!Validators::is($month, 'numericint:1..12') ||
-			!Validators::is($day, 'numericint:1..' . Carbon::create($year, $month, 1)->endOfMonth()->day))
-		{
-			header("HTTP/1.0 404 Not Found");
-			return false;
-		}
-
-		// Check input date range
-		$selDate = Carbon::create($year, $month, $day);						// SELECTED
-		$nowDate = Carbon::now()->startOfDay();								// NOW DATE
-		$endDate = Carbon::now()->addMonth()->endOfMonth()->startOfDay();	// END DATE
-		if($selDate < $nowDate || $selDate > $endDate)
-		{
-			header("HTTP/1.0 404 Not Found");
-			return false;
-		}
-
-		// Referer check
-		if (self::REFERER_CHECK !== false && (
-			empty($_SERVER['HTTP_REFERER']) || 
-			empty(parse_url($_SERVER['HTTP_REFERER'])) || 
-			parse_url($_SERVER['HTTP_REFERER'])['host'] !== self::REFERER_CHECK))
-		{
-			header("HTTP/1.0 404 Not Found");
-			return false;
-		}
-
-		// Render data
-		$renderData = $this->calendar->getRenderData_Selecthour($year, $month, $day);
-		if(!$renderData)
-		{
-			header("HTTP/1.0 404 Not Found");
-			return false;
-		}
-
-		// No error anymore...
-		$this->template->error = false;
-
-		$this->template->year		= (int)$year;
-		$this->template->month		= (int)$month;
-		$this->template->day		= (int)$day;
-
-		$this->template->monthName	= $renderData['monthName'];
-		//$this->template->dayName	= $renderData['dayName'];
-
-		$this->template->occupancyData = $renderData['occupancyData'];
-
-		// DEBUG
-		$this->template->debug = "N/A";
-	}*/
 }

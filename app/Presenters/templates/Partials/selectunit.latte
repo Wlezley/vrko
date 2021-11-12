@@ -16,23 +16,6 @@
 		<tr class="sub-head">
 			<td colspan=4 style="border: none;"><div>Vyberte čas a počet VR jednotek</div></td>
 		</tr>
-		{*foreach range(16, 21) as $hour}
-			{foreach ["00" => $hour.":30", "30" => ($hour+1).":00"] as $minute => $end}
-				<tr class="selector">
-					<th class="stage">&nbsp;{$hour}:{$minute}&nbsp;-&nbsp;{$end}&nbsp;</th>
-					{* Possible style classes: available, selected, occupied * }
-					<td n:foreach="range('A', 'C') as $unit"
-						n:class="unit, (!empty($occupancyData[$hour . '00' . $unit]) && $occupancyData[$hour . '00' . $unit]) ? occupied : available"
-						data-hour="{$hour}"
-						data-minute="{$minute}"
-						data-unit="{$unit}"
-						data-check="n">
-						<div><i></i></div>
-					</td>
-				</tr>
-			{/foreach}
-		{/foreach*}
-
 		{foreach $unitsData as $unitData}
 			<tr class="selector" id="{$iterator->counter}">
 			{foreach $unitData as $unit}
@@ -66,19 +49,6 @@
 	</div>
 </div>
 
-{* DEBUG * }
-<div class="reservation-item">
-	<div class="container">
-		<div class="row" style="color: #E13175; text-align: left; vertical-align: middle; font-family: 'Oxanium', cursive; font-size: 1.50em;">
-			<div class="col-12" style="text-align: center;">DEBUG - HOUR</div>
-		</div>
-		<div class="row">
-			<pre>{$debug|noescape}</pre>
-		</div>
-	</div>
-</div>
-{* *}
-
 {* SCRIPTS *}
 <script>
 jQuery(document).ready(function($) {
@@ -86,7 +56,7 @@ jQuery(document).ready(function($) {
 		var RegList = [];
 		$('.unit.selected').each(function () {
 			if($(this).data('check') == 'y') {
-				RegList.push( $(this).data('hour')+$(this).data('minute')+$(this).data('unit') );
+				RegList.push($(this).data('hour')+""+$(this).data('minute')+$(this).data('unit'));
 			}
 		});
 		if (RegList.length === 0) {
