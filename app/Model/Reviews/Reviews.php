@@ -25,6 +25,13 @@ use Nette\Application\UI\ITemplateFactory;
 
 class Reviews
 {
+
+
+	// ##########################################################
+	// # THIS BIG TODO: !!! --- MOVE TO THE CONFIG FILE --- !!! #
+	// ##########################################################
+
+
 	// DEVELOPMENT
 	const RequestDebug	= true;
 	const ReportEmail	= 'wwlkodlak@seznam.cz';

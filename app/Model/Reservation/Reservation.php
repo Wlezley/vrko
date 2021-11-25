@@ -30,9 +30,6 @@ class Reservation
 	/** @var Nette\Database\Explorer */
 	protected $database;
 
-	/** @var Dotykacka\DotykackaApi2 */
-	protected $doty2;
-
 	/** @var Model\SmsBrana\SmsBrana */
 	protected $smsbrana;
 
@@ -61,14 +58,12 @@ class Reservation
 	public $reservationUnits;
 
 	public function __construct(Explorer $database,
-								Dotykacka\DotykackaApi2 $doty2,
 								SmsBrana\SmsBrana $smsbrana,
 								Reviews\Reviews $reviews,
 								Ecomail\EcomailApi $ecomail,
 								Mail\Mailer $mailer)
 	{
 		$this->database = $database;
-		$this->doty2 = $doty2;
 		$this->smsbrana = $smsbrana;
 		$this->reviews = $reviews;
 		$this->ecomail = $ecomail;
