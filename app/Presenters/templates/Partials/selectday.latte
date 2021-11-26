@@ -11,9 +11,25 @@
 <div class="reservation-item">
 	<table>
 		<tr class="head">
-			<td colspan=1>{$prevMonthHtml|noescape}</td>
+			<td colspan=1>
+				{if $navigator[prev]}
+					<a id="redir-month-prev" title="Předchozí měsíc">
+						<div><i class="fas fa-angle-double-left"></i></div>
+					</a>
+				{else}
+					<div>&nbsp;</div>
+				{/if}
+			</td>
 			<td colspan=5><h2>{$monthName}</h2></td>
-			<td colspan=1>{$nextMonthHtml|noescape}</td>
+			<td colspan=1>
+				{if $navigator[next]}
+					<a id="redir-month-next" title="Následující měsíc">
+						<div><i class="fas fa-angle-double-right"></i></div>
+					</a>
+				{else}
+					<div>&nbsp;</div>
+				{/if}
+			</td>
 		</tr>
 		<tr class="sub-head">
 			<td colspan=7><div>{$pagination['year']}</div></td>

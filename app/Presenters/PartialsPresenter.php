@@ -87,14 +87,10 @@ class PartialsPresenter extends BasePresenter
 		$this->template->palette = $renderData['palette'];
 
 		// NAVIGATOR
-		$this->template->prevMonthHtml = '<div>&nbsp;</div>';
-		$this->template->nextMonthHtml = '<div>&nbsp;</div>';
-		if($year == Carbon::now()->addMonth()->year && $month == Carbon::now()->addMonth()->month) {
-			$this->template->prevMonthHtml = '<a id="redir-month-prev" title="Předchozí měsíc"><div><i class="fas fa-angle-double-left"></i></div></a>';
-		}
-		if($year == Carbon::now()->year && $month == Carbon::now()->month) {
-			$this->template->nextMonthHtml = '<a id="redir-month-next" title="Následující měsíc"><div><i class="fas fa-angle-double-right"></i></div></a>';
-		}
+		$this->template->navigator = [
+			"prev" => ($year == Carbon::now()->addMonth()->year && $month == Carbon::now()->addMonth()->month),
+			"next" => ($year == Carbon::now()->year && $month == Carbon::now()->month),
+		];
 
 		// DEBUG
 		$this->template->debug = "N/A";

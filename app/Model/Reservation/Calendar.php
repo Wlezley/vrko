@@ -36,13 +36,13 @@ class Calendar extends Reservation
 	/** @var Nette\Database\Explorer */
 	protected $database;
 
-	/** @var Model\SmsBrana\SmsBrana */
+	/** @var Model\SmsBrana\SmsBrana @inject */
 	protected $smsbrana;
 
-	/** @var Ecomail\EcomailApi */
+	/** @var Ecomail\EcomailApi @inject */
 	protected $ecomail;
 
-	/** @var Model\Reviews\Reviews */
+	/** @var Model\Reviews\Reviews @inject */
 	protected $reviews;
 
 	/** @var Nette\Mail\Mailer @inject */
@@ -82,6 +82,7 @@ class Calendar extends Reservation
 		$carbon = new Carbon;
 		$carbon->setDateTime($year, $month, 1, 0, 0, 0);
 		$calendar = $carbon->subDays($carbon->dayOfWeek == 0 ? 6 : $carbon->dayOfWeek - 1);
+
 		$dateYesterday = Carbon::now()->subDay();
 
 		$pagination = [
@@ -409,26 +410,6 @@ class Calendar extends Reservation
 	public function _RENDER_DEBUG_DATA_()
 	{
 		return "N/A";
-
-		// PREPARE RESERVATION SLOT
-		//return $this->prepareReservationSlot(123456, 7890123, 2021, 4, 18, 3, 'Poznamka');
-
-		// SYNC RESERVATIONS
-		//return $this->syncReservationsByDay(2021, 4, 18);
-
-		// RESERVATION REQUEST (RAW)
-		//return $this->createReservationRequest_raw(2021, 4, 19, '["20B","21B","19C"]', 'Prymoš', 'Roglič', 'email@example.com', '+420123456789', false);
-
-		// RESERVATION COMPLETE
-		//return $this->completeReservationRequest('0910');
-
-		// TRY SEND SMS
-		//return $this->smsbrana->sendSMS("+420736168785", "Toto je testovaci zprava SMS.");
-
-		// RESERVATION UNITS FIRST HOUR
-		//return $this->getReservationFirstHour('["18A","14A","20A"]');
-
-		//return \base64_decode("CiAgICA8c3R5bGU+CiAgICAgICAgcCB7IG1hcmdpbi10b3A6IDI4cHg7IH0KICAgICAgICBhIHsgY29sb3I6IzE1YzsgfQogICAgPC9zdHlsZT4KCgo8ZGl2IHN0eWxlPSJ3aWR0aDogMTAwJTsgYmFja2dyb3VuZC1jb2xvcjogI2Y0ZjRmNDsiPgogICAgPGRpdiBzdHlsZT0iY29sb3I6ICMwMDAwMDA7IGZvbnQtZmFtaWx5OiBIZWx2ZXRpY2E7IGZvbnQtc2l6ZTogMTZweDsgbGluZS1oZWlnaHQ6IDI1cHg7IG1hcmdpbjogMCBhdXRvOyBtYXgtd2lkdGg6IDYwMHB4OyI+CiAgICAgICAgPGRpdiBzdHlsZT0icGFkZGluZzogMTVweCAyNXB4IDEwcHggMjVweDsiPgogICAgICAgICAgICA8aW1nIHNyYz0iaHR0cHM6Ly9wYXltZW50cy5jb21nYXRlLmN6L2Fzc2V0cy9pbWFnZXMvY2dsb2dvcHMxMTUucG5nIiBhbHQ9ImxvZ28gQ29tR2F0ZSIgdGl0bGU9ImxvZ28gQ29tR2F0ZSIvPgogICAgICAgIDwvZGl2PgogICAgICAgIDxkaXYgc3R5bGU9ImJhY2tncm91bmQtY29sb3I6ICNmZmY7IHBhZGRpbmc6IDI1cHg7Ij4KCiAgICAgICAgICAgIDxwIHN0eWxlPSJtYXJnaW4tdG9wOjBweDsiPgogICAgICAgICAgICAgICAgWiBvYmNob2R1IDxhIGhyZWY9Imh0dHA6Ly93d3cuVlJrby5jeiI+d3d3LlZSa28uY3o8L2E+IGpzbWUgcMWZaWphbGkgcG/FvmFkYXZlayBrIHByb3ZlZGVuw60gcGxhdGJ5PGJyIC8+dmUgdsO9xaFpIDxiPjQwMCwwMCBDWks8L2I+LgogICAgICAgICAgICA8L3A+CgogICAgICAgICAgICA8cD4KICAgICAgICAgICAgICAgIDx0YWJsZT4KICAgICAgICAgICAgICAgICAgICA8dGJvZHk+CiAgICAgICAgICAgICAgICAgICAgICAgIDx0cj4KICAgICAgICAgICAgICAgICAgICAgICAgICAgIDx0ZCBzdHlsZT0icGFkZGluZzogMTBweCAxNXB4OyBiYWNrZ3JvdW5kLWNvbG9yOiAjMWE3M2U4OyBib3JkZXItcmFkaXVzOiA0cHg7ICI+CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgPGEgaHJlZj0iaHR0cHM6Ly9wYXltZW50cy5jb21nYXRlLmN6L2NsaWVudC9pbnN0cnVjdGlvbnMvcGF5bWVudC1zdGF0dXMtaW5mby9pZC9CTk5BLUFXNVYtUUVZNy9oL0Z4eDFGdVlla1lWbUlrZXE5REdjM3FoTUtGc0dQYWllL3Jlc3RhcnQvMSIgc3R5bGU9ImZvbnQtd2VpZ2h0OiBib2xkOyBsZXR0ZXItc3BhY2luZzogbm9ybWFsOwogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgbGluZS1oZWlnaHQ6IDEwMCU7IHRleHQtYWxpZ246IGNlbnRlcjsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHRleHQtZGVjb3JhdGlvbjogbm9uZTsgY29sb3I6ICNmZmZmZmY7Ij5aamlzdGl0IHN0YXYgcGxhdGJ5PC9hPgogICAgICAgICAgICAgICAgICAgICAgICAgICAgPC90ZD4KICAgICAgICAgICAgICAgICAgICAgICAgPC90cj4KICAgICAgICAgICAgICAgICAgICA8L3Rib2R5PgogICAgICAgICAgICAgICAgPC90YWJsZT4KICAgICAgICAgICAgPC9wPgoKICAgICAgICAgICAgPHA+S2xpa251dMOtbSBuYSB0bGHEjcOtdGtvIG3Fr8W+ZXRlIHpqaXN0aXQgcG9kcm9ibm9zdGkgbyBzdGF2dSBwbGF0YnksIHDFmcOtcGFkbsSbIHp2b2xpdCBqaW5vdSBwbGF0ZWJuw60gbWV0b2R1LjwvcD4KCiAgICAgICAgICAgICAgICAgICAgICAgICAgICA8cD5Qb2t1ZCBqacW+IHBsYXRiYSBwcm9ixJtobGEgYSBuZW3DoXRlIGluZm9ybWFjaSBvIHZ5xZnDrXplbsOtIHZhxaHDrSBvYmplZG7DoXZreSwga29udGFrdHVqdGUgb2JjaG9kbsOta2EgbmEgPGEgaHJlZj0ibWFpbHRvOmtvemVsdWhAemV0Y29tcC5jeiI+a296ZWx1aEB6ZXRjb21wLmN6PC9hPi48L3A+CiAgICAgICAgICAgIAogICAgICAgICAgICAKICAgICAgICAgICAgPHA+SUQgcGxhdGVibsOtIHRyYW5zYWtjZTogQk5OQS1BVzVWLVFFWTc8L3A+CgogICAgICAgICAgICA8cCBzdHlsZT0ibWFyZ2luLXRvcDogYXV0bzsgbWFyZ2luLWJvdHRvbTogMDsiPlRhdG8genByw6F2YSBqZSBnZW5lcm92w6FuYSBhdXRvbWF0aWNreS4gUHJvc8OtbWUsIG5lb2Rwb3bDrWRlanRlIG5hIG5pLjwvcD4KICAgICAgICA8L2Rpdj4KICAgICAgICA8ZGl2IHN0eWxlPSJwYWRkaW5nOiAyNXB4OyBmb250LXNpemU6IDEzcHg7IGNvbG9yOiAjNzU3NTc1OyI+CiAgICAgICAgICAgIDxwIHN0eWxlPSJtYXJnaW46IDAiPkNvbUdhdGUgUGF5bWVudHMsIGEucy4sIEdvxI3DoXJvdmEgdMWZw61kYSAxNzU0IC8gNDhiLCA1MDAgMDIgSHJhZGVjIEtyw6Fsb3bDqTxiciAvPgogICAgICAgICAgICBPc29ibsOtIMO6ZGFqZSB6cHJhY292w6F2w6FtZSA8YSBocmVmPSJodHRwczovL3d3dy5jb21nYXRlLmN6L2N6L29zb2JuaS11ZGFqZSI+cG9kbGUgdMSbY2h0byBwcmF2aWRlbDwvYT48L3A+CiAgICAgICAgPC9kaXY+CiAgICA8L2Rpdj4KPC9kaXY+");
 	}
 
 	/** DOTYKACKA: Checks if Reservation SLOT is FREE?
@@ -651,7 +632,7 @@ class Calendar extends Reservation
 			$unitHour = (int)substr($item, 0, 2);
 			$startDate = Carbon::create($date->year, $date->month, $date->day, $unitHour, 0, 0);
 
-			if($this->checkReservationSlot($_tableId, $startDate, 60) == false) {
+			if($this->checkReservationSlot($_tableId, $startDate, 30) == false) {
 				return "E6"; // Slot jiz byl obsazen
 			}
 		}
