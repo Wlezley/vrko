@@ -17,6 +17,11 @@ session:
 	#name: vrko
 	#savePath: %tempDir%/sessions
 
+database:
+	dsn: 'mysql:host=%database.host%;dbname=%database.dbmane%'
+	user: %database.user%
+	password: %database.password%
+
 services:
 	# Model: Dotykacka API
 	#- App\Model\Dotykacka\DotykackaApi
@@ -48,7 +53,8 @@ services:
 	#- App\Model\Reservation\ReservationUnits
 
 	# Model: Hodnoceni
-	- App\Model\Reviews\Reviews
+	#- App\Model\Reviews\Reviews
+	- App\Model\Reviews\Reviews(%reviews.request_debug%, %reviews.report_email%, %reviews.google_review_url%, %reviews.positive_url%, %reviews.negative_url%)
 
 	# Model: Voucher
 	- App\Model\Voucher\Voucher

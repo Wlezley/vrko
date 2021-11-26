@@ -1,4 +1,23 @@
 parameters:
+	# Database
+	database:
+		host: '127.0.0.1'
+		dbmane: ''
+		user: ''
+		password: ''
+
+	# Cron
+	cron:
+		hash: ''
+
+	# Reviews (implemented)
+	reviews:
+		request_debug: true
+		report_email: ''
+		google_review_url: ''
+		positive_url: ''
+		negative_url: ''
+
 	# Rezervace (not implemented yet)
 	reservation:
 		hourStart: 16
@@ -66,16 +85,3 @@ mail:
 	password: ''
 	# possible values are ssl, tls or null
 	secure: tls
-
-
-# WWW-DEV
-database:
-	dsn: 'mysql:host=127.0.0.1;dbname='
-	user: ''
-	password: ''
-
-# WEDOS
-#database:
-#	dsn: 'mysql:host=;dbname='
-#	user: ''
-#	password: ''

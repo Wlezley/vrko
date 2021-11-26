@@ -25,36 +25,36 @@ use Nette\Application\UI\ITemplateFactory;
 
 class Reviews
 {
-
-
-	// ##########################################################
-	// # THIS BIG TODO: !!! --- MOVE TO THE CONFIG FILE --- !!! #
-	// ##########################################################
-
-
-	// DEVELOPMENT
-	const RequestDebug	= true;
-	const ReportEmail	= 'wwlkodlak@seznam.cz';
-	const GoogleReview	= 'https://g.page/r/CUXVqYJ-3jtqEAE/review';
-	const ReviewPosURL	= 'https://www-dev.vrko.cz/hodnoceni-google/';
-	const ReviewNegURL	= 'https://www-dev.vrko.cz/hodnoceni/'; /**/
-
-	/* PRODUCTION
-	const RequestDebug	= false;
-	const ReportEmail	= 'info@vrko.cz';
-	const GoogleReview	= 'https://g.page/r/CUXVqYJ-3jtqEAE/review';
-	const ReviewPosURL	= 'https://vrko.cz/hodnoceni-google/';
-	const ReviewNegURL	= 'https://vrko.cz/hodnoceni/'; /**/
-
 	/** @var Nette\Database\Explorer */
 	protected $database;
 
 	/** @var Nette\Mail\Mailer @inject */
 	public $mailer;
 
-	public function __construct(Explorer $database,
-								Mail\Mailer $mailer)
+	/** @var bool */
+	private bool $request_debug;
+
+	/** @var string */
+	private string $report_email;
+
+	/** @var string */
+	private string $google_review_url;
+
+	/** @var string */
+	private string $positive_url;
+
+	/** @var string */
+	private string $negative_url;
+
+	public function __construct(bool $request_debug, string $report_email, string $google_review_url, string $positive_url, string $negative_url,
+								Explorer $database, Mail\Mailer $mailer)
 	{
+		$this->request_debug = $request_debug;
+		$this->report_email = $report_email;
+		$this->google_review_url = $google_review_url;
+		$this->positive_url = $positive_url;
+		$this->negative_url = $negative_url;
+
 		$this->database = $database;
 		$this->mailer = $mailer;
 	}
@@ -72,12 +72,10 @@ class Reviews
 		$counter = 0;
 		$limit = 10;
 
-		for($counter; $counter < $limit; $counter++)
-		{
+		for ($counter; $counter < $limit; $counter++) {
 			$randomCode = Random::generate($size, '0-9a-z');
 			$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? LIMIT 1', $randomCode);
-			if(!isset($result) || $result->getRowCount() == 0)
-			{
+			if (!isset($result) || $result->getRowCount() == 0) {
 				break;
 			}
 		}
@@ -134,30 +132,30 @@ class Reviews
 		$triggerDay = Carbon::now('Europe/Prague')->format("Y-m-d");
 		//$sReservationDate = Carbon::now('Europe/Prague')->subDay()->format("d.m.Y");
 
-		if(SELF::RequestDebug)
+		if ($this->request_debug) {
 			$result = $this->database->query('SELECT * FROM reviews WHERE id = ? AND status = ?', 2, "WAITING"); // DEBUG
-		else
+		} else {
 			$result = $this->database->query('SELECT * FROM reviews WHERE triggerDay = ? AND status = ?', $triggerDay, "WAITING"); // PRODUCTION
+		}
 
-		if($result && $result->getRowCount() > 0)
-		{
-			foreach($result->fetchAll() as $row)
-			{
+		if ($result && $result->getRowCount() > 0) {
+			foreach ($result->fetchAll() as $row) {
 				$reviewData = json_decode($row['data'], true);
 
 				$data = [
 				//	'date'			=> $sReservationDate,
 				//	'date'			=> $reviewData['date'],
 					'date'			=> Carbon::createFromFormat('Y-m-d', $reviewData['date'])->format("d.m.Y"),
-					'reviewUrlPOS'	=> SELF::ReviewPosURL . $row['hash'],
-					'reviewUrlNEG'	=> SELF::ReviewNegURL . $row['hash'],
+					'reviewUrlPOS'	=> $this->positive_url . $row['hash'],
+					'reviewUrlNEG'	=> $this->negative_url . $row['hash'],
 					'email'			=> $row['email'],
 				];
 
-				if(SELF::RequestDebug)
-					$this->sendMail(SELF::ReportEmail, "@reviewRequestEmail", "Hodnocení zážitku VRko.cz", $data); // DEBUG
-				else
+				if ($this->request_debug) {
+					$this->sendMail($this->report_email, "@reviewRequestEmail", "Hodnocení zážitku VRko.cz", $data); // DEBUG
+				} else {
 					$this->sendMail($row['email'], "@reviewRequestEmail", "Hodnocení zážitku VRko.cz", $data); // PRODUCTION
+				}
 
 				$this->database->query('UPDATE reviews SET', [
 					'status'	=> "SENT",
@@ -176,8 +174,7 @@ class Reviews
 		//$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND status = ? LIMIT 1', $hash, "SENT");
 		$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND (status = ? OR status = ?) LIMIT 1', $hash, "SENT", "GMAPS");
 
-		if($result && $result->getRowCount() == 1)
-		{
+		if ($result && $result->getRowCount() == 1) {
 			$row = $result->fetch();
 			return $row['email'];
 		}
@@ -192,22 +189,22 @@ class Reviews
 	 */
 	public function googleReview($hash)
 	{
-		if(!Validators::is($hash, 'string:32'))
+		if (!Validators::is($hash, 'string:32')) {
 			return NULL;
+		}
 
 		//$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND status = ? LIMIT 1', $hash, "SENT");
 		$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND (status = ? OR status = ?) LIMIT 1', $hash, "SENT", "GMAPS");
 
-		if($result && $result->getRowCount() == 1)
-		{
+		if ($result && $result->getRowCount() == 1) {
 			$row = $result->fetch();
 
 			$this->database->query('UPDATE reviews SET', [
 				'status'	=> "GMAPS", // POSITIVE
 			], 'WHERE id = ?', $row['id']);
 
-			//$this->sendMail(SELF::ReportEmail, "@reviewReportEmail", "Hodnocení [#".$row['id']."]", $reportData);
-			return SELF::GoogleReview;
+			//$this->sendMail($this->report_email, "@reviewReportEmail", "Hodnocení [#".$row['id']."]", $reportData);
+			return $this->google_review_url;
 		}
 
 		return NULL;
@@ -221,14 +218,14 @@ class Reviews
 	 */
 	public function saveReview($hash, $review)
 	{
-		if(!Validators::is($hash, 'string:32') || !Validators::is($review, 'string:1..500'))
+		if (!Validators::is($hash, 'string:32') || !Validators::is($review, 'string:1..500')) {
 			return false;
+		}
 
 		//$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND status = ? LIMIT 1', $hash, "SENT");
 		$result = $this->database->query('SELECT * FROM reviews WHERE hash = ? AND (status = ? OR status = ?) LIMIT 1', $hash, "SENT", "GMAPS");
 
-		if($result && $result->getRowCount() == 1)
-		{
+		if ($result && $result->getRowCount() == 1) {
 			$row = $result->fetch();
 
 			$this->database->query('UPDATE reviews SET', [
@@ -238,7 +235,7 @@ class Reviews
 
 			$reviewData = json_decode($row['data'], true);
 
-			$this->sendMail(SELF::ReportEmail, "@reviewReportEmail", "Hodnocení ID: " . $row['id'], [
+			$this->sendMail($this->report_email, "@reviewReportEmail", "Hodnocení ID: " . $row['id'], [
 				'id'		=> $row['id'],
 				'date'		=> $reviewData['date'],
 				'units'		=> var_export($reviewData['units'], true),
