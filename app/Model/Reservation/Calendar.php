@@ -465,7 +465,7 @@ class Calendar extends Reservation
 
 		// 7.) SEND SMS: Auth Code
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
-			//$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
+			$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
 		} else {
 			return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
 		}
@@ -578,7 +578,7 @@ class Calendar extends Reservation
 		$mailMsg = new Mail\Message();
 		$mailMsg->setFrom("Rezervace VRko.cz <info@vrko.cz>");
 		$mailMsg->addTo($recipient); // TODO: EMAIL Validator: $recipient
-		//$mailMsg->addBcc("info@vrko.cz");
+		$mailMsg->addBcc("wwlkodlak@seznam.cz");
 		$mailMsg->setSubject($subject);
 		$mailMsg->setHtmlBody($template, __DIR__ . "/../../../www/img/email/");
 

@@ -32,21 +32,21 @@ class Reviews
 	public $mailer;
 
 	/** @var bool */
-	private bool $request_debug;
+	private $request_debug;
 
 	/** @var string */
-	private string $report_email;
+	private $report_email;
 
 	/** @var string */
-	private string $google_review_url;
+	private $google_review_url;
 
 	/** @var string */
-	private string $positive_url;
+	private $positive_url;
 
 	/** @var string */
-	private string $negative_url;
+	private $negative_url;
 
-	public function __construct(bool $request_debug, string $report_email, string $google_review_url, string $positive_url, string $negative_url,
+	public function __construct($request_debug, $report_email, $google_review_url, $positive_url, $negative_url,
 								Explorer $database, Mail\Mailer $mailer)
 	{
 		$this->request_debug = $request_debug;
