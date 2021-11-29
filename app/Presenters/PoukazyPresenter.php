@@ -73,6 +73,8 @@ final class PoukazyPresenter extends BasePresenter
 	//public function actionDefault()
 	public function renderDefault()
 	{
+		$this->redirect("Homepage:");
+
 		$this->template->debug = "N/A";
 	}
 
@@ -99,6 +101,8 @@ final class PoukazyPresenter extends BasePresenter
 	public function actionStatus()
 	//public function renderStatus()
 	{
+		$this->redirect("Homepage:");
+
 		// COMGATE IP CHECK
 		if($this->getUserIpAddr() != "89.185.236.55")
 		{
@@ -157,6 +161,8 @@ final class PoukazyPresenter extends BasePresenter
 	//public function actionResult()
 	public function renderResult($transId, $refId)
 	{
+		$this->redirect("Homepage:");
+
 		$this->template->status = "ERROR";
 
 		$result = $this->database->query('SELECT * FROM comgate_payments WHERE transId = ? AND refId = ? LIMIT 1', $transId, $refId);
