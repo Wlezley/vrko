@@ -9,18 +9,19 @@
 			<img src="logo.png" alt="Logo VRko.cz"/>
 		</div>
 		<div style="background-color: #fff; padding: 25px;">
-			<H1 style="margin-top: 0; line-height: 120%;">Potvrzení o rezervaci VRko.cz</H1>
+			<H1 style="margin-top: 0; line-height: 120%;">Nová rezervace VRko.cz</H1>
 
-			<p>Vážený zákazníku,<br />
-			právě jsme zpracovali Vaši rezervaci.<br />
-			Budeme se na Vás těšit dne <strong>{$date}</strong> od <strong>{$hour}:{$minute}</strong>.</p>
+			<p>Právě byla přijata nová rezervace na den <strong>{$date}</strong> od <strong>{$hour}:{$minute}</strong>.</p>
+			<hr />
 
-			<p>Berte prosím na vědomí, že je třeba se dostavit o 5 minut dříve. Tím využijete svůj rezervovaný čas na maximum.</p>
+			<p>Jméno a příjmení: {$customer['name']} {$customer['surname']}</p>
+			<p>Telefon: <a href="tel:{$customer['phone']}">{$customer['phone']}</a></p>
+			<p>E-mail: {$customer['email']}</p>
+			<hr />
 
-			<p>Při platbě lze využít již <a href="https://vrko.cz/poukazy/" target="_blank">zakoupený herní poukaz</a>, nezapomeňte ho vzít s sebou.
-			Stačí ho mít v elektronické podobě, například ve Vašem chytrém telefonu.</p>
-
-			<p style="margin-top: auto; margin-bottom: 0;">Děkujeme za Váš zájem a přejeme perfektní prožitek ve virtuální realitě!</p>
+			<p>Rozpis rezervace (čas / stůl):</p>
+			{$htmlTabString|noescape}
+			<hr />
 		</div>
 		<div style="padding: 25px; font-size: 13px; color: #757575 !important;">
 			<p style="margin: 0"><a href="https://vrko.cz/" target="_blank">666% zábavy s.r.o.</a>, Koterovská 607 / 45, 326 00 Plzeň 2 Slovany - Východní Předměstí<br />

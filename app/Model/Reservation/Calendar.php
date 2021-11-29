@@ -11,8 +11,6 @@ use Latte;
 use Nette;
 use App\Model;
 use App\Model\Reservation;
-//use App\Model\Dotykacka;
-use App\Model\Ecomail;
 use App\Model\SmsBrana;
 use App\Model\Reviews;
 
@@ -39,9 +37,6 @@ class Calendar extends Reservation
 	/** @var Model\SmsBrana\SmsBrana @inject */
 	protected $smsbrana;
 
-	/** @var Ecomail\EcomailApi @inject */
-	protected $ecomail;
-
 	/** @var Model\Reviews\Reviews @inject */
 	protected $reviews;
 
@@ -51,13 +46,11 @@ class Calendar extends Reservation
 	public function __construct(Explorer $database,
 								SmsBrana\SmsBrana $smsbrana,
 								Reviews\Reviews $reviews,
-								Ecomail\EcomailApi $ecomail,
 								Mail\Mailer $mailer)
 	{
 		$this->database = $database;
 		$this->smsbrana = $smsbrana;
 		$this->reviews = $reviews;
-		$this->ecomail = $ecomail;
 		$this->mailer = $mailer;
 	}
 
@@ -115,7 +108,8 @@ class Calendar extends Reservation
 					$this->database->query('REPLACE INTO reservation_fake', ['date' => $dbDateString, 'randomFree' => $randomFree]);
 				}
 
-				$bgColor = $this->getColorByPercentil($randomFree / $unitsCount['total'], 0, 1); // "#EEE";
+				$bgColor = $this->getColorByPercentil($randomFree / $unitsCount['total'], 0, 1);
+				//$bgColor = "#EEE";
 			}
 			else if($isToday) { // TODAY - BLUE MARK
 				$bgColor = "#007BFF";
@@ -156,7 +150,6 @@ class Calendar extends Reservation
 
 			// DEBUG: DUMMY
 			'debug'			=> "N/A",
-		//	'debug'			=> $this->_RENDER_DEBUG_DATA_(),
 		];
 
 		return $renderData;
@@ -180,9 +173,6 @@ class Calendar extends Reservation
 		{
 			return false;
 		}
-
-		// RESYNC Reservations
-		$this->syncReservationsByDay($year, $month, $day);
 
 		$renderData = [
 			'monthName'		=> $this->getMonthNameOrdinal($month),
@@ -266,7 +256,7 @@ class Calendar extends Reservation
 	}
 
 	/** Return TRUE if given UNIT is Enabled (reservable)
-	 * @param	string			$unit		// Unit string (eg. '16A')
+	 * @param	string			$unit		// Unit string (eg. '1630A')
 	 * 
 	 * @return	bool			$result
 	 */
@@ -285,30 +275,6 @@ class Calendar extends Reservation
 		}
 
 		return false;
-	}
-
-	/** Get Dotykacka TableID by Reservation UnitName
-	 * @param	string			$unit		// Unit string (eg. '16A')
-	 * 
-	 * @return	string|NULL		$result
-	 */
-	public function getTableIdByUnitName(string $unit)
-	{
-		if(strlen($unit) !== 5) {
-			return NULL;
-		}
-
-		//$tables = DOTYKACKA_GAMEOVER->getTables();
-
-		foreach($this->getUnitsData() as $item) {
-			$unitName = $item['hourBegin'] . $item['minuteBegin'] . $this->getAZbyID($item['unitID']);
-			/*if($unit === $unitName && $item['unitID'] < count($tables)) {
-				return $tables[$item['unitID']];
-			}*/
-		}
-
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		return NULL;
 	}
 
 	/** GET Reservation First Hour as int	
@@ -363,9 +329,8 @@ class Calendar extends Reservation
 		}
 
 		// Get all reservations for day
-		//$resultR = $this->database->query('SELECT units FROM reservation WHERE date = ? AND (state = ? OR state = ?) ORDER BY id ASC', $date, 'new', 'active');
-		$resultR = $this->database->query('SELECT units FROM reservation WHERE date = ? LIMIT 1', $date);
-		if($resultR && $resultR->getRowCount() === 1) {
+		$resultR = $this->database->query('SELECT units FROM reservation_request WHERE date = ? AND status = ?', $date, "CONFIRMED");
+		if($resultR && $resultR->getRowCount() >= 1) {
 			foreach($resultR->fetchAll() as $unitString) {
 				foreach(json_decode($unitString->units) as $unitName) {
 					$units[$unitName] = 1;
@@ -401,159 +366,6 @@ class Calendar extends Reservation
 		} else {
 			return $this->renderOccupancy($year, $month, $day);
 		}
-	}
-
-	/* ###################################################################################### */
-	/* ############################### RESERVATION SLOTS DATA ############################### */
-	/* ###################################################################################### */
-
-	public function _RENDER_DEBUG_DATA_()
-	{
-		return "N/A";
-	}
-
-	/** DOTYKACKA: Checks if Reservation SLOT is FREE?
-	 * @param	int				$_tableId		// ID Stolu
-	 * @param	Carbon			$date			// Datum rezervace
-	 * @param	int				$minutes = 60	// Doba trvani rezervace (vychozi: 60 minut)
-	 * 
-	 * @return	bool			$isFree			// Je SLOT volny? (true: ano / false: ne)
-	 */
-	public function checkReservationSlot($_tableId, Carbon $date, $minutes = 30)
-	{
-/*		// Validate _tableId
-		if(!in_array($_tableId, DOTYKACKA_GAMEOVER->getTables())) {
-			return false;
-		}
-
-		// Construct DATE
-		$startDate	= Carbon::create($date->year, $date->month, $date->day, $date->hour, 0, 0);
-		$endDate	= Carbon::create($date->year, $date->month, $date->day, $date->hour, 0, 0)->addMinutes($minutes);
-
-		// Build FILTER string
-		$filter = "_tableId|eq|"	. $_tableId . ";"
-				. "startDate|gteq|"	. $startDate->toIso8601ZuluString() . ";"
-				. "startDate|lt|"	. $endDate->toIso8601ZuluString();
-
-		// Build "SFPL" string (sort, filter, page, limit)
-		//$sfpl = DOTYKACKA_GAMEOVER->translateSFPL("", $filter, 1, 100);
-
-		// Get result from DTK API v2
-		$result = DOTYKACKA_GAMEOVER->getReservationList($sfpl);
-
-		if(!empty($result)) {
-			if(empty($result->data)) {
-				return false; // ERROR ?! CATCH THE ERROR MESSAGES [ !! HERE !! ]
-			}
-
-			foreach($result->data as $reservation) {
-				if($reservation->status != 'CANCELLED') {
-					return false; // FOUND & NOT CANCELLED == NOT FREE
-				}
-			}
-		}
-*/
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		return true; // NOT FOUND OVER ALL == IS FREE
-	}
-
-	/** DOTYKACKA: Prepare SLOT data for the Reservation
-	 * @param	int				$_customerId	// ID Zakaznika
-	 * @param	int				$_tableId		// ID Stolu
-	 * @param	int				$year			// Rok
-	 * @param	int				$month			// Mesic
-	 * @param	int				$day			// Den
-	 * @param	int				$hour			// Hodina
-	 * @param	string			$note			// Poznamka
-	 * 
-	 * @return	array|bool		$result			// Data pro vytvoreni polozky v Dotykacce (nejsou-li data == FALSE)
-	 */
-	public function prepareReservationSlot($_customerId, $_tableId, $year, $month, $day, $hour, $minute, $note = "")
-	{
-		// Construct DATE
-		$minutes	= 30;
-		$startDate	= Carbon::create($year, $month, $day, $hour, $minute, 0);
-		$endDate	= Carbon::create($year, $month, $day, $hour, $minute, 0)->addMinutes($minutes);
-		
-		if($this->checkReservationSlot($_tableId, $startDate, $minutes) == false) {
-			return false;
-		}
-/*
-		//ReservationSchema($tableId, $seats, $startDate, $endDate, $customerId = 0, $employeeId = 0, $note = "", $flags = 0, $status = 'CONFIRMED');
-		$result = DOTYKACKA_GAMEOVER->ReservationSchema(
-			$_tableId,							// ID Stolu
-			4,									// Pocet mist (zidli)
-			$startDate->toIso8601ZuluString(),	// Datum zacatku rezervace (ISO 8601 Zulu)
-			$endDate->toIso8601ZuluString(),	// Datum konce rezervace (ISO 8601 Zulu)
-			$_customerId,						// ID Zakaznika
-			0,									// ID Zamestnance (Vychozi: 0)
-			$note,								// Poznamka
-			0,									// Priznaky (Vychozi: 0)
-			'CONFIRMED'							// Stav rezervace [NEW, CONFIRMED, CANCELLED]
-		);
-*/
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		return NULL; // $result;
-	}
-
-	/* ###################################################################################### */
-	/* ################################## RESERVATION SYNC ################################## */
-	/* ###################################################################################### */
-
-	/** DOTYKACKA: Synchronize Reservations Database (DOTY -> DB)
-	 * @param	int				$year			// Rok
-	 * @param	int				$month			// Mesic
-	 * @param	int				$day			// Den
-	 * 
-	 * @return	array|bool		$result			// Pole dat s rezervacemi pro Dotykacku (nejsou-li data == FALSE)
-	 */
-	public function syncReservationsByDay($year, $month, $day)
-	{
-/*		$tableString = implode(",", DOTYKACKA_GAMEOVER->getTables());
-
-		// Construct DATE
-		$startDate	= Carbon::create($year, $month, $day, 0, 0, 0);
-		$endDate	= Carbon::create($year, $month, $day, 0, 0, 0)->addDay();
-
-		$filter = "_tableId|in|" . $tableString . ";"
-				. "startDate|gteq|" . $startDate->toIso8601ZuluString() . ";"
-				. "startDate|lt|" . $endDate->toIso8601ZuluString();
-
-		$sfpl = DOTYKACKA_GAMEOVER->translateSFPL("startDate", $filter, 1, 100);
-		$reservationList = DOTYKACKA_GAMEOVER->getReservationList($sfpl);
-
-		$units = [];
-		$reservations = [];
-		if(!empty($reservationList)) {
-			foreach($reservationList->data as $reservation) {
-				if($reservation->status == 'CANCELLED') {
-					continue;
-				}
-
-				$reservations[] = (array)$reservation;
-				$rsDate = Carbon::create($reservation->startDate /*, 'UTC'* /)->setTimezone(parent::$_TIMEZONE_);
-				$rsMinute = $rsDate->minute < 10 ? "0" . $rsDate->minute : $rsDate->minute;
-
-				//$tableChar = range('A', 'Z')[array_search($reservation->_tableId, DOTYKACKA_GAMEOVER->getTables())];
-				$tableChar = $this->getAZbyID(array_search($reservation->_tableId, DOTYKACKA_GAMEOVER->getTables()));
-				$units[] = $rsDate->hour . $rsMinute . $tableChar;
-			}
-		}
-
-		//$unitsString = '["' . implode('","', $units) . '"]';
-		$dateString = (string)sprintf("%4d-%02d-%02d", (int)$year, (int)$month, (int)$day);
-
-		//$this->database->query('DELETE FROM reservation WHERE date = ?', $dateString);
-		$resultO = $this->database->query('REPLACE INTO reservation', [
-		//	'customerID'	=> 0,
-			'date'			=> $dateString,
-			'units'			=> json_encode($units),
-		//	'state'			=> "new",
-		//	'note'			=> "",
-		]);
-*/
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		return true; //$unitsString;
 	}
 
 	/* ###################################################################################### */
@@ -606,48 +418,32 @@ class Calendar extends Reservation
 		// 2.) Kontrola - BANLIST (Email + Telefon)
 		$resBlEmail = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'EMAIL', $customer['email']);
 		if($resBlEmail && $resBlEmail->getRowCount() > 0) {
-			return "E2"; // Email BAN
+			return "E2_A"; // Email BAN
 		}
-
 		$resBlPhone = $this->database->query('SELECT * FROM reservation_banlist WHERE type = ? AND value = ? LIMIT 1', 'PHONE', $customer['phone']);
 		if($resBlPhone && $resBlPhone->getRowCount() > 0) {
-			return "E3"; // Telefon BAN
+			return "E3_B"; // Telefon BAN
 		}
 
 		// 3.) Kontrola - UNITS
-		if(count($units /*, COUNT_RECURSIVE*/) > $this->getUnitsCountTotal()) {
-			return "E4_A"; // Prilis mnoho Units
+		if(count($units) > $this->getUnitsCountTotal()) {
+			return "E3_A"; // Prilis mnoho Units
 		}
 		if(empty($units)) {
-			return "E4_B"; // Prazdne Units
-		}
-
-		foreach($units as $item) {
-			$_tableId = $this->getTableIdByUnitName($item);
-
-			if(empty($_tableId)) {
-				return "E5: " . $item; //"E5"; // Chybi _tableId (neplatny Unit Name?)
-			}
-
-			$unitHour = (int)substr($item, 0, 2);
-			$startDate = Carbon::create($date->year, $date->month, $date->day, $unitHour, 0, 0);
-
-			if($this->checkReservationSlot($_tableId, $startDate, 30) == false) {
-				return "E6"; // Slot jiz byl obsazen
-			}
+			return "E3_B"; // Prazdne Units
 		}
 
 		// 4.) Zapsat data 'customer' do DB -> ziskam customerID
 		$resultC = $this->database->table('customer')->insert($customer);
 		if(!$resultC) {
-			return "E7"; // Nepodarilo se zapsat do DB
+			return "E4"; // Nepodarilo se zapsat do DB
 		}
 		$customerID = $resultC->id;
 
 		// 5.) Vygenerovani Auth Code
 		$authCode = $this->getRandomAuthCode(4);
 		if($authCode == str_repeat('9', 4)) {
-			return "E8"; // Nepodarilo se najit unikatni AuthCode
+			return "E5"; // Nepodarilo se najit unikatni AuthCode
 		}
 
 		// 6.) Zapsat data 'reservation_request' do DB
@@ -664,12 +460,12 @@ class Calendar extends Reservation
 			'reminder'		=> 'DISABLED',
 		]);
 		if(!$resultR) {
-			return "E9"; // Nepodarilo se zapsat do DB
+			return "E6"; // Nepodarilo se zapsat do DB
 		}
 
 		// 7.) SEND SMS: Auth Code
 		if (isset(parent::$_DEBUG_) && parent::$_DEBUG_ !== true) {
-			$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
+			//$this->smsbrana->sendSMS($customer['phone'], "Vas SMS Kod pro potvrzeni rezervace VRko.cz je ". $authCode .". Tesime se na Vas! :)");
 		} else {
 			return (string)$authCode; // AUTH-OVERRIDE (DEBUG-ONLY)
 		}
@@ -691,7 +487,6 @@ class Calendar extends Reservation
 		if(!$resultR || $resultR->getRowCount() != 1) { // Nepodarilo ziskat data z DB
 			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB01;
 		}
-
 		$reservationRequest = $resultR->fetch();
 
 		$date = Carbon::create($reservationRequest['date']->format('Y-m-d H:i:s.u'), "Europe/Prague")->startOfDay();
@@ -700,96 +495,38 @@ class Calendar extends Reservation
 		// 2.) Ziskat 'customer' z DB (podle 'reservation_request'.'customerID')
 		$resultC = $this->database->query('SELECT * FROM customer WHERE id = ?', $reservationRequest['customerID']);
 		if(!$resultC || $resultC->getRowCount() != 1) { // Nepodarilo ziskat data z DB
-			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB02-A;
+			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB02;
 		}
-
 		$customer = $resultC->fetch();
 
-		// !!! HARDCODED: Kontrola emailove adresy zakaznika
+		// 3.) Kontrola emailove adresy zakaznika
 		if($customer['email'] !== $email) {
-			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB02-B;
+			return "Chyba: Zadaný kód je neplatný, nebo vypršela jeho platnost."; // EB03;
 		}
-/*
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		// 3.) Vytvorit zakaznika v Dotykacce => Ziskam 'dotykackaID'
-		// (POUZE kdyz 'customer'.'dotykackaID' == NULL; jinak ziskat z DB)
-		$dotykackaID = (string)$customer['dotykackaID'];
-		if(empty($dotykackaID)) {
-			$newCustomer = DOTYKACKA_GAMEOVER->createCustomers([
-				DOTYKACKA_GAMEOVER->CustomerSchema($customer['name'], $customer['surname'], $customer['email'], $customer['phone'])
-			]);
 
-			if(empty($newCustomer[0]->id)) { // Nepodarilo se vytvorit zakaznika v Dotykacce (nedostali jsme ID)
-				return "Chyba: Nepodařilo se vytvořit záznam zákazníka."; // EB03
-			}
-
-			$dotykackaID = $newCustomer[0]->id;
-		}
-*/
-		// 4.) Vytvorit zaznam v EcoMailu => Ziskam 'ecomailID'
-		// (POUZE kdyz 'customer'.'subscribe' == 1 && 'customer'.'ecomailID' == NULL)
-		$ecomailID = $customer['ecomailID'];
-		/*if($customer['subscribe'] == 1 && empty($ecomailID)) {
-			$ecomailData = $this->ecomail->addSubscriber(2, [	// <<<<<<<<<<< BRZDA???
-				'name'		=> $customer['name'],
-				'surname'	=> $customer['surname'],
-				'email'		=> $customer['email'],
-				'phone'		=> $customer['phone'],
-				'vokativ'	=> $customer['name'],
-				'vokativ_s'	=> $customer['surname'],
-				], FALSE, TRUE, TRUE);
-			$ecomailID = (!isset($ecomailData['id'])) ? NULL : $ecomailData['id']; // V pripade chyby je NULL
-		}*/
-
-		// 5.) Aktualizovat 'customer' v DB ('dotykackaID', 'ecomailID')
-		$this->database->query('UPDATE customer SET', [
-			'dotykackaID'	=> NULL, // DOTYKACKA WAS HERE
-			'ecomailID'		=> $ecomailID,
-		], 'WHERE id = ?', $reservationRequest['customerID']);
-
-		// 6.) Pripravit data pro Rezervace (a zkontrolovat jestli je SLOT volny!)
+		// 4.) Pripravit data pro Rezervace (TODO: zkontrolovat jestli je SLOT volny!)
 		$startHour = 24;	// 24 == error
 		$startMinute = 60;	// 60 == error
-		$note = $customer['name'] . " " . $customer['surname'] . " / " . $customer['phone'];
-		$reservations = [];
+		$htmlTableString = "";
+
 		foreach($units as $item) {
-			$_tableId = $this->getTableIdByUnitName($item);
-
-			if(empty($_tableId)) { // Chybi _tableId (neplatny Unit Name?)
-				return "Chyba: Vámi vybrané místo se nám nepodařilo najít. Prosím, zkuste zadat novou rezervaci."; // EB06-A
-			}
-
 			$unitHour = (int)substr($item, 0, 2);
 			$unitMinute = (int)substr($item, 2, 2);
+			$unitCode = substr($item, 4, 1);
 
 			if($unitHour < $startHour) {
 				$startHour = $unitHour;
-			}
-
-			if($unitMinute < $startMinute) {
 				$startMinute = $unitMinute;
 			}
 
-			$reservation = $this->prepareReservationSlot(NULL /* DOTYKACKA WAS HERE */, $_tableId, $date->year, $date->month, $date->day, $unitHour, $unitMinute, $note);
-			if($reservation == false) { // Slot jiz byl obsazen
-				return "Chyba: Některé z vybraných míst je již obsazeno. Prosím, vyberte jiný čas rezervace."; // EB06-B
+			if($unitHour == $startHour && $unitMinute < $startMinute) {
+				$startMinute = $unitMinute;
 			}
 
-			$reservations[] = $reservation;
-		}
-/*
-		// TODO: CHECK THE DATABESE NOW !!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
-		// 7.) Vytvorit Rezervace v Dotykacce
-		if(empty($reservations)) {
-			return "Chyba: Data o rezervaci nejsou k dispozici. Prosím, kontaktujte nás."; // EB07-A
+			$htmlTableString .= "<p>" . $unitHour . ":" . ($unitMinute < 10 ? "0" : "") . $unitMinute . " / UNIT " . $unitCode . "</p>";
 		}
 
-		$resultDtk = DOTYKACKA_GAMEOVER->createReservations($reservations);
-		if(empty($resultDtk[0]->id)) {
-			return "Chyba: Rezervaci se nepodařilo založit. Prosím, kontaktujte nás."; // EB07-B
-		}
-*/
-		// 8.) Aktualizovat 'reservation_request' v DB (status = 'CONFIRMED', [vymazat 'authCode' ??? ])
+		// 5.) Aktualizace 'reservation_request' v DB
 		$this->database->query('UPDATE reservation_request SET', [
 			'firstHour'		=> $startHour,
 			'firstMinute'	=> $startMinute,
@@ -798,23 +535,21 @@ class Calendar extends Reservation
 			'authCode'		=> NULL,
 		], 'WHERE id = ?', $reservationRequest['id']);
 
-		// 9.) TODO: Odeslat Email (Potvrzeni o Rezervaci)
+		// 6.) TODO: Odeslat Email (Potvrzeni o Rezervaci)
 		$mailTemplateData = [
-		//	'customer'		=> $customer,
+			'customer'		=> $customer,
 			'date'			=> $date->format('d.m.Y'),
-		//	'hour'			=> getReservationFirstHour($reservationRequest['units']),
 			'hour'			=> $startHour,
 			'minute'		=> ($startMinute < 10 ? "0" : "") . $startMinute,
 			'units'			=> var_export($units, true),
-		//	'resultDtk'		=> var_export($resultDtk, true),
+			'htmlTabString'	=> $htmlTableString,
 		];
 		$this->sendMail($customer['email'], "@confirmationEmail", "Potvrzení o rezervaci VRko.cz", $mailTemplateData);
 
-		// 10.) Synchronizace rezervaci pro cely den (podle 'reservation_request'.'date')
-		$this->syncReservationsByDay($date->year, $date->month, $date->day); // SYNC
+		// 7.) Synchronizace rezervaci pro cely den (podle 'reservation_request'.'date')
 		$this->renderOccupancy($date->year, $date->month, $date->day); // REDRAW
 
-		// 11.) Vytvoreni pozadavku na "hodnoceni"
+		// 8.) Vytvoreni pozadavku na "hodnoceni"
 		$reviewRequestResult = $this->reviews->createRequest(
 			$date,
 			$reservationRequest['units'],
@@ -824,8 +559,11 @@ class Calendar extends Reservation
 			$reservationRequest['id']
 		);
 		/*if($reviewRequestResult === false) {
-			return "Chyba: Nepodařilo se vytvořit požadavek na hodnocení zážitku."; // EB11
+			return "Chyba: Nepodařilo se vytvořit požadavek na hodnocení zážitku."; // EB08
 		}*/
+
+		// 9.) Odeslání rezervace na VRKO Admina
+		$this->sendMail("kozeluh@zetcomp.cz", "@confirmationEmailAdmin", "Nová rezervace VRko.cz", $mailTemplateData);
 
 		// Hotovo ???
 		return true; // "OK: Reservation Request Completed...";
@@ -840,7 +578,7 @@ class Calendar extends Reservation
 		$mailMsg = new Mail\Message();
 		$mailMsg->setFrom("Rezervace VRko.cz <info@vrko.cz>");
 		$mailMsg->addTo($recipient); // TODO: EMAIL Validator: $recipient
-		$mailMsg->addBcc("info@vrko.cz");
+		//$mailMsg->addBcc("info@vrko.cz");
 		$mailMsg->setSubject($subject);
 		$mailMsg->setHtmlBody($template, __DIR__ . "/../../../www/img/email/");
 

@@ -115,11 +115,9 @@ class ReservationFormFactory extends Control
 			'subscribe'			=> !isset($values->subscribe),
 			'agree'				=> !isset($values->agree),
 		];
-		foreach($validateL1 as $key => $value)
-		{
-			if($value)
-			{
-				$form->addError("Hodnota ".$key." nesmí být prázdná.");
+		foreach($validateL1 as $key => $value) {
+			if($value) {
+				$form->addError("Hodnota " . $key . " nesmí být prázdná.");
 				return $this->onError($form);
 			}
 		}
@@ -128,23 +126,19 @@ class ReservationFormFactory extends Control
 
 		// L2 Check: Format
 		$validateL2 = [
-			'reservation_date'	=> Validators::is($values->reservation_date, 'string:8..10'),	// String, lenght 8 to 10 (min. '2021-1-1' / max. '2021-01-01')
+			'reservation_date'	=> Validators::is($values->reservation_date, 'string:8..10'),	// String, lenght 8 to 10 (min. 'RRRR-M-D' / max. 'RRRR-MM-DD')
 			'reservation_units'	=> Validators::is($values->reservation_units, 'string:5..' . $reservationUnitsLenghtMax),	// String, lenght 5 to ??? (min. '[1600A]' / typ. '["1600A"]' / max. JSON_Array)
 			'jmeno'				=> Validators::is($values->jmeno, 'string:1..30'),				// String, lenght 1 to 30
 			'prijmeni'			=> Validators::is($values->prijmeni, 'string:1..30'),			// String, lenght 1 to 30
 			'email'				=> Validators::is($values->email, 'string:7..64') &&			// String, lenght 7 to 64 (min. '1@34.67')
 								   Validators::isEmail($values->email),							// Email, format
 			'predvolba'			=> in_array($values->predvolba, ['+420','+421'], true),			// String, '+420' or '+421' only, strict
-		//	'predvolba'			=> Validators::is($values->predvolba, 'numericint'),			// Number
 			'telefon'			=> Validators::is($values->telefon, 'digit:9'),					// Digit, exactly 9 digits
-		//	'telefon'			=> Validators::is($values->telefon, 'numericint:100000000..999999999'),	// Number, exactly 9 digits
 			'subscribe'			=> Validators::is($values->subscribe, 'bool'),					// Bool
 			'agree'				=> Validators::is($values->agree, 'bool'),						// Bool
 		];
-		foreach($validateL2 as $key => $value)
-		{
-			if(!$value)
-			{
+		foreach($validateL2 as $key => $value) {
+			if(!$value) {
 				$form->addError("Hodnota ".$key." nebyla vyplněna správně.");
 				return $this->onError($form);
 			}
@@ -152,12 +146,10 @@ class ReservationFormFactory extends Control
 
 		// L3 Check: Values
 		$validateL3 = [
-			'agree'		=> ($values->agree === true),	// Must be TRUE
+			'agree' => ($values->agree === true), // Must be TRUE
 		];
-		foreach($validateL3 as $key => $value)
-		{
-			if(!$value)
-			{
+		foreach($validateL3 as $key => $value) {
+			if(!$value) {
 				$form->addError("Je vyžadován souhlas s podmínkami zaškrtnutím příslušných polí.");
 				return $this->onError($form);
 			}
@@ -167,14 +159,10 @@ class ReservationFormFactory extends Control
 		$hour = $this->calendar->getReservationFirstHour($values->reservation_units);
 		$dateRes = Carbon::create($values->reservation_date, 'Europe/Prague')->setHour($hour)->subMinute(5);
 		$dateNow = Carbon::now('Europe/Prague');
-		if($dateRes < $dateNow) // ERROR: Reservation date is older than "NOW" - 5 minutes
-		{
+		if($dateRes < $dateNow) { // ERROR: Reservation date is older than "NOW" - 5 minutes
 			$form->addError("Pokud nemáte stroj času, vyberte prosím čas rezervace alespoň 5 minut dopředu. Děkujeme.");
 			return $this->onError($form);
 		}
-
-
-
 
 		// $year, $month, $day, $unitsJson, $name, $surname, $email, $phone, $subscribe
 		//$this->calendar->createReservationRequest_raw();
@@ -190,8 +178,7 @@ class ReservationFormFactory extends Control
 		];
 		$result = $this->calendar->createReservationRequest($date, json_decode($values->reservation_units), $customer);
 
-		if($result === true)
-		{
+		if($result === true) {
 			$params = [
 				'jmeno'				=> $values->jmeno,
 				'prijmeni'			=> $values->prijmeni,
@@ -206,11 +193,12 @@ class ReservationFormFactory extends Control
 			//$this->calendar->completeReservationRequest($result);
 
 			$this->onUserSave($this, $params);
-		}
-		else
-		{
-			if(is_string($result)) $form->addError($result);
-			else $form->addError("Došlo k neznámé chybě. Zkuste to prosím později.");
+		} else {
+			if(is_string($result)) {
+				$form->addError($result);
+			} else {
+				$form->addError("Došlo k neznámé chybě. Zkuste to prosím později.");
+			}
 
 			$this->onError($form);
 		}
