@@ -48,9 +48,17 @@ class PartialsPresenter extends BasePresenter
 
 		// Check input DATE before sending to major functions (Memory overflow protection)
 		if (!Validators::is($year, 'numericint:' . (Carbon::now()->year + 0) . '..' . (Carbon::now()->year + 1)) ||
-			!Validators::is($month, 'numericint:1..12') ||
-			$year  < Carbon::now()->year  || $year  > Carbon::now()->addMonth()->year ||
-			$month < Carbon::now()->month || $month > Carbon::now()->addMonth()->month)
+			!Validators::is($month, 'numericint:1..12'))
+		{
+			header("HTTP/1.0 404 Not Found");
+			return false;
+		}
+
+		// Check input date range
+		$selDate = Carbon::create($year, $month, 1);						// SELECTED
+		$nowDate = Carbon::now()->startOfDay();								// NOW DATE
+		$endDate = Carbon::now()->addMonth()->endOfMonth()->startOfDay();	// END DATE
+		if($selDate < $nowDate || $selDate > $endDate)
 		{
 			header("HTTP/1.0 404 Not Found");
 			return false;
