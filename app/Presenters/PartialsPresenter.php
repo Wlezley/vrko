@@ -40,6 +40,38 @@ class PartialsPresenter extends BasePresenter
 	public function renderDefault()
 	{
 		$this->template->error = true;
+		header("HTTP/1.0 404 Not Found");
+		return false;
+
+		/* DEBUG: Check input date range
+		$startDate = Carbon::now()->startOfMonth()->startOfDay();		// NOW DATE
+		$endDate = Carbon::now()->addMonth()->endOfMonth()->endOfDay();	// END DATE
+
+		bdump($startDate, "START DATE");
+		bdump($endDate, "END DATE");
+
+		for ($y = 2021; $y <= 2022; $y++) {
+			echo "### ### ### " . $y . " ### ### ###<br>";
+			for ($m = 1; $m <= 12; $m++) {
+				echo "[ " . $y . " / " . $m . " ]<br>";
+				$daysInMonth = Carbon::create($y, $m, 1)->endOfMonth()->startOfDay()->day;
+
+				for ($d = 1; $d <= $daysInMonth; $d++) {
+					$selDate = Carbon::create($y, $m, $d)->endOfDay(); // SELECTED
+
+					echo $y . "-" . $m . "-" . $d . ": ";
+					if($selDate < $startDate || $selDate > $endDate)
+					{
+						echo "ERROR!";
+					} else {
+						echo "PASSED";
+					}
+					echo "<br>";
+				}
+				echo "<br>";
+			}
+			echo "<br>";
+		}*/
 	}
 
 	public function renderSelectday($year, $month) // TODO: Just parse DATE from one $string
@@ -55,10 +87,10 @@ class PartialsPresenter extends BasePresenter
 		}
 
 		// Check input date range
-		$selDate = Carbon::create($year, $month, 1);						// SELECTED
-		$nowDate = Carbon::now()->startOfDay();								// NOW DATE
-		$endDate = Carbon::now()->addMonth()->endOfMonth()->startOfDay();	// END DATE
-		if($selDate < $nowDate || $selDate > $endDate)
+		$selectedDate = Carbon::create($year, $month, 1);
+		$startDate = Carbon::now()->startOfMonth()->startOfDay();
+		$endDate = Carbon::now()->addMonth()->endOfMonth()->endOfDay();
+		if($selectedDate < $startDate || $selectedDate > $endDate)
 		{
 			header("HTTP/1.0 404 Not Found");
 			return false;
@@ -118,10 +150,10 @@ class PartialsPresenter extends BasePresenter
 		}
 
 		// Check input date range
-		$selDate = Carbon::create($year, $month, $day);						// SELECTED
-		$nowDate = Carbon::now()->startOfDay();								// NOW DATE
-		$endDate = Carbon::now()->addMonth()->endOfMonth()->startOfDay();	// END DATE
-		if($selDate < $nowDate || $selDate > $endDate)
+		$selectedDate = Carbon::create($year, $month, $day);
+		$startDate = Carbon::now()->startOfDay();
+		$endDate = Carbon::now()->addMonth()->endOfMonth()->endOfDay();
+		if($selectedDate < $startDate || $selectedDate > $endDate)
 		{
 			header("HTTP/1.0 404 Not Found");
 			return false;
