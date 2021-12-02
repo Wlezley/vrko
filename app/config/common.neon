@@ -52,6 +52,9 @@ services:
 	#- App\Model\Reservation\ReservationSlots
 	#- App\Model\Reservation\ReservationUnits
 
+	# Presenter: Partials
+	- App\Presenters\PartialsPresenter(%partials.referer_check%)
+
 	# Model: Hodnoceni
 	#- App\Model\Reviews\Reviews
 	- App\Model\Reviews\Reviews(%reviews.request_debug%, %reviews.report_email%, %reviews.google_review_url%, %reviews.positive_url%, %reviews.negative_url%)

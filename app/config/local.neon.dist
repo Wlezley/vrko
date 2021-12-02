@@ -24,6 +24,12 @@ parameters:
 		hourCount: 6
 		unitsPerHour: 3
 
+	# Partials (implemented)
+	partials:
+		referer_check: false
+		#referer_check: 'localhost'
+		#referer_check: 'vrko.cz'
+
 	# mPDF (not implemented yet)
 	mpdf_config:
 		#tempDir: %tempDir%

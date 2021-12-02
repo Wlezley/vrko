@@ -24,15 +24,16 @@ class PartialsPresenter extends BasePresenter
 	/** @var Reservation\Calendar */
 	private $calendar;
 
-	// Referer check settings
-	const REFERER_CHECK = false; // DEBUG
-	//const REFERER_CHECK = 'www-dev.vrko.cz'; // DEBUG
-	//const REFERER_CHECK = 'vrko.cz'; // PRODUCTION
+	/** @var mixed */
+	private $referer_check;
 
-	public function __construct(Explorer $database,
+	public function __construct($referer_check,
+								Explorer $database,
 								Reservation\Calendar $calendar)
 	{
 		Debugger::$showBar = false; // Disable Tracy Debug Bar
+
+		$this->referer_check = $referer_check;
 		$this->database = $database;
 		$this->calendar = $calendar;
 	}
@@ -97,10 +98,10 @@ class PartialsPresenter extends BasePresenter
 		}
 
 		// Referer check
-		if (self::REFERER_CHECK !== false && (
+		if ($this->referer_check !== false && (
 			empty($_SERVER['HTTP_REFERER']) || 
 			empty(parse_url($_SERVER['HTTP_REFERER'])) || 
-			parse_url($_SERVER['HTTP_REFERER'])['host'] !== self::REFERER_CHECK))
+			parse_url($_SERVER['HTTP_REFERER'])['host'] !== $this->referer_check))
 		{
 			header("HTTP/1.0 404 Not Found");
 			return false;
@@ -160,10 +161,10 @@ class PartialsPresenter extends BasePresenter
 		}
 
 		// Referer check
-		if (self::REFERER_CHECK !== false && (
+		if ($this->referer_check !== false && (
 			empty($_SERVER['HTTP_REFERER']) || 
 			empty(parse_url($_SERVER['HTTP_REFERER'])) || 
-			parse_url($_SERVER['HTTP_REFERER'])['host'] !== self::REFERER_CHECK))
+			parse_url($_SERVER['HTTP_REFERER'])['host'] !== $this->referer_check))
 		{
 			header("HTTP/1.0 404 Not Found");
 			return false;
