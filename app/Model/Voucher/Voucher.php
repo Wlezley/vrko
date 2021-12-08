@@ -7,7 +7,6 @@ namespace App\Model\Voucher;
 use Latte;
 use Nette;
 use App\Model;
-use App\Model\Dotykacka;
 
 use Nette\Utils\Json;
 use Nette\Utils\Random;
@@ -32,18 +31,13 @@ class Voucher
 	/** @var Nette\Database\Explorer */
 	protected $database;
 
-	/** @var Dotykacka\DotykackaApi2 */
-	private $doty2;
-
 	/** @var Nette\Mail\Mailer @inject */
 	public $mailer;
 
 	public function __construct(Explorer $database,
-								Dotykacka\DotykackaApi2 $doty2,
 								Mail\Mailer $mailer)
 	{
 		$this->database = $database;
-		$this->doty2 = $doty2;
 		$this->mailer = $mailer;
 	}
 
@@ -340,7 +334,7 @@ class Voucher
 	 *
 	 * @return	integer|NULL				// ID Objednavky
 	 */
-	function createSaleItem($invoiceId, $voucherId, $voucherEan, $price)
+	function createSaleItem($invoiceId, $voucherId, $voucherEan, $price) /// DOTYKACKA /// TODO: Rewrite this function to by-pass DotyPOS !!!
 	{
 		$_supplierId = '8436897805239446';
 		$name = "Herní poukaz - " . $voucherEan;		// Nazev
@@ -381,9 +375,9 @@ class Voucher
 			'versionDate'			=> NULL,			// TimeStamp
 		];
 		$saleItems = [$saleItem];
-		$cpResponse = $this->doty2->createProduct($saleItems);
+		///$cpResponse = $this->doty2->createProduct($saleItems);
 
-		foreach($cpResponse as $item)
+		/*foreach($cpResponse as $item) /// DOTYKACKA - TODO: VSECHNO DO DB! ///
 		{
 			$itemId = $item->id;
 
@@ -395,8 +389,8 @@ class Voucher
 				'sellPrice'		=> $rawPrice,	// Double	?
 			];
 
-			$this->doty2->stockupToWarehouse($_supplierId, $invoiceId, $name, false, $skladItems);
-		}
+			///$this->doty2->stockupToWarehouse($_supplierId, $invoiceId, $name, false, $skladItems);
+		}*/
 	}
 
 	// ### PDF - SEED DATA ###
