@@ -45,19 +45,19 @@ class Voucher
 
 	/** Vygeneruje nahodny ciselny kod
 	 * @param	integer			$size
-	 * @param	string|NULL		$table
-	 * @param	string|NULL		$field
+	 * @param	string|null		$table
+	 * @param	string|null		$field
 	 *
-	 * @return	int|NULL
+	 * @return	int|null
 	 */
-	public function getRandomCode($size, $table = NULL, $field = NULL)
+	public function getRandomCode($size, $table = null, $field = null)
 	{
-		if($table == NULL || $field == NULL)
+		if($table == null || $field == null)
 		{
 			return Random::generate($size, '1-9');
 		}
 
-		$randomCode = NULL;
+		$randomCode = null;
 		$counter = 0;
 		$limit = 10;
 
@@ -78,12 +78,12 @@ class Voucher
 
 	/** Vygeneruje nahodny ciselny kod EAN-13 (vcetne CHECKSUM)
 	 * @param	string			$prefix
-	 * @param	string|NULL		$table
-	 * @param	string|NULL		$field
+	 * @param	string|null		$table
+	 * @param	string|null		$field
 	 *
-	 * @return	string|NULL
+	 * @return	string|null
 	 */
-	public function getRandomEAN13($prefix = '', $table = NULL, $field = NULL)
+	public function getRandomEAN13($prefix = '', $table = null, $field = null)
 	{
 		// TODO: Check if $prefix is STRING of DIGITS (empty string allowed)
 
@@ -91,12 +91,12 @@ class Voucher
 		$charlist = empty($prefix) ? '1-9' : '0-9';
 
 		if($size <= 0)
-			return NULL;
+			return null;
 
-		if($table == NULL || $field == NULL)
+		if($table == null || $field == null)
 			return $this->getChecksum_EAN13($prefix . (string)Random::generate($size, $charlist));
 
-		$randomCode = NULL;
+		$randomCode = null;
 		$counter = 0;
 		$limit = 10;
 
@@ -172,16 +172,16 @@ class Voucher
 	 * @param	string		$z_email		// Zakaznik / Email
 	 * @param	string		$z_phone		// Zakaznik / Telefon
 	 *
-	 * @return	integer|NULL				// ID Objednavky
+	 * @return	integer|null				// ID Objednavky
 	 */
 	function createOrder($price_total, $count, $z_name, $z_surname, $z_email, $z_phone)
 	{
 		if($price_total <= 0 || $count <= 0 || $count > 10)
-			return NULL;
+			return null;
 
 		$orderData = [
 		  //'id'			=> $orderId,		// ID Objednavky
-		  //'invoice_id'	=> NULL,			// Unknown
+		  //'invoice_id'	=> null,			// Unknown
 		  //'date_created'	=> Carbon::now()->format('Y-m-d H:i:s'),	// CURRENT_TIMESTAMP
 			'price_total'	=> $price_total,	// Cena celkem
 			'z_name'		=> $z_name,			// Zakaznik / Jmeno
@@ -193,13 +193,13 @@ class Voucher
 		$orderId = $result->id;
 
 		if(!isset($orderId) || $orderId <= 0)
-			return NULL;
+			return null;
 
 		$orderItems = [];
 		for($i = 0; $i < $count; $i++)
 		{
 			$orderItems[] = [
-			  //'id'			=> NULL,					// ID Polozky
+			  //'id'			=> null,					// ID Polozky
 				'order_id'		=> $orderId,				// ID Objednavky
 				'item_name'		=> "Herní poukaz VRko.cz",	// Nazev polozky
 				'item_count'	=> 1,						// Pocet kusu
@@ -214,7 +214,7 @@ class Voucher
 	/** Dokončení objednávky (a vygenerování voucherů)
 	 * @param	integer		$orderId		// ID Objednávky
 	 *
-	 * @return	bool|NULL
+	 * @return	bool|null
 	 */
 	function completeOrder($orderId)
 	{
@@ -250,7 +250,7 @@ class Voucher
 		  //$voucherEAN = '6660' . $this->getRandomCode(9, 'voucher', 'voucher_ean');
 			$voucherEAN = $this->getRandomEAN13('6660', 'voucher', 'voucher_ean');
 			$voucherData = [
-			  //'id'			=> NULL,			// UID (možná UID pro voucher EAN6?)
+			  //'id'			=> null,			// UID (možná UID pro voucher EAN6?)
 				'order_id'		=> $orderId,		// ID Objednavky
 				'order_item_id'	=> $item['id'],		// ID Polozky Objednavky
 				'voucher_id'	=> $voucherID,		// EAN-6
@@ -268,7 +268,7 @@ class Voucher
 		$voucherDataAll = $result->fetchAll();
 
 		// CREATE INVOICE (id & descriptor)
-		$invoiceId = NULL;
+		$invoiceId = null;
 		$result = $this->database->query('SELECT * FROM invoice WHERE order_id = ? LIMIT 1', $orderId);
 		if(isset($result) && $result->getRowCount() == 1)
 		{
@@ -277,7 +277,7 @@ class Voucher
 		else
 		{
 			$invoiceData = [
-			  //'id'			=> NULL,			// ID Faktury / Uctenky
+			  //'id'			=> null,			// ID Faktury / Uctenky
 				'order_id'		=> $orderId,		// ID Objednavky
 			  //'date_created'	=> $todayDatetime,	// Datum vytvoreni 
 				'date_payed'	=> $todayDatetime,	// Datum a cas uhrady
@@ -332,7 +332,7 @@ class Voucher
 	 * @param	string		$voucherEan		// EAN-13 Voucheru
 	 * @param	string		$price			// Cena
 	 *
-	 * @return	integer|NULL				// ID Objednavky
+	 * @return	integer|null				// ID Objednavky
 	 */
 	function createSaleItem($invoiceId, $voucherId, $voucherEan, $price) /// DOTYKACKA /// TODO: Rewrite this function to by-pass DotyPOS !!!
 	{
@@ -368,11 +368,11 @@ class Voucher
 			'stockDeduct'			=> true,			// Bool		- Odečítat ze skladu při prodeji?
 			'stockOverdraft'		=> 'DISABLE',		// Enum		Přečerpání zásob (určuje, zda je možné jít s počtem položek na skladě do mínusu) (ALLOW, DISABLE)
 			'subtitle'				=> $description,	// String	Krátká poznámka
-		//	'supplierProductCode'	=> NULL,			// 			(?) Kód produktu dodavatele (?)
+		//	'supplierProductCode'	=> null,			// 			(?) Kód produktu dodavatele (?)
 			'unit'					=> 'Piece',			// Enum		Jednotka (kus)
 			'unitMeasurement'		=> 'Piece',			// Enum		Měrná jednotka (kus)
 			'vat'					=> '1.0',			// Double	Poměr násobku DPH
-			'versionDate'			=> NULL,			// TimeStamp
+			'versionDate'			=> null,			// TimeStamp
 		];
 		$saleItems = [$saleItem];
 		///$cpResponse = $this->doty2->createProduct($saleItems);
@@ -383,7 +383,7 @@ class Voucher
 
 			$skladItems [] = [
 				'_productId'	=> $itemId,		// Long		?
-				'externalId'	=> NULL,		// String	?
+				'externalId'	=> null,		// String	?
 				'purchasePrice'	=> 0.00,		// Double	? ($rawPrice)
 				'quantity'		=> '1.0',		// Double	-- negative for corrections
 				'sellPrice'		=> $rawPrice,	// Double	?
