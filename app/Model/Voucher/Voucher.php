@@ -8,12 +8,8 @@ use Latte;
 use Nette;
 use App\Model;
 
-use Nette\Utils\Json;
 use Nette\Utils\Random;
-use Nette\Utils\ArrayHash;
-use Nette\Utils\Validators;
 use Nette\Database\Explorer;
-use Tracy\Debugger;
 
 // DATE / TIME
 use Carbon\Carbon;
@@ -296,7 +292,7 @@ class Voucher
 		$files['uctenka-'. $invoiceId . '.pdf'] = $seedPDF;
 		foreach($voucherDataAll as $voucher)
 		{
-			// DOTYKACKA - CREATE SALE & STOCKUP ITEM (DISABLE FOR TESTING PURPOSES ???)
+			/// DOTYKACKA - CREATE SALE & STOCKUP ITEM (DISABLE FOR TESTING PURPOSES ???)
 			$this->createSaleItem($invoiceId, $voucher['voucher_id'], $voucher['voucher_ean'], $item_price);
 
 			// PDF: RENDER VOUCHER FILES
@@ -343,7 +339,7 @@ class Voucher
 		$rawPrice = ($price * (-1));					// Bez DPH
 		$vatPrice = ($price * (-1));					// Vc. DPH
 
-		// DOTYKACKA - Vytvorit prodejni polozky
+		/// DOTYKACKA - Vytvorit prodejni polozky
 		$saleItem = [
 			'_categoryId'			=> $categoryId,		// Long		ID Kategorie, do které položka spadá
 			'_cloudId'				=> '323467526',		// Integer	ID Cloudu (není potřeba - natáhne se z API requestu)
