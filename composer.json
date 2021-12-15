@@ -29,8 +29,7 @@
 	},
 	"require-dev": {
 		"nette/tester": "^2.3",
-		"symfony/thanks": "^1",
-		"dotykacka/php-api-client": "dev-master"
+		"symfony/thanks": "^1"
 	},
 	"autoload": {
 		"psr-4": {

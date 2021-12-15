@@ -7,7 +7,6 @@ namespace App\Presenters;
 use Nette;
 
 use App\Model;
-use App\Model\Dotykacka;
 use App\Model\Voucher;
 
 use App\Forms;
@@ -26,18 +25,13 @@ final class PoukazyPresenter extends BasePresenter
 	/** @var Forms\IVoucherFormFactory @inject */
 	public $VoucherForm;
 
-	/** @var Dotykacka\DotykackaApi2 */
-	private $doty2;
-
 	/** @var Voucher\Voucher */
 	private $voucher;
 
 	public function __construct(Explorer $database,
-								Dotykacka\DotykackaApi2 $doty2,
 								Voucher\Voucher $voucher)
 	{
 		$this->database = $database;
-		$this->doty2 = $doty2;
 		$this->voucher = $voucher;
 	}
 

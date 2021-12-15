@@ -18,16 +18,11 @@ session:
 	#savePath: %tempDir%/sessions
 
 database:
-	dsn: 'mysql:host=%database.host%;dbname=%database.dbmane%'
+	dsn: 'mysql:host=%database.host%;dbname=%database.dbname%'
 	user: %database.user%
 	password: %database.password%
 
 services:
-	# Model: Dotykacka API
-	#- App\Model\Dotykacka\DotykackaApi
-	- App\Model\Dotykacka\DotykackaApi2(%dotykacka_api%)
-	#- App\Model\Dotykacka\DotykackaApi2(%dotykacka_api.url%, %dotykacka_api.refreshToken%, %dotykacka_api.cloudId%, %dotykacka_api.branchId%, %dotykacka_api.warehouseId%, %dotykacka_api.tables%)
-
 	# Model: Comgate API
 	- App\Model\AgmoPayments\AgmoPaymentsException
 	- App\Model\AgmoPayments\AgmoPaymentsSimpleProtocol(%agmo_payments.paymentsUrl%, %agmo_payments.merchant%, %agmo_payments.test%, %agmo_payments.secret%, %agmo_payments.paymentsUrl2%)
@@ -46,11 +41,6 @@ services:
 	# Model: Rezervace
 	- App\Model\Reservation
 	- App\Model\Reservation\Calendar
-	#- App\Model\Reservation\ReservationOccupancy
-	#- App\Model\Reservation\ReservationRender
-	#- App\Model\Reservation\ReservationRequest
-	#- App\Model\Reservation\ReservationSlots
-	#- App\Model\Reservation\ReservationUnits
 
 	# Presenter: Partials
 	- App\Presenters\PartialsPresenter(%partials.referer_check%)
