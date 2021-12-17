@@ -12,7 +12,7 @@ use Nette\Database\Explorer;
 use Tracy\Debugger;
 
 
-final class HomepagePresenter extends BasePresenter
+final class HomepagePresenter extends UnsecuredPresenter
 {
 	/* * @var Nette\Database\Explorer * /
 	protected $database;*/
@@ -65,4 +65,11 @@ final class HomepagePresenter extends BasePresenter
 	{
 		$this->redirect('Homepage:default');
 	}
+	
+	/*public function actionLogout()
+	{
+		$this->user->logout();
+		$this->flashMessage('Byli jste úspěšně odhlášeni');
+		$this->redirect('Sign:in');
+	}*/
 }

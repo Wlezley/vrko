@@ -16,6 +16,14 @@ final class RouterFactory
 	{
 		$router = new RouteList;
 
+		// LOGIN/LOGOUT HANDLERS
+		$router->addRoute('admin',			'Admin:default');
+		$router->addRoute('admin/login',	'Sign:in');
+		$router->addRoute('admin/logout',	'Admin:logout');
+
+		// CRON
+		//$router->addRoute('cron/[<hash>/]', 'Cron:default');
+
 		// STATIC PAGES
 		$router->addRoute('o-herne',		'Homepage:oherne');
 		$router->addRoute('faq',			'Homepage:faq');

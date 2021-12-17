@@ -52,6 +52,9 @@ services:
 	# Model: Voucher
 	- App\Model\Voucher\Voucher
 
+	# Forms: Login
+	- App\Forms\SignInFormFactory
+
 	# Forms
 	- App\Forms\IReservationFormFactory
 	- App\Forms\IReservationAuthorizeFormFactory
@@ -60,4 +63,4 @@ services:
 	- App\Forms\IReviewFormFactory
 
 	router: App\Router\RouterFactory::createRouter
-	#authenticator: App\Model\User\Authenticator 
+	authenticator: App\Model\User\Authenticator 

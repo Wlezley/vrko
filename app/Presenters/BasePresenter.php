@@ -13,6 +13,6 @@ class BasePresenter extends Nette\Application\UI\Presenter
 	{
         parent::__construct();
 
-        $this->baseImgUrl = $this->template->baseUrl . "/img";
+        //$this->baseImgUrl = $this->template->baseUrl . "/img";
 	}
 }

@@ -15,8 +15,8 @@
 {else}
 	{var $robots = "index,follow"}
 {/if}
-{var $csVer = "?v=2021090401"}
-{var $jsVer = "?v=2021090401"}
+{var $csVer = "?v=2021121501"}
+{var $jsVer = "?v=2021121501"}
 {*{ifset $csVer}{$csVer}{/ifset}
 {ifset $jsVer}{$jsVer}{/ifset}*}
 <!DOCTYPE html>
@@ -24,35 +24,35 @@
 <head>
 {* META *}
 	<meta charset="utf-8">
-	<meta http-equiv="Content-Type"	content="text/html; charset=UTF-8">
-	<meta http-equiv="x-ua-compatible" content="ie=edge">
+	<meta http-equiv="Content-Type"		content="text/html; charset=UTF-8">
+	<meta http-equiv="x-ua-compatible"	content="ie=edge">
 	<meta http-equiv="content-language" content="cs-CZ">
-	{*<meta name="viewport"			content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">*}
-	<meta name="viewport"			content="width=device-width, initial-scale=1.0">
+	{*<meta name="viewport"				content="width=device-width, initial-scale=1.0, shrink-to-fit=no, viewport-fit=cover">*}
+	<meta name="viewport"				content="width=device-width, initial-scale=1.0">
 	{block headoverride}
-	<meta name="author"				content="Ladislav Alexa, Filip Koželuh">
-	<meta name="designer"			content="Ladislav Alexa">
-	{*<meta name="designer"			content="Kryštof Henzl, Ladislav Alexa">*}
-	<meta name="programmer"			content="Ladislav Alexa">
-	{*<meta name="description"		content="{$description_default|striptags}">*}
-	<meta name="description"		content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
-	<meta name="keywords"			content="{$keywords_default|striptags}">
-	<meta name="rating"				content="All">
-	<meta name="robots"				content="{$robots|striptags}">
-	<meta name="googlebot"			content="{$robots|striptags}">
-	<meta name="copyright"			content="666% zábavy s.r.o.">
-	<meta name="publisher"			content="666% zábavy s.r.o.">
-	<meta property="og:title"		content="{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz">
-	<meta property="og:type"		content="website">
-	<meta property="og:url"			content="https://vrko.cz/">
-	<meta property="og:email"		content="info@vrko.cz">
-	<meta property="og:image"		content="{$baseUrl}/img/logo/logo.png">
+	<meta name="author"					content="Ladislav Alexa, Filip Koželuh">
+	<meta name="designer"				content="Ladislav Alexa">
+	{*<meta name="designer"				content="Kryštof Henzl, Ladislav Alexa">*}
+	<meta name="programmer"				content="Ladislav Alexa">
+	{*<meta name="description"			content="{$description_default|striptags}">*}
+	<meta name="description"			content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
+	<meta name="keywords"				content="{$keywords_default|striptags}">
+	<meta name="rating"					content="All">
+	<meta name="robots"					content="{$robots|striptags}">
+	<meta name="googlebot"				content="{$robots|striptags}">
+	<meta name="copyright"				content="666% zábavy s.r.o.">
+	<meta name="publisher"				content="666% zábavy s.r.o.">
+	<meta property="og:title"			content="{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz">
+	<meta property="og:type"			content="website">
+	<meta property="og:url"				content="https://vrko.cz/">
+	<meta property="og:email"			content="info@vrko.cz">
+	<meta property="og:image"			content="{$baseUrl}/img/logo/logo.png">
 	{*<meta property="og:image:width"	content="1280"><meta property="og:image:height" content="720">*}
 	{*<meta property="og:description"	content="{$description_default|striptags}">*}
-	<meta property="og:description"	content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
-	<meta property="og:determiner"	content="VRko.cz">
-	<meta property="og:locale"		content="cs_CZ">
-	<meta property="og:site_name"	content="Virtuální Realita Plzeň | VRko.cz">
+	<meta property="og:description"		content="{ifset description}{include description|striptags}{else}{$description_default|striptags}{/ifset}">
+	<meta property="og:determiner"		content="VRko.cz">
+	<meta property="og:locale"			content="cs_CZ">
+	<meta property="og:site_name"		content="Virtuální Realita Plzeň | VRko.cz">
 	{*<link rel="canonical" href="{$baseUrl}/{$basePath}">*}
 {* TITLE *}
 	<title>{ifset title}{include title|striptags}{else}Virtuální Realita Plzeň{/ifset} | VRko.cz</title>
@@ -101,9 +101,16 @@
 <body>
 	{*block styles}
 	{/block*}
-	{include './layout/header.latte'}
-	{include content}
-	{include './layout/footer.latte'}
+
+	{if $presenter->name != "Sign"}
+	{*dump($presenter->name)*}
+		{include './layout/header.latte'}
+		{include content}
+		{include './layout/footer.latte'}
+	{else}
+		{include content}
+	{/if}
+
 	{block scripts}
 	{*<script src="https://nette.github.io/resources/js/netteForms.min.js"></script>*}
 	<script src="https://nette.github.io/resources/js/3/netteForms.min.js"></script>
