@@ -1,0 +1,40 @@
+<style>
+	p { margin-top: 10px; }
+	a { font-weight: 600; color: #e13175; }
+</style>
+
+<div style="width: 100%; background-color: #140a1c !important;">
+	<div style="color: #000000; font-family: Helvetica; font-size: 16px; line-height: 25px; margin: 0 auto; max-width: 600px;">
+		<div style="padding: 15px 25px 10px 25px;">
+			<img src="logo.png" alt="Logo VRko.cz"/>
+		</div>
+		<div style="background-color: #fff; padding: 25px;">
+			<H1 style="margin-top: 0; line-height: 120%;">Nový Herní poukaz VRko.cz</H1>
+
+			<p>Byl zakoupen VOUCHER!</p>
+
+			<p>Datum a čas: {$todayDatetime}<br />
+			ID objednávky: #{$orderId}<br />
+			Počet poukazů: {$pocetPoukazu}</p>
+			<hr />
+
+			<p style="margin-bottom: 0;">VOUCHERY:</p>
+			{if !empty($vouchers)}
+			<p style="margin-top: 10px;" n:inner-foreach="$vouchers as $voucher">
+				Poukaz #{$iterator->counter}: <strong>{$voucher[voucher_id]}</strong> <span style="font-style: italic;">(EAN: {$voucher[voucher_ean]})</span><br />
+			</p>
+			{else}
+			<p style="margin-top: 10px;">
+				<strong>Jejda! Něco se pokazilo a žádný voucher tu není! :(</strong>
+			</p>
+			{/if}
+
+		</div>
+		<div style="padding: 25px; font-size: 13px; color: #757575 !important;">
+			<p style="margin: 0"><a href="https://vrko.cz/" target="_blank">666% zábavy s.r.o.</a>, Koterovská 607 / 45, 326 00 Plzeň 2 Slovany - Východní Předměstí<br />
+			Telefon: <a href="tel:+420373700366">+420 373 700 366</a> <span style="font-style: italic !important;">(volba číslo 2)</span><br />
+			Najdete nás na sociálních sítích <a href="https://www.facebook.com/VRko.cz/" target="_blank" title="Facebook vrko.cz">Facebook</a> a
+			<a href="https://www.instagram.com/vrko.cz/" target="_blank" title="Instagram vrko.cz">Instagram</a>.</p>
+		</div>
+	</div>
+</div>

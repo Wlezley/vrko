@@ -578,7 +578,6 @@ class Calendar extends Reservation
 		$mailMsg = new Mail\Message();
 		$mailMsg->setFrom("Rezervace VRko.cz <info@vrko.cz>");
 		$mailMsg->addTo($recipient); // TODO: EMAIL Validator: $recipient
-		$mailMsg->addBcc("wwlkodlak@seznam.cz");
 		$mailMsg->setSubject($subject);
 		$mailMsg->setHtmlBody($template, __DIR__ . "/../../../www/img/email/");
 

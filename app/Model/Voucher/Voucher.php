@@ -236,6 +236,7 @@ class Voucher
 		$item_price = ($price_total / $orderItems_count);
 
 		// GENERATE VOUCHER DATA
+		$vouchers = [];
 		foreach($orderItems as /*$key =>*/ $item)
 		{
 			$result = $this->database->query('SELECT * FROM voucher WHERE order_id = ? AND order_item_id = ?', $orderId, $item['id']);
@@ -254,6 +255,8 @@ class Voucher
 				'voucher_date'	=> $todayDate,		// DATUM
 			];
 			$result = $this->database->table('voucher')->insert($voucherData);
+
+			$vouchers[] = $voucherData;
 		}
 
 		// GET VOUCHER DATA
@@ -292,9 +295,6 @@ class Voucher
 		$files['uctenka-'. $invoiceId . '.pdf'] = $seedPDF;
 		foreach($voucherDataAll as $voucher)
 		{
-			/// DOTYKACKA - CREATE SALE & STOCKUP ITEM (DISABLE FOR TESTING PURPOSES ???)
-			$this->createSaleItem($invoiceId, $voucher['voucher_id'], $voucher['voucher_ean'], $item_price);
-
 			// PDF: RENDER VOUCHER FILES
 			$voucherPDF = $this->getVoucherPDF($voucher['voucher_id'], $voucher['voucher_ean'], $voucher['voucher_date']);
 			$files['voucher-' . $voucher['voucher_ean'] . '.pdf'] = $voucherPDF;
@@ -314,80 +314,22 @@ class Voucher
 			'pocetPoukazu'	=> (int)$orderItems_count,
 			'spelling'		=> $spelling,
 		];
-		$this->sendMail($orderData['z_email'], "@email-success", "Herní poukaz VRko.cz", $files, $mailTemplateData);
+		$this->sendMail($orderData['z_email'], "@emailSuccess", "Herní poukaz VRko.cz", $files, $mailTemplateData);
+
+		// SEND ADMIN MAIL
+		$mailTemplateDataAdmin = [
+			'orderId'		=> $orderId,
+			'pocetPoukazu'	=> (int)$orderItems_count,
+			'vouchers'		=> $vouchers,
+			'todayDatetime'	=> $todayDatetime,
+		];
+		$this->sendMail("kozeluh@zetcomp.cz", "@emailAdmin", "Herní poukaz VRko.cz", $files, $mailTemplateDataAdmin, false);
 
 		// SUCCESS
 		return true;
 	}
 
 	// #############################################################################################################################
-
-	/** Vytvoření prodejní položky DOTYKAČKA
-	 * @param	string		$invoiceId		// ID Faktury (uctenky)
-	 * @param	string		$voucherId		// ID Voucheru (EAN-6)
-	 * @param	string		$voucherEan		// EAN-13 Voucheru
-	 * @param	string		$price			// Cena
-	 *
-	 * @return	integer|null				// ID Objednavky
-	 */
-	function createSaleItem($invoiceId, $voucherId, $voucherEan, $price) /// DOTYKACKA /// TODO: Rewrite this function to by-pass DotyPOS !!!
-	{
-		$_supplierId = '8436897805239446';
-		$name = "Herní poukaz - " . $voucherEan;		// Nazev
-		$description = "30 minut / 1 ks VR jednotky";	// Popis
-		$categoryId = 8436894865124667;					// Kategorie: VOUCHERY
-		$rawPrice = ($price * (-1));					// Bez DPH
-		$vatPrice = ($price * (-1));					// Vc. DPH
-
-		/// DOTYKACKA - Vytvorit prodejni polozky
-		$saleItem = [
-			'_categoryId'			=> $categoryId,		// Long		ID Kategorie, do které položka spadá
-			'_cloudId'				=> '323467526',		// Integer	ID Cloudu (není potřeba - natáhne se z API requestu)
-			'deleted'				=> false,			// Bool		- Smazáno?
-			'description'			=> $description,	// String	Popis položky
-			'discountPercent'		=> '0.0',			// Double	Sleva v procentech
-			'discountPermitted'		=> true,			// Bool		- Povolit možnost slevy?
-			'display'				=> true,			// Bool		- Zobrazit?
-			'ean'					=> [$voucherEan,
-										$voucherId],	// String[]	Pole s EANy pro položku
-			'flags'					=> '0',				// Integer	Příznaky (nastavení)
-			'hexColor'				=> '#F32C24',		// String	Barva položky v HEXu
-			'name'					=> $name,			// String	Název položky
-			'onSale'				=> false,			// Bool		- Je položka "na prodej"?
-			'packageItem'			=> '1.0',			// Double	Počet balíčků na položku
-			'packaging'				=> '1.0',			// Double	Počet položek v balíčku
-			'packagingMeasurement'	=> '1.0',			// Double	Měrná jednotka balení (?)
-			'points'				=> '0.0',			// Double	(?) Body za nákup produktu  (?)
-			'priceWithVat'			=> $vatPrice,		// Double	Cena vč. DPH
-			'priceWithoutVat'		=> $rawPrice,		// Double	Cena bez DPH
-			'requiresPriceEntry'	=> false,			// Bool		- Vyžaduje zadání ceny?
-			'stockDeduct'			=> true,			// Bool		- Odečítat ze skladu při prodeji?
-			'stockOverdraft'		=> 'DISABLE',		// Enum		Přečerpání zásob (určuje, zda je možné jít s počtem položek na skladě do mínusu) (ALLOW, DISABLE)
-			'subtitle'				=> $description,	// String	Krátká poznámka
-		//	'supplierProductCode'	=> null,			// 			(?) Kód produktu dodavatele (?)
-			'unit'					=> 'Piece',			// Enum		Jednotka (kus)
-			'unitMeasurement'		=> 'Piece',			// Enum		Měrná jednotka (kus)
-			'vat'					=> '1.0',			// Double	Poměr násobku DPH
-			'versionDate'			=> null,			// TimeStamp
-		];
-		$saleItems = [$saleItem];
-		///$cpResponse = $this->doty2->createProduct($saleItems);
-
-		/*foreach($cpResponse as $item) /// DOTYKACKA - TODO: VSECHNO DO DB! ///
-		{
-			$itemId = $item->id;
-
-			$skladItems [] = [
-				'_productId'	=> $itemId,		// Long		?
-				'externalId'	=> null,		// String	?
-				'purchasePrice'	=> 0.00,		// Double	? ($rawPrice)
-				'quantity'		=> '1.0',		// Double	-- negative for corrections
-				'sellPrice'		=> $rawPrice,	// Double	?
-			];
-
-			///$this->doty2->stockupToWarehouse($_supplierId, $invoiceId, $name, false, $skladItems);
-		}*/
-	}
 
 	// ### PDF - SEED DATA ###
 	function getSeedPDF($invoiceId, $orderItems_count, $item_price, $price_total, $date)
@@ -476,7 +418,7 @@ class Voucher
 	}
 
 	// ### SEND MAIL ###
-	private function sendMail($recipient, $templateName, $subject, $files, $data)
+	private function sendMail($recipient, $templateName, $subject, $files, $data, $sendCopy = true)
 	{
 		$latte = new Latte\Engine;
 		$template = $latte->renderToString(__DIR__ . "/" . $templateName . ".latte", $data);
@@ -484,7 +426,9 @@ class Voucher
 		$mailMsg = new Mail\Message();
 		$mailMsg->setFrom("Vouchery VRko.cz <info@vrko.cz>");
 		$mailMsg->addTo($recipient); // TODO: EMAIL Validator: $recipient
-		$mailMsg->addBcc("faktura@vrko.cz");
+		if ($sendCopy) {
+			$mailMsg->addBcc("faktura@vrko.cz");
+		}
 		$mailMsg->setSubject($subject);
 		foreach($files as $fileName => $fileData) {
 			$mailMsg->addAttachment($fileName, $fileData, "application/pdf");
