@@ -17,6 +17,8 @@ use Tracy\Debugger;
 use Carbon\Carbon;
 
 
+use samdark\sitemap\Sitemap;
+
 class CronPresenter extends BasePresenter
 {
 	//const CRON_DEBOUT = true; // DEBUG
@@ -186,5 +188,24 @@ class CronPresenter extends BasePresenter
 			if(SELF::CRON_DEBOUT) echo "An error occurred while completing the order. Amount: " . $count . ", Order ID: " . $orderId;
 			return false;
 		}
+	}
+
+	public function actionTesting()
+	{
+		$filename = "sitemap-test.xml";
+		$baseUrl = $this->template->baseUrl;
+
+		$sitemap = new Sitemap(__DIR__ . "/" . $filename);
+		$sitemap->addItem($baseUrl . "/mylink1");
+		$sitemap->addItem($baseUrl . "/mylink2", time());
+		$sitemap->addItem($baseUrl . "/mylink3", time(), Sitemap::HOURLY);
+		$sitemap->addItem($baseUrl . "/mylink4", time(), Sitemap::DAILY, 0.3);
+		$sitemap->write();
+
+		// OUTPUT (DEBUG)
+		header("Content-Type: application/xml");
+		echo file_get_contents(__DIR__ . "/" . $filename);
+
+		$this->terminate();
 	}
 }
