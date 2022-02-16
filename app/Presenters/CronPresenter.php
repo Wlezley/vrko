@@ -76,7 +76,8 @@ class CronPresenter extends BasePresenter
 		}
 
 		header("HTTP/1.0 404 Not Found");
-		return false;
+		$this->template->error = true;
+		//$this->terminate();
 	}
 
 	private function cronTrigger_REMINDER($aheadSchedule = 3)
@@ -88,7 +89,7 @@ class CronPresenter extends BasePresenter
 
 		// Gets reservation data from DB (WHERE: status = CONFIRMED, reminder = WAITING, date = dateNow, firstHour = hourNow (OR NULL))
 		$result1 = $this->database->query(
-			'SELECT id,customerID,units,firstHour FROM reservation_request WHERE status = ? AND reminder = ? AND date = ? AND (firstHour = ? OR firstHour IS NULL)',
+			'SELECT id,customerID,units,firstHour,firstMinute FROM reservation_request WHERE status = ? AND reminder = ? AND date = ? AND (firstHour = ? OR firstHour IS NULL)',
 			"CONFIRMED", "WAITING", $dateNow, $hourNow
 		);
 
@@ -101,6 +102,7 @@ class CronPresenter extends BasePresenter
 		foreach($result1->fetchAll() as $row)
 		{
 			$firstHour = $row['firstHour'];
+			$firstMinute = $row['firstMinute'];
 
 			// If the 'firstHour' is NULL, then tries to prepare its value from the 'units' column
 			if(!isset($firstHour))
@@ -137,7 +139,7 @@ class CronPresenter extends BasePresenter
 
 			// Prepare SMS data
 			$customerPhone = $result2->fetch()['phone'];
-			$reminderMessage = "Vase rezervace VRko.cz zacina dnes " . $this->getCzechHourNouns($firstHour) . ". Prosime, dorazte alespon 5 minut predem. Dekujeme.";
+			$reminderMessage = "Vase rezervace VRko.cz zacina dnes " . $this->getCzechHourNouns($firstHour, $firstMinute) . ". Prosime, dorazte alespon 5 minut predem. Dekujeme.";
 
 			// UPDATE REMINDER STATUS -> SENT
 			$this->database->query('UPDATE reservation_request SET', ['reminder' => "SENT",], 'WHERE id = ?', $row['id']);
@@ -152,22 +154,17 @@ class CronPresenter extends BasePresenter
 		return true;
 	}
 
-	private function getCzechHourNouns($hour)
+	private function getCzechHourNouns($hour, $minute = 0)
 	{
-		// HODIN:  [0,        5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24] * Default
-		// HODINU: [  1,                                                            ]
-		// HODINY: [    2,3,4,                                                      ]
-		$h = "hodin";
-		if($hour == 1) $h = "hodinu";
-		if(in_array($hour, [2,3,4])) $h = "hodiny";
-
 		// V:  [0,1,      5,6,7,8,9,10,11,         15,16,17,18,19,              ] * Default
 		// VE: [    2,3,4,                12,13,14,               20,21,22,23,24] (maybe set this as default?)
 		$v = "v";
 		if(in_array($hour, [2,3,4,12,13,14,20,21,22,23,24])) $v = "ve";
 
+		$minute = ($minute < 10 ? "0" : "") . (string)$minute;
+
 		//return ['v' => $v,'h' => $h];
-		return $v . " " . $hour . " " . $h;
+		return $v . " " . $hour . ":" . $minute;
 	}
 
 	private function cronTrigger_VOUCHERFAKE($count = 0)
