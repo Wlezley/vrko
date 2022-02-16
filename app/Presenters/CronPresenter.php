@@ -84,12 +84,12 @@ class CronPresenter extends BasePresenter
 	{
 		// Date and time initialization
 		$carbon = Carbon::now("Europe/Prague")->addHours($aheadSchedule)->startOfHour(); // Default: 3 hours
-		$dateNow = $carbon->format('Y-m-d');
-		$hourNow = (int)$carbon->format('H');
+		$dateNow = $carbon->format("Y-m-d");
+		$hourNow = (int)$carbon->format("H");
 
 		// Gets reservation data from DB (WHERE: status = CONFIRMED, reminder = WAITING, date = dateNow, firstHour = hourNow (OR NULL))
 		$result1 = $this->database->query(
-			'SELECT id,customerID,units,firstHour,firstMinute FROM reservation_request WHERE status = ? AND reminder = ? AND date = ? AND (firstHour = ? OR firstHour IS NULL)',
+			"SELECT id,customerID,units,firstHour,firstMinute FROM reservation_request WHERE status = ? AND reminder = ? AND date = ? AND (firstHour = ? OR firstHour IS NULL)",
 			"CONFIRMED", "WAITING", $dateNow, $hourNow
 		);
 
@@ -104,17 +104,17 @@ class CronPresenter extends BasePresenter
 			$firstHour = $row['firstHour'];
 			$firstMinute = $row['firstMinute'];
 
-			// If the 'firstHour' is NULL, then tries to prepare its value from the 'units' column
+			// If the "firstHour" is NULL, then tries to prepare its value from the "units" column
 			if(!isset($firstHour))
 			{
 				$firstHour = $this->calendar->getReservationFirstHour($row['units']);
 			}
 
-			// Checks 'firstHour' range, or issues an error
+			// Checks "firstHour" range, or issues an error
 			if($firstHour >= 24 || $firstHour < 0)
 			{
 				if(SELF::CRON_DEBOUT) echo "ERROR: The 'firstHour' parameter (inherid from 'units') is invalid in reservation_request table, ID: " . $row['id'] . "; SKIPPED.\n";
-				$this->database->query('UPDATE reservation_request SET', ['reminder' => "ERROR",], 'WHERE id = ?', $row['id']); // REMINDER STATUS -> ERROR
+				$this->database->query("UPDATE reservation_request SET", ["reminder" => "ERROR"], "WHERE id = ?", $row['id']); // REMINDER STATUS -> ERROR
 				continue;
 			}
 
@@ -122,18 +122,18 @@ class CronPresenter extends BasePresenter
 			if($firstHour != $hourNow)
 			{
 				if(SELF::CRON_DEBOUT) echo "WARNING: The 'firstHour' (" . $firstHour . ") parameter is not equal to 'hourNow' (" . $hourNow . "), ID: " . $row['id'] . "; SKIPPED.\n";
-				//$this->database->query('UPDATE reservation_request SET', ['reminder' => "ERROR",], 'WHERE id = ?', $row['id']); // REMINDER STATUS -> ERROR
+				//$this->database->query("UPDATE reservation_request SET", ["reminder" => "ERROR"], "WHERE id = ?", $row['id']); // REMINDER STATUS -> ERROR
 				continue;
 			}
 
 			// Obtains the customer's phone number from the DB
-			$result2 = $this->database->query('SELECT phone FROM customer WHERE id = ?', $row['customerID']);
+			$result2 = $this->database->query("SELECT phone FROM customer WHERE id = ?", $row['customerID']);
 
 			// Customer not found, or the result returned two or more rows
 			if(!$result2 || $result2->getRowCount() != 1)
 			{
 				if(SELF::CRON_DEBOUT) echo "ERROR: Customer data not found, ID: " . $row['id'] . ", customerID: " . $row['customerID'] . "; SKIPPED.\n";
-				$this->database->query('UPDATE reservation_request SET', ['reminder' => "ERROR",], 'WHERE id = ?', $row['id']); // REMINDER STATUS -> ERROR
+				$this->database->query("UPDATE reservation_request SET", ["reminder" => "ERROR"], "WHERE id = ?", $row['id']); // REMINDER STATUS -> ERROR
 				continue;
 			}
 
@@ -142,7 +142,7 @@ class CronPresenter extends BasePresenter
 			$reminderMessage = "Vase rezervace VRko.cz zacina dnes " . $this->getCzechHourNouns($firstHour, $firstMinute) . ". Prosime, dorazte alespon 5 minut predem. Dekujeme.";
 
 			// UPDATE REMINDER STATUS -> SENT
-			$this->database->query('UPDATE reservation_request SET', ['reminder' => "SENT",], 'WHERE id = ?', $row['id']);
+			$this->database->query("UPDATE reservation_request SET", ["reminder" => "SENT"], "WHERE id = ?", $row['id']);
 
 			// SEND SMS
 			$this->smsbrana->sendSMS($customerPhone, $reminderMessage);
