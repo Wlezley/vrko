@@ -9,3 +9,4 @@ vendor/
 .vscode/
 !.gitignore
 !.htaccess
+app/Presenters/sitemap-test.xml
