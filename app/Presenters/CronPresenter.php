@@ -10,6 +10,8 @@ use App\Model\Reviews;
 use App\Model\Reservation;
 use App\Model\SmsBrana;
 use App\Model\Voucher;
+use App\Router\RouterFactory;
+
 use Nette\Database\Explorer;
 use Tracy\Debugger;
 
@@ -192,14 +194,33 @@ class CronPresenter extends BasePresenter
 
 	public function actionTesting()
 	{
+		$time = time();
 		$filename = "sitemap-test.xml";
 		$baseUrl = $this->template->baseUrl;
 
 		$sitemap = new Sitemap(__DIR__ . "/" . $filename);
-		$sitemap->addItem($baseUrl . "/mylink1");
-		$sitemap->addItem($baseUrl . "/mylink2", time());
-		$sitemap->addItem($baseUrl . "/mylink3", time(), Sitemap::HOURLY);
-		$sitemap->addItem($baseUrl . "/mylink4", time(), Sitemap::DAILY, 0.3);
+		$router = RouterFactory::createRouter();
+		$urlScript = new \Nette\Http\UrlScript();
+
+		foreach ($router as $route) {
+			$param = $route->getConstantParameters();
+
+			if (empty($param)) {
+				continue;
+			}
+			$urlRender = $route->constructUrl($param, $urlScript);
+
+			if ($urlRender) {
+				$urlRender = $baseUrl . ltrim($urlRender, ":");
+
+				// DEBUG ONLY
+				// echo $param["presenter"] . ":" . $param["action"] . "<br />";
+				// echo $urlRender . "<hr />\n";
+
+				$sitemap->addItem($urlRender, $time, Sitemap::DAILY, 0.8);
+			}
+		}
+
 		$sitemap->write();
 
 		// OUTPUT (DEBUG)
