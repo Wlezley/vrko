@@ -47,7 +47,7 @@ class CronPresenter extends BasePresenter
 								SmsBrana\SmsBrana $smsbrana,
 								Voucher\Voucher $voucher)
 	{
-		Debugger::$strictMode = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED; // Disable deprecate reporting
+		Debugger::$strictMode = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED; // Disable deprecated reporting
 		Debugger::$showBar = false; // Disable Tracy Debug Bar
 		$this->database = $database;
 		$this->reviews = $reviews;
@@ -196,10 +196,10 @@ class CronPresenter extends BasePresenter
 	public function actionTesting()
 	{
 		$time = time();
-		$filename = "sitemap-test.xml";
+		$fileName = "sitemap-test.xml";
 		$baseUrl = $this->template->baseUrl;
 
-		$sitemap = new Sitemap(__DIR__ . "/" . $filename);
+		$sitemap = new Sitemap(__DIR__ . "/" . $fileName);
 		$router = RouterFactory::createRouter();
 		$urlScript = new \Nette\Http\UrlScript();
 
@@ -232,7 +232,7 @@ class CronPresenter extends BasePresenter
 
 		// OUTPUT (DEBUG)
 		header("Content-Type: application/xml");
-		readfile(__DIR__ . "/" . $filename);
+		readfile(__DIR__ . "/" . $fileName);
 
 		$this->terminate();
 	}
