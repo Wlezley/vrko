@@ -47,6 +47,7 @@ class CronPresenter extends BasePresenter
 								SmsBrana\SmsBrana $smsbrana,
 								Voucher\Voucher $voucher)
 	{
+		Debugger::$strictMode = E_ALL & ~E_DEPRECATED & ~E_USER_DEPRECATED; // Disable deprecate reporting
 		Debugger::$showBar = false; // Disable Tracy Debug Bar
 		$this->database = $database;
 		$this->reviews = $reviews;
@@ -202,7 +203,7 @@ class CronPresenter extends BasePresenter
 		$router = RouterFactory::createRouter();
 		$urlScript = new \Nette\Http\UrlScript();
 
-		foreach ($router as $route) {
+		foreach ($router as $key => $route) {
 			$param = $route->getConstantParameters();
 
 			if (empty($param)) {
@@ -213,9 +214,15 @@ class CronPresenter extends BasePresenter
 			if ($urlRender) {
 				$urlRender = $baseUrl . ltrim($urlRender, ":");
 
-				// DEBUG ONLY
-				// echo $param["presenter"] . ":" . $param["action"] . "<br />";
-				// echo $urlRender . "<hr />\n";
+				// DEBUG
+				if (Debugger::isEnabled() && Debugger::$showBar) {
+					$paramDebug = [
+						"presenter"	=> $param["presenter"],
+						"action"	=> $param["action"],
+						"urlRender"	=> $urlRender,
+					];
+					bdump($paramDebug, __METHOD__ . "/ROUTE_ID_" . $key);
+				}
 
 				$sitemap->addItem($urlRender, $time, Sitemap::DAILY, 0.8);
 			}
@@ -225,7 +232,7 @@ class CronPresenter extends BasePresenter
 
 		// OUTPUT (DEBUG)
 		header("Content-Type: application/xml");
-		echo file_get_contents(__DIR__ . "/" . $filename);
+		readfile(__DIR__ . "/" . $filename);
 
 		$this->terminate();
 	}
