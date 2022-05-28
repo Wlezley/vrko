@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Model\Katalog;
+namespace App\Model;
 
 use Nette;
 use App\Model;
@@ -229,7 +229,7 @@ class Katalog
 	}
 
 	/** Get GAME DATA (by GAME URL)
-	 * @param	string		$gameUrl		// URL Hry (z url linku?)
+	 * @param	string		$gameUrl
 	 *
 	 * @return	array|NULL
 	 */
@@ -247,5 +247,79 @@ class Katalog
 		}
 
 		return NULL;
+	}
+
+	/** Get GAME DATA (by GAME ID)
+	 * @param	int $gameId
+	 *
+	 * @return	array|NULL
+	 */
+	public function getGameInfoById($gameId)
+	{
+		$result = $this->database->query('SELECT * FROM gamelist_gameinfo WHERE id = ?', $gameId);
+
+		if($result && $result->getRowCount() == 1)
+		{
+			$data = $result->fetch();
+			$data['categoryData'] = $this->getCategoryDataById($data['categoryId']);	// Array
+			$data['categoryPool'] = $this->getCategoryPoolByGameId($data['id']);		// Multi-Array
+
+			return $data;
+		}
+
+		return NULL;
+	}
+
+	/** SAVE GAME DATA
+	 * @param	array $param
+	 *
+	 * @return	int|null
+	 */
+	public function saveGameInfo(array $param): ?int
+	{
+		$data = $param;
+
+		if (empty($data['url'])) {
+			$data['url'] = Nette\Utils\Strings::webalize($data['fullName']);
+		}
+
+		$data['categoryId'] = $data['categoryPool'][0];
+		$data['display'] = ($data['display'] === "show") ? "show" : "hide";
+		unset($data['categoryPool']);
+
+		if (empty($data['id'])) { // INSERT
+			unset($data['id']);
+			$result = $this->database->table("gamelist_gameinfo")->insert($data);
+
+			if ($result->id) {
+				$this->database->query("DELETE FROM gamelist_category_pool WHERE gameId = ?", $result->id);
+
+				foreach ($param['categoryPool'] as $categoryId) {
+					if (!empty($categoryId)) {
+						$this->database->table("gamelist_category_pool")->insert([
+							"gameId" => $result->id,
+							"categoryId" => $categoryId,
+						]);
+					}
+				}
+
+				return (int)$result->id;
+			}
+		} else { // UPDATE
+			$result = $this->database->table("gamelist_gameinfo")->where("id = ?", $param['id'])->update($data);
+
+			$this->database->query("DELETE FROM gamelist_category_pool WHERE gameId = ?", $param['id']);
+
+			foreach ($param['categoryPool'] as $categoryId) {
+				if (!empty($categoryId)) {
+					$this->database->table("gamelist_category_pool")->insert([
+						"gameId" => $param['id'],
+						"categoryId" => $categoryId,
+					]);
+				}
+			}
+		}
+
+		return null;
 	}
 }

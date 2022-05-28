@@ -1,0 +1,258 @@
+{* {var $title = (!empty($game[id])) ? "Editace hry '" . $game['fullName'] . "' (ID: {$game[id]})" : "Vytvoření hry"} *}
+{* {block title}{$title}{/block} *}
+
+{block title}{if !empty($game[id])}Editace hry "{$game[fullName]}" (ID: {$game[id]}){else}Vytvoření hry{/if}{/block}
+{block description}{include title}{/block}
+
+{block head}
+{include parent}
+<style>
+.categorylist-main {
+    background-color: #000000;
+    padding: 20px;
+}
+
+.categorylist-main h2,
+.categorylist-main h3,
+.categorylist-main h4 {
+    color: #e13175;
+}
+
+.categorylist-main h2 {
+    font-size: 40px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+}
+
+.categorylist-main h3 {
+    font-size: 35px;
+    margin-bottom: 0;
+}
+
+.categorylist-main h4 {
+    font-size: 25px;
+    margin-bottom: 0;
+}
+
+.categorylist-main hr {
+    border-color: #e13175;
+    margin: 0 0 25px 0;
+}
+
+.categorylist-counter {
+    font-size: 16px;
+}
+
+.categorylist-category-item {
+    background-color: #101010;
+    padding-top: 30px;
+    padding-bottom: 5px;
+    text-align: center;
+    margin: 5px -10px;
+    transition: .3s linear;
+}
+
+.categorylist-category-item h3 {
+    transition: .3s linear;
+}
+
+.categorylist-category-item:hover {
+    /*background-color: #404080;*/
+    /*background: #e13175;*/
+    background: #151515;
+    transition: .3s linear;
+}
+
+.categorylist-category-item:hover h3 {
+    color: #ffffff;
+    /*color: #2b96cc;*/
+    transition: .3s linear;
+}
+
+.categorylist-category-description {
+    font-size: 12px;
+}
+
+input {
+    width: 100%;
+    height: 35px;
+    padding-inline: 10px;
+}
+
+select {
+    width: 100%;
+    height: 35px;
+    padding-inline: 10px;
+}
+
+textarea {
+    margin-left: 15px;
+}
+
+label {
+    color: #ffffff;
+    margin-top: 7px;
+    margin-bottom: 0;
+    font-weight: 500;
+    cursor: unset;
+    vertical-align: middle;
+}
+</style>
+{/block}
+
+{block content}
+    <main>
+        <section class="area-bg-four pt-30 pb-30">
+            <div class="container">
+                <div class="categorylist-main">
+
+                    <div class="row text-center mb-4 mt-4">
+                        <div class="col-12">
+                            <div class="mb-10">
+                                <h2>{include title}</h2>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div n:if="!empty($game[id])" class="row mb-2">
+                        <div class="col-2">
+                        </div>
+                        <div class="col-8 text-right mr-0 pr-0">
+                            <a href="{link Katalog:gamepage $game['categoryData']['url'], $game['url']}" target="_blank">
+                                Zobrazit stránku
+                            </a>
+                        </div>
+                        <div class="col-2">
+                        </div>
+                    </div>
+
+                    <div class="row mb-5">
+                        <div class="col-2">
+                            {* SPACER *}
+                        </div>
+
+                        <form method="post" class="col-8">
+                            <input type="hidden" name="param[id]" value="{$game[id]}" />
+
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[fullName]">Název</label>
+                                <input class="col-9" type="text" name="param[fullName]" value="{$game[fullName]}" />
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[url]">URL (automaticky)</label>
+                                <input class="col-9" type="text" name="param[url]" value="{$game[url]}" />
+                            </div>
+
+                            {* TITULNÍ OBRÁZEK *}
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[imageMain]">Titulní obrázek</label>
+                                <select class="col-9" type="text" name="param[imageMain]">
+                                    <option value=""{if empty($game[imageMain])} selected{/if}>--- Vyberte ---</option>
+                                    {foreach $imageList as $fileName}
+                                        {var $value = "/img/hry/" . $fileName}
+                                        <option value="{$value}"{if $value === $game[imageMain]} selected{/if}>{$fileName}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+
+                            {* KATEGORIE *}
+                            {for $i = 0; $i < 4; $i++}
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[categoryPool][{$i}]">{if $i === 0}Hlavní kategorie{else}Podkategorie {$i}{/if}</label>
+                                <select class="col-9" type="text" name="param[categoryPool][{$i}]">
+                                    <option value=""{if empty($game[categoryPool][$i])} selected{/if}>--- Vyberte ---</option>
+                                    {foreach $categoryList as $category}
+                                        <option value="{$category[id]}"{if $category[id] === $game[categoryPool][$i][id]} selected{/if}>{$category[nameS]}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+                            {/for}
+
+                            {* ATTRIBUTES / PLAYERS *}
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[players]">Počet hráčů</label>
+                                <select class="col-9" type="text" name="param[players]">
+                                    <option value=""{if empty($game[players])} selected{/if}>--- Vyberte ---</option>
+                                    {foreach $attributes[players] as $key => $item}
+                                        {breakIf $key === 5}
+                                        {continueIf $key === 0}
+                                        <option value="{$key}"{if $key === $game[players]} selected{/if}>{$item[desc]}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+
+                            {* ATTRIBUTES / SKILL *}
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[skills]">Skill hráče</label>
+                                <select class="col-9" type="text" name="param[skills]">
+                                    <option value=""{if empty($game[skills])} selected{/if}>--- Vyberte ---</option>
+                                    {foreach $attributes[skills] as $key => $item}
+                                        {continueIf $key === 0}
+                                        <option value="{$key}"{if $key === $game[skills]} selected{/if}>{$item[desc]}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+
+                            {* ATTRIBUTES / DIFFICULTY *}
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[difficulty]">Fyzická náročnost</label>
+                                <select class="col-9" type="text" name="param[difficulty]">
+                                    <option value=""{if empty($game[difficulty])} selected{/if}>--- Vyberte ---</option>
+                                    {foreach $attributes[difficulty] as $key => $item}
+                                        {continueIf $key === 0}
+                                        <option value="{$key}"{if $key === $game[difficulty]} selected{/if}>{$item[desc]}</option>
+                                    {/foreach}
+                                </select>
+                            </div>
+
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[display]">Zobrazit</label>
+                                <input class="col-1" type="checkbox" name="param[display]" value="show"{if empty($game[display]) || $game[display] === "show"} checked{/if}/>
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[youtubeId]">Youtube ID</label>
+                                <input class="col-9" type="text" name="param[youtubeId]" value="{$game[youtubeId]}" />
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[steamId]">Steam ID</label>
+                                <input class="col-9" type="text" name="param[steamId]" value="{$game[steamId]}" />
+                            </div>
+                            <div class="row mb-3">
+                                <label class="col-3" for="param[steamUrl]">Steam URL</label>
+                                <input class="col-9" type="text" name="param[steamUrl]" value="{$game[steamUrl]}" />
+                            </div>
+
+                            {* ANOTACE *}
+                            <div class="row mb-1">
+                                <label class="col" for="param[descriptionShort]">Popis do hlavičky (maximálně 155 znaků)</label>
+                            </div>
+                            <div class="row mb-3">
+                                <textarea class="col" name="param[descriptionShort]" rows="3">{$game[descriptionShort]}</textarea>
+                            </div>
+
+                            {* OBSAH *}
+                            <div class="row mb-1">
+                                <label class="col" for="param[descriptionFull]">Popis hry (HTML)</label>
+                            </div>
+                            <div class="row mb-3 ml">
+                                <textarea class="col" name="param[descriptionFull]" rows="20">{$game[descriptionFull]}</textarea>
+                            </div>
+
+                            {* SUBMIT *}
+                            <div class="row mt-5">
+                                <div class="col-9">
+                                </div>
+                                <input type="submit" name="submit" style="padding: 20px 0; height: 55px; color: #fff;" value="ULOŽIT" class="btn btn-primary btn-block col-3">
+                            </div>
+                        </form>
+
+                        <div class="col-2">
+                            {* SPACER *}
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+    </main>
+{/block}

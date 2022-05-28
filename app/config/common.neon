@@ -36,7 +36,8 @@ services:
 	- App\Model\SmsBrana\SmsBrana(%smsbrana_api.url%, %smsbrana_api.login%, %smsbrana_api.password%, %smsbrana_api.sender_id%)
 
 	# Model: Katalog
-	- App\Model\Katalog\Katalog
+	- App\Model\Katalog
+	- App\Model\KatalogAttributes
 
 	# Model: Rezervace
 	- App\Model\Reservation

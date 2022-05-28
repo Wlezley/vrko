@@ -62,6 +62,7 @@ final class RouterFactory
 		$router->addRoute('hry',										'Katalog:default');
 		$router->addRoute('hry/<category>',								'Katalog:category');
 		$router->addRoute('hry/<category>/<game>',						'Katalog:gamepage');
+		$router->addRoute('editace-hry[/<id>]',							'Katalog:edit');
 
 		// DEFAULT
 		//$router->addRoute('/', 'Homepage:default');
