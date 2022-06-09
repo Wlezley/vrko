@@ -105,9 +105,12 @@ final class KatalogPresenter extends BasePresenter
         $game = $this->katalog->getGameInfoById($id);
 
         // Oprava indexu categoryPool
-        $categoryPool = [];
+        $categoryPool = [ 0 => $game['categoryId']];
         foreach ($game['categoryPool'] as $value) {
-            $categoryPool[] = $value;
+            if ($game['categoryId'] == $value['id']) {
+                continue;
+            }
+            $categoryPool[] = $value['id'];
         }
         $game['categoryPool'] = $categoryPool;
 
@@ -123,4 +126,9 @@ final class KatalogPresenter extends BasePresenter
         //     rename($path . $file_name, $path . $new);
         // }
     }
+
+    // public function actionDelete(int $id = null)
+    // {
+    //     $this->katalog->getCategoryList();
+    // }
 }
