@@ -21,9 +21,9 @@ class Katalog
 	/** Get CATEGORY LIST
 	 * @return	array|null
 	 */
-	public function getCategoryList()
+	public function getCategoryList($order = "priority DESC")
 	{
-		$result = $this->database->query("SELECT * FROM gamelist_category WHERE `priority` > ? ORDER BY `priority` DESC", 0.0);
+		$result = $this->database->query("SELECT * FROM gamelist_category WHERE `priority` > ? ORDER BY " . $order, 0.0);
 
 		if ($result && $result->getRowCount() > 0) {
 			$data = [];

@@ -53,8 +53,7 @@ final class KatalogPresenter extends BasePresenter
         // Seznam her podle kategorie (URL)
         $this->template->category = $this->katalog->getCategoryDataByUrl($category);
 
-        if($this->template->category == NULL)
-        {
+        if ($this->template->category == NULL) {
             //$this->redirect('Katalog:default');
             $this->error();
         }
@@ -67,9 +66,11 @@ final class KatalogPresenter extends BasePresenter
         // Data na stranku o hre
         $data = $this->katalog->getGameInfo($game);
 
-        if(is_null($data))
-        {
-            //$this->redirect('Katalog:default');
+        if (is_null($data)) {
+            $this->error();
+        }
+
+        if ($category !== $data['categoryData']['url']) {
             $this->error();
         }
 
@@ -116,7 +117,7 @@ final class KatalogPresenter extends BasePresenter
 
         $this->template->game = $game;
         $this->template->imageList = array_diff(scandir(__DIR__ . "/../../www/img/hry/"), array('.', '..'));
-        $this->template->categoryList = $this->katalog->getCategoryList();
+        $this->template->categoryList = $this->katalog->getCategoryList("nameS ASC");
         $this->template->attributes = $this->attributes->getAttributes();
 
         // FILENAME REPAIR
