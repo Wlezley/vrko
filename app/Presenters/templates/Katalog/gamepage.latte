@@ -109,11 +109,10 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-12">
-						{*<div class="game-single-content">*}
 						<div class="gamepage-main">
 							<div class="mb-10">
 								<h2 class="d-none d-md-block">{$gamepage['fullName']}</h2>{* DESKTOP *}
-								<h2 class="d-block d-md-none text-center">{$gamepage['fullName']}</h2>{* MOBILE *}
+								<div class="h2 d-block d-md-none text-center">{$gamepage['fullName']}</div>{* MOBILE *}
 								<p class="gamepage-counter">
 									<a href="{link Katalog:default}">Katalog her</a> /
 									<a href="{link Katalog:category $gamepage['categoryData']['url']}">{$gamepage['categoryData']['nameP']}</a> /
@@ -121,35 +120,10 @@
 								</p>
 							</div>
 							<div class="mb-0">
-
-								{*<div class="row mt-20">
-									<div class="col-6 mb-25">
-										<div class="video-container">
-											<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=0&rel=0"
-													title="YouTube video player" frameborder="0"
-													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-													allowfullscreen></iframe>
-										</div>
-									</div>
-									<div class="col-6 mb-25">
-										<h3>Parametry</h3>
-										<hr>
-										<div class="gamepage-params mb-15">
-											<ul>
-												<li><span class="released-game-icon"><img src="{$params['category']['icon']}" alt="{$params['category']['nameS']}"></span><span>{$params['category']['nameS']}</span></li>
-												<li><span class="released-game-icon"><img src="{$params['players']['icon']}" alt="{$params['players']['desc']}"></span><span>{$params['players']['desc']}</span></li>
-												<li><span class="released-game-icon"><img src="{$params['skills']['icon']}" alt="{$params['skills']['desc']}"></span><span>{$params['skills']['desc']}</span></li>
-												<li><span class="released-game-icon"><img src="{$params['difficulty']['icon']}" alt="{$params['difficulty']['desc']}"></span><span>{$params['difficulty']['desc']}</span></li>
-											</ul>
-										</div>
-										<p class="font-italic">Debug: Popis hry... (TODO)</p>
-									</div>
-								</div>{* DESKTOP TEST 1 *}
-
 								<div class="row mb-0 mt-0">
 									<div class="col-12">
 										<div class="video-container mb-25">
-											{*<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=1&loop=1&rel=0&playlist={$gamepage['youtubeId']}"*}
+											{* <iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=1&loop=1&rel=0&playlist={$gamepage['youtubeId']}" *}
 											<iframe src="https://www.youtube-nocookie.com/embed/{$gamepage['youtubeId']}?autoplay=0&loop=0&rel=0"
 													title="YouTube video player" frameborder="0"
 													allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -159,8 +133,6 @@
 								</div>
 								<div class="row mb-0 mt-0">
 									<div class="col-12 mb-0">
-										{*<h3>Parametry</h3>
-										<hr>*}
 										<div class="gamepage-params mb-15">
 											<ul class="row">
 												<li class="col-lg-6 col-xl-3">
@@ -195,8 +167,7 @@
 										<hr>
 										<div class="gamepage-description">{$gamepage['descriptionFull']|noescape}</div>
 									</div>
-								</div>{* MOBILE TEST 1 *}
-
+								</div>
 							</div>
 						</div>
 					</div>
