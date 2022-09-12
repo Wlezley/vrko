@@ -33,7 +33,7 @@ final class HomepagePresenter extends BasePresenter
 
 	public function renderKatalogher()
 	{
-		$this->redirect("Katalog:default");
+		$this->redirect('Katalog:default');
 	}
 
 	public function renderCenik()
@@ -46,11 +46,11 @@ final class HomepagePresenter extends BasePresenter
 
 	public function actionZazitek()
 	{
-		$this->redirectUrl("https://www.zetcomp.cz/", 302);
+		$this->redirectUrl('https://www.zetcomp.cz/', 302);
 	}
 
 	public function actionLetak()
 	{
-		$this->redirect("Homepage:default");
+		$this->redirect('Homepage:default');
 	}
 }
