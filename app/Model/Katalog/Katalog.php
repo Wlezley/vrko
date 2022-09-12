@@ -134,10 +134,12 @@ class Katalog
 				$gameIds[] = $row['gameId'];
 			}
 
-			$gameQR = $this->database->query("SELECT COUNT(*) AS count FROM gamelist_gameinfo WHERE display = ? AND id IN(?)", "show", $gameIds);
+			if (!empty($gameIds)) {
+				$gameQR = $this->database->query("SELECT COUNT(*) AS count FROM gamelist_gameinfo WHERE display = ? AND id IN(?)", "show", $gameIds);
 
-			if ($gameQR && $gameQR->getRowCount() == 1) {
-				return $gameQR->fetch()['count'];
+				if ($gameQR && $gameQR->getRowCount() == 1) {
+					return $gameQR->fetch()['count'];
+				}
 			}
 		}
 
@@ -175,7 +177,10 @@ class Katalog
 				}
 			}
 
-			$result = $this->database->query("SELECT id, url, fullName, imageMain, categoryId FROM gamelist_gameinfo WHERE display = ? AND id IN(?)", "show", $gameIds);
+			$result = null;
+			if (!empty($gameIds)) {
+				$result = $this->database->query("SELECT id, url, fullName, imageMain, categoryId FROM gamelist_gameinfo WHERE display = ? AND id IN(?)", "show", $gameIds);
+			}
 		}
 
 		if ($result && $result->getRowCount() > 0) {

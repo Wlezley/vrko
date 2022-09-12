@@ -93,6 +93,8 @@ final class KatalogPresenter extends BasePresenter
 
     public function actionEdit(int $id = null)
     {
+        die('503 Unauthorized');
+
         $param = $_POST['param'];
 
         if (!empty($param)) {
